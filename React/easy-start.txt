@@ -1,0 +1,25 @@
+//to create a new typescript project
+    create-react-app name-of-project --template typescript
+//move to folder of project
+    cd name-of-project
+//to start the app
+    npm start
+
+//don't forget .gitignore in it :
+    /node_modules
+// to reinstall packages from package.json :
+    npm install
+// to install :
+    npm install -g react-cli-snippets
+
+//to add component:
+    create fc [folder]/[name]
+// to add component with props 
+    create fc [folder]/[name] --props insert fields that you require to interface
+//to get help 
+    create --help
+
+1. create fc layout/MainLayout
+2. delete from index.tsx
+     import App from './App';
+     
