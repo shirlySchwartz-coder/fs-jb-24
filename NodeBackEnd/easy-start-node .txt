@@ -1,0 +1,8 @@
+npm init -y
+
+package.json:
+    "scripts": {
+    "start" : "nodemon index.js" // או שם קובץ ממנו מתחילים
+  },
+npm install nodemon --save-dev
+
