@@ -22,4 +22,11 @@
 1. create fc layout/MainLayout
 2. delete from index.tsx
      import App from './App';
+3.create fc layout/MainHeader
+4.create fc layout/MainFooter
+5.create fc layout/MainMenu
+6.create fc layout/MainPage
+7.create fc modules/gang --props
+
+
      
