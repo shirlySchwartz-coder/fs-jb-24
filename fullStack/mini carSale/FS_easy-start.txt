@@ -1,0 +1,16 @@
+create 2 folders : backend , frontend
+cd backend 
+npm init -y
+npm install --save express
+npm install --save-dev nodemon
+npm install axios
+
+//מסוג  צריך גם התקנות מתאימות לכך -typescript 
+
+package.json : "start": "nodemon --exec ts-node server.ts"
+
+order of folders & files :
+ index.js -> 
+ 
+mkdir logic
+mkdir 

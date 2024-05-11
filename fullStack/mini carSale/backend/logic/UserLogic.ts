@@ -1,4 +1,5 @@
 import { UserCred } from "../Models/UserCred";
+import { createJWT } from "../Utils/jwt";
 const fs = require("fs");
 
 const registerUser = (user:UserCred)=>{
@@ -16,23 +17,36 @@ const registerUser = (user:UserCred)=>{
     }
     console.log(singleUser);
     userInfo.push(user);
-    fs.writeFileSync("users.data",JSON.stringify(userInfo));
+    fs.writeFileSync("users.data",JSON.stringify(userInfo)  );
     return true;
 }
 
-const loginUser = (user:UserCred)=>{
-    let userInfo;
-    try{
-         userInfo = JSON.parse(fs.readFileSync("users.data"));
-    } catch (err){
-         userInfo = [];
-    }
-    //check the user and password send the password
-    //return true / false
-    let singleUser = userInfo.find((item: { userName: string; })=>item.userName===user.userName);
-    return singleUser.userName===user.userName && singleUser.userPass===user.userPass;
-}
-
+const loginUser = (user: UserCred) => {
+     let userInfo;
+     try {
+       userInfo = JSON.parse(fs.readFileSync("users.data"));
+     } catch (err) {
+       userInfo = [];
+     }
+     //check the user and password send the password
+     //return true / false
+     let singleUser = userInfo.find(
+       (item: { userName: string }) => item.userName === user.userName
+     );
+   
+     //sending true/false if user data is o.k.
+     //return singleUser.userName===user.userName && singleUser.userPass===user.userPass;
+   
+     //sending jwt if user data is o.k.
+     if (
+       singleUser.userName === user.userName &&
+       singleUser.userPass === user.userPass 
+     ) {
+       return createJWT(singleUser);
+     } else {
+       return "";
+     }
+   };
 const forgotPassword = (userName:string)=>{
     let userInfo;
     try{
