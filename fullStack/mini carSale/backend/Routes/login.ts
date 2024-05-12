@@ -1,6 +1,6 @@
-import express, { NextFunction, Request, Response } from "express";
-import { forgotPassword, loginUser, registerUser } from "../logic/UserLogic";
-import { checkJWT, createJWT } from "../Utils/jwt";
+import express, { NextFunction, Request, Response } from 'express';
+import { forgotPassword, loginUser, registerUser } from '../logic/UserLogic';
+import { checkJWT, createJWT } from '../Utils/jwt';
 
 const loginRouter = express.Router();
 
@@ -8,67 +8,78 @@ const loginRouter = express.Router();
 
 //loginUser
 loginRouter.post(
-  "/loginUser",
+  '/loginUser',
   async (request: Request, response: Response, nextFunction: NextFunction) => {
     let userCred = request.body;
     const myJWT = loginUser(userCred);
-    //need to expose headers 
-    if (myJWT.length>10) {
+    //need to expose headers
+    if (myJWT.length > 10) {
       response
         .status(200)
         .header('Access-Control-Expose-Headers', 'Authorization')
-        .header("Authorization",myJWT)
-        
+        .header('Authorization', myJWT)
+
         .json({ msg: `hello user ${userCred.userName}` });
     } else {
-      response.status(401).json({ msg: "bad password :(" });
+      response.status(401).json({ msg: 'bad password :(' });
     }
   }
 );
 
 loginRouter.post(
-  "/registerUser",
+  '/registerUser',
   async (request: Request, response: Response, nextFunction: NextFunction) => {
-    if (registerUser(request.body)) {
-      response.status(201).json({ msg: "user was created" });
+    let userCred = request.body;
+    const myJWT = registerUser(userCred);
+    
+    if (myJWT.length > 10) {
+      response
+        .status(201)
+        .header('Access-Control-Expose-Headers', 'Authorization')
+        .header('Authorization', myJWT)
+
+        .json({ msg: 'user was created' });
     } else {
-      response.status(400).json({ msg: "user already exists" });
+      response.status(400).json({ msg: 'user already exists' });
     }
   }
 );
 
 //forget password.....
 loginRouter.get(
-  "/forgotPassword/:userName",
+  '/forgotPassword/:userName',
   async (request: Request, response: Response, nextFunction: NextFunction) => {
     let userName = request.params.userName;
-    let userPass = forgotPassword(userName);
-    if (userPass !== "") {
-      response.status(200).json({ password: userPass });
+    let myJWT = forgotPassword(userName);
+    console.log(myJWT)
+    
+    if (myJWT.length >10) {
+      response.status(200)
+      .header('Access-Control-Expose-Headers', 'Authorization')
+      .header('Authorization', myJWT)
+      .json({ password: myJWT });
     } else {
-      response.status(400).json({ msg: "user not found" });
+      response.status(400).json({ msg: 'user not found' });
     }
   }
 );
 
 loginRouter.post(
-  "/getJWT",
+  '/getJWT',
   async (request: Request, response: Response, nextFunction: NextFunction) => {
     let userData = request.body;
-    response
-      .status(200)
-      .json({ jwt: createJWT(userData) });
+    response.status(200).json({ jwt: createJWT(userData) });
   }
 );
 
 loginRouter.get(
-  "/checkJWT/:token",
+  '/checkJWT/:token',
   async (request: Request, response: Response, nextFunction: NextFunction) => {
-    console.log("token: ",request.params.token);
+    console.log('token: ', request.params.token);
     if (checkJWT(request.params.token)) {
-      response.status(200).json({ msg: "all ok" });
+      response.status(200).json({ msg: 'all ok' });
     } else {
-        response.status(401).json({ msg: "token is invalid" });
+      response.status(401).json({ msg: 'token is invalid' });
     }
   }
 );

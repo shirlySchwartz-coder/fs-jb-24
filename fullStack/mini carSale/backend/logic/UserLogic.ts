@@ -12,13 +12,19 @@ const registerUser = (user:UserCred)=>{
     //check if user exists before saving the user.
     let singleUser = userInfo.find((item: { userName: string; })=>item.userName===user.userName);
     if (singleUser!==undefined){
-        console.log(singleUser)
-        return false
+        console.log("No such user ",singleUser)
+        return "";
     }
     console.log(singleUser);
+    if (user.userRole == undefined ) {
+      user.userRole = "Guest";
+    }
+    //add the new user to our file
     userInfo.push(user);
     fs.writeFileSync("users.data",JSON.stringify(userInfo)  );
-    return true;
+    let myJWT= createJWT(user)
+    //console.log('myJWT-registerUser: ',myJWT)
+    return myJWT ;
 }
 
 const loginUser = (user: UserCred) => {
@@ -40,7 +46,8 @@ const loginUser = (user: UserCred) => {
      //sending jwt if user data is o.k.
      if (
        singleUser.userName === user.userName &&
-       singleUser.userPass === user.userPass 
+       singleUser.userPass === user.userPass &&
+       singleUser.userRole === user.userRole
      ) {
        return createJWT(singleUser);
      } else {
@@ -58,9 +65,12 @@ const forgotPassword = (userName:string)=>{
    let singleUser = userInfo.find((item: { userName: string; })=>item.userName===userName);
    console.log(singleUser)
    if (singleUser===undefined){
-        return false;
+        return "";
    }
-   return singleUser.userPass;
+   let myJWT=createJWT(singleUser)
+   
+  
+   return myJWT;
    //send back the password....
 }
 
