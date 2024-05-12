@@ -1,0 +1,24 @@
+/api/v1/login:
+    /api/v1/login/loginUser
+    /api/v1/login/registerUser
+    /api/v1/login/forgotPassword/:userName
+    /api/v1/login/getJWT
+    /api/v1/login/checkJWT/:token
+
+/api/v1/transport: 
+search by number:
+    /api/v1/transport/car/:id
+    /api/v1/transport/bike/:id
+    /api/v1/transport/truck/:id
+    /api/v1/transport/handicap/:id
+    /api/v1/transport/offroad/:id
+    /api/v1/transport/recall/:id
+
+lists (limit-5):
+    /api/v1/transport/cars
+    /api/v1/transport/bikes
+    /api/v1/transport/trucks
+    /api/v1/transport/handicaps
+    /api/v1/transport/offroads
+    /api/v1/transport/recalls
+

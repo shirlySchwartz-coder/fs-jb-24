@@ -21,7 +21,7 @@ loginRouter.post(
 
         .json({ msg: `hello user ${userCred.userName}` });
     } else {
-      response.status(401).json({ msg: 'bad password :(' });
+      response.status(401).json({ msg: 'bad password or role:(' });
     }
   }
 );

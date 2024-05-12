@@ -8,6 +8,7 @@ const HANDICAP_URL  = "https://data.gov.il/api/3/action/datastore_search?resourc
 const OFFROAD_URL   = "https://data.gov.il/api/3/action/datastore_search?resource_id=f6efe89a-fb3d-43a4-bb61-9bf12a9b9099&q=";
 const RECALL_URL    = "https://data.gov.il/api/3/action/datastore_search?resource_id=36bf1404-0be4-49d2-82dc-2f1ead4a8b93&q=";
 
+//search by car number
 const carInfo = async (id:string)=>{
     let myData = (await axios.get(CAR_URL+id)).data.result.records[0];
     //console.log(myData);
@@ -23,8 +24,63 @@ const truckInfo = async (id:string)=>{
     let myData = (await axios.get(TRUCK_URL+id)).data.result.records[0];
     return myData;
 }
+
+const handicapInfo = async (id:string)=>{
+    let myData = (await axios.get(HANDICAP_URL+id)).data.result.records[0];
+    return myData;
+}
+
+const offroadInfo = async (id:string)=>{
+    let myData = (await axios.get(OFFROAD_URL+id)).data.result.records[0];
+    return myData;
+}
+
+const recallInfo = async (id:string)=>{
+    let myData = (await axios.get(RECALL_URL+id)).data.result.records[0];
+    return myData;
+}
+//lists
+const carList =async()=>{
+    let myData = (await axios.get(CAR_URL+'&limit=5')).data.result.records;
+    return myData;
+}
+
+const bikeList= async()=>{
+    let myData = (await axios.get(BIKE_URL+'&limit=5')).data.result.records;
+    return myData;
+}
+const truckList= async()=>{
+    let myData = (await axios.get(TRUCK_URL+'&limit=5')).data.result.records;
+    return myData;
+}
+const handicapList= async()=>{
+    let myData = (await axios.get(HANDICAP_URL+'&limit=5')).data.result.records;
+    return myData;
+}
+
+const offroadList= async()=>{
+    let myData = (await axios.get(OFFROAD_URL+'&limit=5')).data.result.records;
+    return myData;
+}
+
+const recallList= async()=>{
+    let myData = (await axios.get(RECALL_URL+'&limit=5')).data.result.records;
+    return myData;
+}
+
 export {
     carInfo,
     bikeInfo,
-    truckInfo
+    truckInfo,
+    handicapInfo,
+    offroadInfo,
+    recallInfo,
+
+    carList,
+    bikeList,
+    truckList,
+    handicapList,
+    offroadList,
+    recallList
+
 }
