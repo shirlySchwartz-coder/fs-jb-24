@@ -11,6 +11,7 @@ loginRouter.post(
   '/loginUser',
   async (request: Request, response: Response, nextFunction: NextFunction) => {
     let userCred = request.body;
+    console.log("login request :" ,userCred)
     const myJWT = loginUser(userCred);
     //need to expose headers
     if (myJWT.length > 10) {

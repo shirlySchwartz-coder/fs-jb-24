@@ -14,3 +14,7 @@ order of folders & files :
  
 mkdir logic
 mkdir 
+
+for redux:
+    npm install @reduxjs/toolkit
+    npm install redux

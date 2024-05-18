@@ -12,7 +12,7 @@ import {
   bikeList,
   truckList,
   handicapList,
-  offroadInfo,
+  offroadList,
   recallList
 } from '../logic/TransportLogic';
 import { checkJWT } from '../Utils/jwt';
