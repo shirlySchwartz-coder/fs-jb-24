@@ -14,6 +14,8 @@ order of folders & files :
  
 mkdir logic
 mkdir 
+to create folder:
+    create fc Pages/hacker
 
 for redux:
     npm install @reduxjs/toolkit

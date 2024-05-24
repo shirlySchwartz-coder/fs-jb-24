@@ -1,4 +1,5 @@
 import { UserCred } from '../Models/UserCred';
+import { userCred } from "../Routes/login";
 import { createJWT } from '../Utils/jwt';
 var fs = require('fs');
 
@@ -32,31 +33,39 @@ const registerUser = (user: UserCred) => {
 
 //login
 const loginUser = (user: UserCred) => {
-/*  let {...tempUser} = user
-  console.log("TempUser:", tempUser, tempUser.userName)
-  console.log('user: ', user); */
-
   let userInfo;
   try {
-    userInfo = JSON.parse(fs.readFileSync('users.data'));
+    userInfo = JSON.parse(fs.readFileSync("users.data"));
   } catch (err) {
     userInfo = [];
   }
- 
+  //check the user and password send the password
+  //return true / false
   let singleUser = userInfo.find(
     (item: { userName: string }) => item.userName === user.userName
   );
-
-  if (singleUser === undefined) {
-    console.log("User not found: ", user);
-    return ''; // Explicitly return an empty string if user is not found
-  }
-
-  if (singleUser.userPass === user.userPass) {
-    return createJWT(singleUser);
-  } else {
-    console.log('Invalid credentials for user: ', user);
-    return '';
+  //sending true/false if user data is o.k.
+  //return singleUser.userName===user.userName && singleUser.userPass===user.userPass;
+  //sending jwt if user data is o.k.
+  try {
+    if (singleUser.userPass === user.userPass) {
+      const userInfo = {
+        name: singleUser.userName,
+        email: singleUser.userEmail,
+        role: singleUser.userRole,
+        jwt: createJWT(singleUser),
+      };
+      return userInfo;
+    } else {
+      return {
+        name: "",
+        email: "",
+        role: "GUEST",
+        jwt: "",
+      };
+    }
+  } catch (err) {
+    console.log("no user found");
   }
 };
 

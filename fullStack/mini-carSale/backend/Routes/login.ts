@@ -1,29 +1,34 @@
 import express, { NextFunction, Request, Response } from 'express';
 import { forgotPassword, loginUser, registerUser } from '../logic/UserLogic';
 import { checkJWT, createJWT } from '../Utils/jwt';
-import { UserCred } from '../Models/UserCred';
+
 
 const loginRouter = express.Router();
 
 //login methods: loginUser, registerUser, forgotPassword
-
+export type userCred = {
+  name: string;
+  email: string;
+  role: string;
+  jwt: string;
+};
 //loginUser
 loginRouter.post(
   '/loginUser',
   async (request: Request, response: Response, nextFunction: NextFunction) => {
-    let userCred = request.body;  
-    const myJWT = loginUser(userCred);
-    console.log("login request in Route -myJWT:" ,myJWT)
+    let userCred = request.body;
+    const userData = loginUser(userCred);
+
     //need to expose headers
-    if (myJWT.length > 10) {
+    if (userData !== undefined && userData['jwt'].length > 10) {
+      console.log(userData);
       response
         .status(200)
         .header('Access-Control-Expose-Headers', 'Authorization')
-        .header('Authorization', myJWT)
-
-        .json({ msg: `hello user ${userCred.userName}` });
+        .header('Authorization', userData['jwt'])
+        .json(userData);
     } else {
-      response.status(401).json({ msg: 'bad password or role:(' });
+      response.status(401).json({ msg: 'bad password :(' });
     }
   }
 );
@@ -32,9 +37,9 @@ loginRouter.post(
   '/registerUser',
   async (request: Request, response: Response, nextFunction: NextFunction) => {
     let userCred = request.body;
-   
+
     const myJWT = registerUser(userCred);
-    console.log("register request in Route -myJWT:" ,myJWT)
+    console.log('register request in Route -myJWT:', myJWT);
     if (myJWT.length > 10) {
       response
         .status(201)
@@ -54,13 +59,14 @@ loginRouter.get(
   async (request: Request, response: Response, nextFunction: NextFunction) => {
     let userName = request.params.userName;
     let myJWT = forgotPassword(userName);
-    console.log(myJWT)
-    
-    if (myJWT.length >10) {
-      response.status(200)
-      .header('Access-Control-Expose-Headers', 'Authorization')
-      .header('Authorization', myJWT)
-      .json({ password: myJWT });
+    console.log(myJWT);
+
+    if (myJWT.length > 10) {
+      response
+        .status(200)
+        .header('Access-Control-Expose-Headers', 'Authorization')
+        .header('Authorization', myJWT)
+        .json({ password: myJWT });
     } else {
       response.status(400).json({ msg: 'user not found' });
     }
