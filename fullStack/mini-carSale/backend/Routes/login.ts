@@ -17,19 +17,19 @@ loginRouter.post(
   '/loginUser',
   async (request: Request, response: Response, nextFunction: NextFunction) => {
     let userCred = request.body;
-    const userData = loginUser(userCred);
+    const userData  = loginUser(userCred);
 
     //need to expose headers
-    if (userData !== undefined && userData['jwt'].length > 10) {
+    if (userData !== undefined && userData["jwt"].length > 10) {
       console.log(userData);
-      response
-        .status(200)
-        .header('Access-Control-Expose-Headers', 'Authorization')
-        .header('Authorization', userData['jwt'])
-        .json(userData);
-    } else {
-      response.status(401).json({ msg: 'bad password :(' });
-    }
+    response
+      .status(200)
+      .header("Access-Control-Expose-Headers", "Authorization") //do i really need it????
+      .header("Authorization", userData["jwt"])
+      .json(userData);
+  } else {
+    response.status(401).json({ msg: "bad password :(" });
+  }
   }
 );
 

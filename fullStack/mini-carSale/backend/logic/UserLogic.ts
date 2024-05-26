@@ -1,5 +1,4 @@
 import { UserCred } from '../Models/UserCred';
-import { userCred } from "../Routes/login";
 import { createJWT } from '../Utils/jwt';
 var fs = require('fs');
 
@@ -18,7 +17,7 @@ const registerUser = (user: UserCred) => {
   );
   if (singleUser !== undefined) {
     console.log('User already exist ', singleUser);
-    return '';
+    return "";
   }
   console.log(singleUser);
 

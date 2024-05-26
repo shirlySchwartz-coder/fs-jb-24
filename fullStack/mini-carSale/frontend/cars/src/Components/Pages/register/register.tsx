@@ -36,16 +36,16 @@ function Register(): JSX.Element {
       return;
     }
 
-    let userData = new User(
-      data.userName,
-      data.userPass,
-      data.userRole,
-      data.userEmail
-    );
-    console.log(userData);
+    let sendData = {
+      userName:data.userName,
+      userPass:data.userPass,
+      userRole:data.userRole,
+      userEmail:data.userEmail,
+  }
+    console.log(sendData);
     //go to axios and send the information....
     axios
-      .post('http://localhost:8080/api/v1/login/registerUser', userData)
+      .post('http://localhost:8080/api/v1/login/registerUser', sendData)
       .then((res) => {
         notify.success('User was registered successfully');
         navigate('/');

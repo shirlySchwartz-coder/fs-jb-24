@@ -1,1 +1,1 @@
-[{"userName":"shirly","userPass":"123456","userRole":"user","userEmail":"shirly@gmail.com"},{"userName":"dododo","userPass":"123456","userRole":"user","userEmail":"dododo@gmail.com"},{"userName":"benben","userPass":"123456","userRole":"user","userEmail":"benben@gmail.com"},{"userName":"shirlyl","userPass":"123456","userRole":"Admin","userEmail":"sssssss"}]
+[{"userName":"shirly","userPass":"12345","userRole":"Admin","userEmail":"shirly@one.il"},{"userName":"dolev","userPass":"12345","userRole":"user","userEmail":"dolev@1.hu"}]

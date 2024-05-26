@@ -2,7 +2,7 @@ import { useNavigate } from 'react-router-dom';
 import './Header.css';
 import { useEffect, useState } from 'react';
 import { store } from '../../../redux/store';
-import { logoutAction } from '../../../redux/AuthRedicer';
+import { logoutAction } from '../../../redux/AuthReducer';
 import notify from '../../utils/Notify';
 
 function Header(): JSX.Element {
@@ -24,8 +24,10 @@ function Header(): JSX.Element {
           value='logout'
           onClick={() => {
             store.dispatch(logoutAction());
-            notify.success("goodbye, and thank you for the fish");
+            notify.success('goodbye, and thank you for the fish');
             localStorage.removeItem('jwt');
+            sessionStorage.removeItem('jwt');
+            navigate('/');
           }}
         />
       </>

@@ -2,7 +2,7 @@ import axios from "axios";
 import notify from "../../utils/Notify";
 import { SubmitHandler, useForm } from "react-hook-form";
 import { store } from "../../../redux/store";
-import { AuthState, loginAction } from "../../../redux/AuthRedicer";
+import { AuthState, loginAction } from "../../../redux/AuthReducer";
 import { useNavigate } from "react-router-dom";
 import { useEffect } from "react";
 
