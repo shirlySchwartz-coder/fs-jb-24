@@ -8,11 +8,10 @@ import { CheckJWT } from '../../utils/JWT';
 
 function SearchPage(): JSX.Element {
   //list of url from data.gov.il
- // const URL_CAR =
+  // const URL_CAR =
   //  'https://data.gov.il/api/3/action/datastore_search?resource_id=053cea08-09bc-40ec-8f7a-156f0677aff3&q=';
-    const URL_CAR =
-    'http://localhost:8080/api/v1/transport/car/:id';
-  const URL_BIKE = 'http://localhost:8080/api/v1/transport/bike/:id';
+  const URL_CAR = 'http://localhost:8080/api/v1/transport/car/';
+  const URL_BIKE = 'http://localhost:8080/api/v1/transport/bike/';
   const URL_TRUCK = '';
   const URL_OFFROAD = '';
   const RESULT_LIMIT = 10;
@@ -32,13 +31,16 @@ function SearchPage(): JSX.Element {
   const getData = () => {
     switch (myVtype) {
       case 'car':
-        //setVtype('URL_CAR')
+        setVtype('URL_CAR');
         break;
       case 'bike':
+        setVtype('URL_BIKE');
         break;
       case 'truck':
+        setVtype('URL_TRUCK');
         break;
       case 'offroad':
+        setVtype('URL_OFFROAD');
         break;
     }
   };
@@ -59,7 +61,7 @@ function SearchPage(): JSX.Element {
           myResponse[index].kinuy_mishari,
           myResponse[index].sug_delek_nm,
           myResponse[index].mispar_rechev
-        )
+        );
       }
       setResult(myResponse);
     });
@@ -75,7 +77,7 @@ function SearchPage(): JSX.Element {
       </div>
       <hr />
       {carResult.map((item, index) => (
-         <SingleItem key={index} carItem={item} />
+        <SingleItem key={index} carItem={item} />
       ))}
     </div>
   );

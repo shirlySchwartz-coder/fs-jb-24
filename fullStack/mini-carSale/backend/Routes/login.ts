@@ -1,7 +1,11 @@
 import express, { NextFunction, Request, Response } from 'express';
-import { forgotPassword, loginUser, registerUser } from '../logic/UserLogic';
+import {
+  forgotPassword,
+  loginUser,
+  registerUser,
+  deleteUser,
+} from '../logic/UserLogic';
 import { checkJWT, createJWT } from '../Utils/jwt';
-
 
 const loginRouter = express.Router();
 
@@ -17,22 +21,22 @@ loginRouter.post(
   '/loginUser',
   async (request: Request, response: Response, nextFunction: NextFunction) => {
     let userCred = request.body;
-    const userData  = loginUser(userCred);
+    const userData = loginUser(userCred);
 
     //need to expose headers
-    if (userData !== undefined && userData["jwt"].length > 10) {
+    if (userData !== undefined && userData['jwt'].length > 10) {
       console.log(userData);
-    response
-      .status(200)
-      .header("Access-Control-Expose-Headers", "Authorization") //do i really need it????
-      .header("Authorization", userData["jwt"])
-      .json(userData);
-  } else {
-    response.status(401).json({ msg: "bad password :(" });
-  }
+      response
+        .status(200)
+        .header('Access-Control-Expose-Headers', 'Authorization') //do i really need it????
+        .header('Authorization', userData['jwt'])
+        .json(userData);
+    } else {
+      response.status(401).json({ msg: 'bad password :(' });
+    }
   }
 );
-
+/*
 loginRouter.post(
   '/registerUser',
   async (request: Request, response: Response, nextFunction: NextFunction) => {
@@ -49,6 +53,17 @@ loginRouter.post(
         .json({ msg: 'user was created' });
     } else {
       response.status(400).json({ msg: 'user already exists' });
+    }
+  }
+);*/
+loginRouter.post(
+  "/registerUser",
+  async (request: Request, response: Response, nextFunction: NextFunction) => {
+    let result = await registerUser(request.body);
+    if (!result.errno) {
+      response.status(201).json({ msg: "created" });
+    } else {
+        response.status(400).json({msg: result.sqlMessage})
     }
   }
 );
@@ -70,6 +85,17 @@ loginRouter.get(
     } else {
       response.status(400).json({ msg: 'user not found' });
     }
+  }
+);
+
+//Delete user
+loginRouter.delete(
+  '/delete/:id',
+  async (request: Request, response: Response, NextFunction: NextFunction) => {
+    console.log(`Deleting user ${request.params.id}`);
+    let data = await deleteUser(+request.params.id);
+    console.log('data: ', data);
+    response.status(200).json({ msg: 'User deleted successfully' });
   }
 );
 

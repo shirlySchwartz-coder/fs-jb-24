@@ -1,0 +1,17 @@
+--  חלק1
+-- 1 select * from orders;
+-- 2 select * from employees; 
+-- 3 select FirstName, HireDate, Region, Country from employees;
+-- 4 select CustomerID, OrderID, OrderDate from orders;
+-- 5 select  ProductID As ProId, ProductName As ProNm, UnitPrice As UntPr from products;
+-- 6 select Address As `Add`, city As ct, Region As reg from employees;
+-- 7 SELECT CONCAT_WS("- ", Address, city ) as 'Full Address' FROM northwind.customers;
+-- 8 select  CONCAT_WS(" ", FirstName, LastName ) as 'Full Name' , adddate(BirthDate, INTERVAL 8 DAY ) as `Birth Date`,  ReportsTo As Manager   from employees
+-- 9  select distinct city  from employees
+-- 10 SELECT distinct Country FROM northwind.employees;
+-- 11 SELECT distinct Title FROM northwind.employees;
+-- 12 SELECT distinct country, city FROM Customers;
+-- 13 SELECT FirstName, BirthDate, date_add(BirthDate, INTERVAL 5 DAY) As `BirthWeek`  FROM northwind.employees;
+-- 14 SELECT ProductName, UnitPrice, UnitPrice+10 as `SalePrice` FROM products;
+-- 15 SELECT ProductID, ProductName, UnitPrice, UnitPrice+(UnitPrice *16.5 / 100.0 ) As `IncludTax`, UnitsInStock, UnitsOnOrder,   (UnitsInStock - UnitsOnOrder ) As `UnitsForSale` FROM products;
+-- 16 SELECT ProductID, ProductName, UnitPrice,  UnitsInStock, UnitsOnOrder,   (UnitsInStock - UnitsOnOrder )*UnitPrice As `InventoryValue` FROM products;

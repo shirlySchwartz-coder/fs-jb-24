@@ -28,11 +28,13 @@ const createJWT = (user: UserCred) => {
 const checkJWT = (token: string) => {
   try {
     const checkToken = token.split(' ')[1];
+    //console.log("checkToken in checkToken: ", checkToken)
     const decoded = jwt.verify(checkToken, secretKey);
     console.log(decoded);
-    return createJWT(new UserCred(decoded.name, decoded.role, decoded.id));
+    //return createJWT(new UserCred(decoded.name, decoded.role, decoded.id));
+    return createJWT(new UserCred(0,decoded.name,decoded.role,decoded.id));
   } catch (err: any) {
-    console.log('error: ', err.name);
+    console.log('error- token was empty: ', err.name);
     return '';
   }
 };
