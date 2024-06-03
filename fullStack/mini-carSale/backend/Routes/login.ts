@@ -16,7 +16,10 @@ export type userCred = {
   role: string;
   jwt: string;
 };
-//loginUser
+
+
+/*
+//loginUser from file
 loginRouter.post(
   '/loginUser',
   async (request: Request, response: Response, nextFunction: NextFunction) => {
@@ -35,8 +38,8 @@ loginRouter.post(
       response.status(401).json({ msg: 'bad password :(' });
     }
   }
-);
-/*
+);*/
+/*register to file
 loginRouter.post(
   '/registerUser',
   async (request: Request, response: Response, nextFunction: NextFunction) => {
@@ -57,10 +60,26 @@ loginRouter.post(
   }
 );*/
 loginRouter.post(
+  '/loginUser',
+  async (request: Request, response: Response, nextFunction: NextFunction) => {
+  let result: any = await loginUser(request.body);
+  console.log(result)
+  if(result.jwt!=""){
+    response.status(200).
+    header('Access-Control-Expose-Headers','Authorization' ).
+    header('Authorization', result.jwt).
+    json(result)
+  }else {
+    response.status(400).json({msg: "user not found"})
+  }
+  }
+)
+loginRouter.post(
   "/registerUser",
   async (request: Request, response: Response, nextFunction: NextFunction) => {
-    let result = await registerUser(request.body);
-    if (!result.errno) {
+    let result: any = await registerUser(request.body);
+    console.log(result)
+   if (!result.errno) {
       response.status(201).json({ msg: "created" });
     } else {
         response.status(400).json({msg: result.sqlMessage})

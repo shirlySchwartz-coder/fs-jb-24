@@ -7,64 +7,65 @@ const TRUCK_URL     = "https://data.gov.il/api/3/action/datastore_search?resourc
 const HANDICAP_URL  = "https://data.gov.il/api/3/action/datastore_search?resource_id=c8b9f9c8-4612-4068-934f-d4acd2e3c06e&q=";
 const OFFROAD_URL   = "https://data.gov.il/api/3/action/datastore_search?resource_id=f6efe89a-fb3d-43a4-bb61-9bf12a9b9099&q=";
 const RECALL_URL    = "https://data.gov.il/api/3/action/datastore_search?resource_id=36bf1404-0be4-49d2-82dc-2f1ead4a8b93&q=";
+const LIMIT_STR = '&limit=25'
 
 //search by car number
 const carInfo = async (id:string)=>{
-    let myData = (await axios.get(CAR_URL+id)).data.result.records[0];
+    let myData = (await axios.get(CAR_URL+id +LIMIT_STR)).data.result.records;
     //console.log(myData);
     return myData;
 }
 
 const bikeInfo = async (id:string)=>{
-    let myData = (await axios.get(BIKE_URL+id)).data.result.records[0];
+    let myData = (await axios.get(BIKE_URL+id +LIMIT_STR)).data.result.records;
     return myData;
 }
 
 const truckInfo = async (id:string)=>{
-    let myData = (await axios.get(TRUCK_URL+id)).data.result.records[0];
+    let myData = (await axios.get(TRUCK_URL+id +LIMIT_STR)).data.result.records;
     return myData;
 }
 
 const handicapInfo = async (id:string)=>{
-    let myData = (await axios.get(HANDICAP_URL+id)).data.result.records[0];
+    let myData = (await axios.get(HANDICAP_URL+id +LIMIT_STR)).data.result.records;
     return myData;
 }
 
 const offroadInfo = async (id:string)=>{
-    let myData = (await axios.get(OFFROAD_URL+id)).data.result.records[0];
+    let myData = (await axios.get(OFFROAD_URL+id +LIMIT_STR)).data.result.records;
     return myData;
 }
 
 const recallInfo = async (id:string)=>{
-    let myData = (await axios.get(RECALL_URL+id)).data.result.records[0];
+    let myData = (await axios.get(RECALL_URL+id +LIMIT_STR)).data.result.records;
     return myData;
 }
 //lists
 const carList =async()=>{
-    let myData = (await axios.get(CAR_URL+'&limit=5')).data.result.records;
+    let myData = (await axios.get(CAR_URL+LIMIT_STR)).data.result.records;
     return myData;
 }
 
 const bikeList= async()=>{
-    let myData = (await axios.get(BIKE_URL+'&limit=5')).data.result.records;
+    let myData = (await axios.get(BIKE_URL+LIMIT_STR)).data.result.records;
     return myData;
 }
 const truckList= async()=>{
-    let myData = (await axios.get(TRUCK_URL+'&limit=5')).data.result.records;
+    let myData = (await axios.get(TRUCK_URL+LIMIT_STR)).data.result.records;
     return myData;
 }
 const handicapList= async()=>{
-    let myData = (await axios.get(HANDICAP_URL+'&limit=5')).data.result.records;
+    let myData = (await axios.get(HANDICAP_URL+LIMIT_STR)).data.result.records;
     return myData;
 }
 
 const offroadList= async()=>{
-    let myData = (await axios.get(OFFROAD_URL+'&limit=5')).data.result.records;
+    let myData = (await axios.get(OFFROAD_URL+LIMIT_STR)).data.result.records;
     return myData;
 }
 
 const recallList= async()=>{
-    let myData = (await axios.get(RECALL_URL+'&limit=5')).data.result.records;
+    let myData = (await axios.get(RECALL_URL+LIMIT_STR)).data.result.records;
     return myData;
 }
 

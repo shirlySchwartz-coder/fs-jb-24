@@ -1,9 +1,9 @@
 //1 - class => state
 export class AuthState{
+    name:string = "";
     email:string = "";
     jwt:string="";
-    name:string = "guest";
-    role:string = "";
+    role:string = "guest";
 }
 
 //2 - enum => commands

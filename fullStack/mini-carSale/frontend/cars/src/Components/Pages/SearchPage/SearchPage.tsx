@@ -5,6 +5,7 @@ import axios from 'axios';
 import SingleItem from '../SingleItem/SingleItem';
 import { Car } from '../../model/Car';
 import { CheckJWT } from '../../utils/JWT';
+import { store } from '../../../redux/store';
 
 function SearchPage(): JSX.Element {
   //list of url from data.gov.il
@@ -20,8 +21,10 @@ function SearchPage(): JSX.Element {
   const [carData, setData] = useState('');
   //useState setResult
   const [carResult, setResult] = useState<Car[]>([]);
-
+  const [jwt, setJwt] = useState('');
   const navigate = useNavigate();
+
+  store.subscribe(() => setJwt(store.getState().auth.jwt));
 
   useEffect(() => {
     if (!CheckJWT()) {
@@ -49,10 +52,12 @@ function SearchPage(): JSX.Element {
     let mySearch = (args.target as HTMLInputElement).value;
     setData(mySearch);
   };
-  const handleSearch = () => {
-    axios.get(URL_CAR + carData).then((res) => {
+  const handleSearch = async () => {
+    const headers = { Authorization: ` ${jwt}` };
+    await axios.get(URL_CAR + carData, { headers }).then((res) => {
       let myData: Car[] = [];
-      let myResponse = res.data.result.records;
+      console.log('res:', res);
+      let myResponse = res.data;
       for (let index = 0; index < myResponse.length; index++) {
         console.log(myResponse[index]);
         new Car(

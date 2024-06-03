@@ -1,0 +1,1 @@
+GRANT ALL PRIVILEGES ON database.*users TO 'user'@'localhost'
