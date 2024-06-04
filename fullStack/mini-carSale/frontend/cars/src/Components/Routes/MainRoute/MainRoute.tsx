@@ -7,6 +7,7 @@ import Register from '../../Pages/register/register';
 import { Hacker } from '../../Pages/hacker/hacker';
 
 function MainRoute(): JSX.Element {
+  
   return (
     <div className='MainRoute'>
       <Routes>

@@ -29,13 +29,17 @@ function MainMenu(): JSX.Element {
   const showMainMenu = () => {
     return (
       <>
-        <NavLink to={'/search/car'}>car locater</NavLink>
+        <NavLink to={'/search/car'}>Car locater</NavLink>
         <br />
-        <NavLink to={'/search/bike'}>bike locater</NavLink>
+        <NavLink to={'/search/bike'}>Bike locater</NavLink>
         <br />
-        <NavLink to={'/search/truck'}>truck locater</NavLink>
+        <NavLink to={'/search/truck'}>Truck locater</NavLink>
         <br />
-        <NavLink to={'/search/offroad'}>offride locater</NavLink>
+        <NavLink to={'/search/offroad'}>Offride locater</NavLink>
+        <br />
+        <NavLink to={'/search/handicap'}>Handicap locater</NavLink>
+        <br />
+        <NavLink to={'/search/recall'}>Recall locater</NavLink>
         <hr />
       </>
     );
