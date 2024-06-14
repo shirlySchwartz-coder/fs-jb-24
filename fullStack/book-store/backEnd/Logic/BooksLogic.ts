@@ -6,7 +6,7 @@ const getAllBooks = async ()=>{
     const sql = `
         SELECT *, \`authors\`.firstName, \`authors\`.lastName FROM books
         INNER JOIN \`authors\`
-        ON \`books\`.author_id = \`authors\`.authorId
+        ON \`books\`.authorId = \`authors\`.authorId
     `;
     //execute the sql statement
     return await dal_mysql.execute(sql);
