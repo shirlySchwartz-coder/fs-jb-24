@@ -21,6 +21,7 @@ authorsRouter.get("/all",async (request:Request,response:Response,next:NextFunct
 booksRouter.get("/all", async (request:Request,response:Response,next:NextFunction)=>{
     try{
         const books = await getAllBooks();
+        console.log("books:",books);
         response.status(200).json(books);
     } catch (err){
         next (err); 

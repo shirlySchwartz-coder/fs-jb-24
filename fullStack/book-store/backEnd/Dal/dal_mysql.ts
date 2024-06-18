@@ -26,6 +26,7 @@ const execute = (sql: string):Promise<any>=>{
                     return;
                 }
                 //return the result
+                console.log("connected to my sql server");
                 resolve(result);
             });
         }
