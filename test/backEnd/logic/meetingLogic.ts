@@ -21,9 +21,7 @@ const getAllTeamsMeetings = async ()=>{
 const getTeamMeetings = async(id:number)=>{
     //SQL statement
     const sql = `SELECT * FROM team_meetings.meeting_cal
-    WHERE id=${id}`;
-
-
+    WHERE team_id=${id}`;
     // execute the sql
     const teamMeetings = await dal_mysql.execute(sql);
     console.log(teamMeetings)
@@ -31,9 +29,9 @@ const getTeamMeetings = async(id:number)=>{
 }
 
 const addNewMeeting = async (newMeeting: Meeting)=>{
-    const sql = `INSERT INTO  team_meetings.meeting_cal (team_id, start_time, end_time, details, room)  
-    VALUES (${newMeeting.id}, ${newMeeting.team_id}, ${newMeeting.start_time}, ${newMeeting.end_time},
-    '${newMeeting.details}', '${newMeeting.room}')`;
+    const sql = `INSERT INTO  team_meetings.meeting_cal (id,team_id, start_time, end_time, details, room)  
+    VALUES (${newMeeting.id},${newMeeting.team_id}, ${new Date(newMeeting.team_id)}, ${new Date(newMeeting.start_time)}, ${newMeeting.end_time},
+    ${newMeeting.details}, ${newMeeting.room})`;
     
     return await dal_mysql.execute(sql);
 }
@@ -45,3 +43,4 @@ export  {
     getTeamMeetings,
     addNewMeeting
 }
+

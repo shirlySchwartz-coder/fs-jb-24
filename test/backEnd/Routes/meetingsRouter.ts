@@ -17,7 +17,7 @@ meetingsRouter.get(
   }
 );
 meetingsRouter.get(
-  '/all/:id',
+  '/:id/all',
   async (request: Request, response: Response, nextFunction: NextFunction) => {
     let id = +request.params.id;
     const teams = await getTeamMeetings(id);
@@ -39,7 +39,7 @@ meetingsRouter.post(
         request.body.room
       );
 
-      console.log(newMeeting)
+      console.log("newMeeting:",newMeeting)
       const addedMeeting = await addNewMeeting(newMeeting);
       response.status(201).json(addedMeeting);
     } catch (err) {

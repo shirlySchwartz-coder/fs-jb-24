@@ -33,6 +33,6 @@ server.listen(config.webPort, ()=>{
     console.log (`listing on http://${config.webHost}:${config.webPort}`);
 })
 
-//http://localhost:8080/api/meetings/all/1
+//http://localhost:8080/api/meetings/:id/all
 //http://localhost:8080/api/team/all
 //http://localhost:8080/api/meetings/add
