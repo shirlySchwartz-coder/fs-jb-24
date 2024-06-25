@@ -1,6 +1,4 @@
-import Cars from "../../rest/cars/cars";
 import { MainRoute } from "../../routes/MainRoute/MainRoute";
-import Gabriel from "../../targil/gabriel/gabriel";
 import MainFooter from "../MainFooter/MainFooter";
 import MainHeader from "../MainHeader/MainHeader";
 import MainMenu from "../MainMenu/MainMenu";

@@ -1,16 +1,16 @@
 export class Meeting {
   id: number;
   team_id: number;
-  start_time: Date;
-  end_time: Date;
+  start_time: string;
+  end_time: string;
   details: string;
   room: string;
 
   constructor(
     id: number,
     team_id: number,
-    start_time: Date,
-    end_time: Date,
+    start_time: string,
+    end_time: string,
     details: string,
     room: string
   ) {

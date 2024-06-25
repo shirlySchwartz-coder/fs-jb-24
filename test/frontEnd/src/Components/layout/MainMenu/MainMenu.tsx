@@ -9,9 +9,9 @@ function MainMenu(): JSX.Element {
 			<b>Main menu</b>
             <br/><br/>
             <hr/>
-                <NavLink to="/">All Products</NavLink><br/><br/>
-                <NavLink to="/product">Single Product</NavLink><br/><br/>
-                <NavLink to="/update">Update Product</NavLink><br/><br/>
+                <NavLink to="/">All Meetings</NavLink><br/><br/>
+                <NavLink to="/addMeeting">Add Meeting</NavLink><br/><br/>
+               
         </div>
     );
 }

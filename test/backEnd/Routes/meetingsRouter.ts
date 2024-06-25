@@ -29,17 +29,19 @@ meetingsRouter.get(
 meetingsRouter.post(
   '/add',
   async (request: Request, response: Response, next: NextFunction) => {
+    let start = new Date(request.body.start_time);
+    let end = new Date(request.body.end_time);
     try {
       const newMeeting = new Meeting(
         request.body.id,
         request.body.team_id,
-        request.body.start_time,
-        request.body.end_time,
+        start,
+        end,
         request.body.details,
         request.body.room
       );
 
-      console.log("newMeeting:",newMeeting)
+      console.log('newMeeting:', newMeeting);
       const addedMeeting = await addNewMeeting(newMeeting);
       response.status(201).json(addedMeeting);
     } catch (err) {
