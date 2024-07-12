@@ -1,0 +1,38 @@
+
+<h1>hello</h1>
+date of birth: <input type="number" name="year" [(ngModel)]="userYear"/>
+<p>your age is:</p> <p>{{2024-userYear}}</p>
+
+<hr/>
+<input type="number" name="age" id="id_age" [(ngModel)]="userAge"/><br/>
+<h2 appMarkAttribute>you born in : {{2024-userAge}}</h2>
+<h1 *ngIf="tellLies">Gabriel the smartest person on earth</h1>
+<h2 *ngIf="youInTheArmyNow; else inClass">Ilan is in the army, hizbalahh beware</h2>
+<ng-template #inClass>Ilan is in the class</ng-template>
+<hr/>
+<!-- <h1 [ngStyle]="{color: txtColor,background: txtBackground}">I AM THE KING OF THE WORLD !!!!</h1> -->
+ <h3 [ngClass]="{darkModeOn:isDarkMode, darkModeOff:!isDarkMode}">I AM THE KING OF THE WORLD</h3>
+
+<hr>
+<div *ngFor="let color of userColor; let i=index">
+  <input type="button" name="color" value='{{userColor[i]}}'  />
+</div>
+<hr>
+<input type="button" name="color" value='Next Them' (click)="onNextColor( )" />
+
+ <!--<p [ngClass]="userColor[i]">{{userColor[i]}}- Next color Them</p> -->
+
+<hr>
+<p *ngFor="let color of userColor; let i=index" ngIf="i<4; else i=0" ngClass="[userColor[i]]">button change color {{i}}</p>
+<p [ngClass]="['red_them', 'green_them','blue_them']">this is the text</p>
+<p [class]="userColor[0]">this is the text</p>
+
+<div *ngFor = "let color of userColor; let i=index" >
+    <p [ngClass]="userColor[i]">{{userColor[i]}} This is class</p>
+</div>
+
+<li *ngFor = "let color of userColor; let i=index">
+  <ul>1</ul>
+  <ul>1</ul>
+</li>
+

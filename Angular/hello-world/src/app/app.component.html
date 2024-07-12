@@ -1,0 +1,31 @@
+<div style="text-align: center;">
+  <app-header></app-header>
+  <h1>Welcome {{userName}}</h1>
+  <h2>{{message}}</h2>
+  <hr>
+  <div style="align-content: center;">
+    <app-button-ok></app-button-ok>
+    <app-button-fail></app-button-fail>
+  </div>
+  <hr>
+<div>
+
+<input type="number" name="temp" id="id_temp"  [(ngModel)]="userTemp" placeholder="Celsius"/><br/>
+Fahrenheit : {{userTemp+1.8 + 32}}
+<br><hr>
+<input type="number" name="amount" id="id_amount"  [(ngModel)]="userAmount" placeholder="Shekel"/><br/>
+$ : {{userAmount*0.27}}<br/>
+Eur: {{userAmount*0.249}}<br/>
+Cad:{{userAmount*.0365}}<br/>
+<br><hr>
+<input type="number" name="length" id="id_length"  [(ngModel)]="userLength" placeholder="cm"/><br/>
+Inch : {{userLength*0.393}}<br/>
+<br><hr>
+<input type="number" name="size" id="id_size"  [(ngModel)]="userSize" placeholder="Meter"/><br/>
+pit : {{userSize*3.28}}<br/>
+</div>
+<p appMarkAttribute>abcd</p>
+<p appMarkAttribute>efg</p>
+<hr>
+
+</div>

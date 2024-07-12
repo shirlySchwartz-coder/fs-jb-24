@@ -1,0 +1,3 @@
+ng new <name-project>
+ng g c comps/header - to build component
+ ng serve           - to start

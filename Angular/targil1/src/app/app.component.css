@@ -1,0 +1,16 @@
+.red_them{
+  background-color: red;
+  color: white;
+  font-style: italic;
+}
+.green_them{
+  background-color: green;
+  color: red;
+  font-style: normal;
+
+}
+.blue_them{
+  background-color: blue;
+  color: yellow;
+  font-family:Arial, Helvetica, sans-serif;
+}
