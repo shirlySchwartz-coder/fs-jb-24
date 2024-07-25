@@ -1,0 +1,10 @@
+{{title}} <hr>
+approch 1
+<ul>
+  <li *ngFor="let item of genderArr" [ngClass]="item== 'boy' ? 'blue':'pink'"> {{item}} </li>
+</ul>
+<hr>
+approch 2
+<ul>
+  <li *ngFor="let item of genderArr" [ngClass]="item"> {{item}} </li>
+</ul>

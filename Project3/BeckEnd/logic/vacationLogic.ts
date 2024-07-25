@@ -10,10 +10,17 @@ const getAllVacations = async ()=>{
     return await dal_mysql.execute(sql);
 }
 
-const followVacation = async(userId: number,vacationId :number, isFollowed: boolean)=>{
+const followVacation = async(userId: number,vacationId :number)=>{
     const sql = `
-    INSERT INTO tagging_vacation.followers (userId, vacationId, isFollowed)
-     VALUES (userId, vacationId, isFollowed)
+    INSERT INTO  tagging_vacation.followers(idFollower,idVacation) VALUES (${userId},${vacationId}) ;
+    `;
+   
+    return await dal_mysql.execute(sql);
+}
+const unFollowVacation = async(userId: number,vacationId :number)=>{
+    const sql = `
+    DELETE FROM  tagging_vacation.followers WHERE idFollower=${userId} 
+    AND idVacation=${vacationId} ;
     `;
    
     return await dal_mysql.execute(sql);
@@ -21,5 +28,6 @@ const followVacation = async(userId: number,vacationId :number, isFollowed: bool
 
 export {
     getAllVacations,
-    followVacation
+    followVacation,
+    unFollowVacation
 };

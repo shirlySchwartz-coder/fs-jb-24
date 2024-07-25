@@ -4,8 +4,9 @@ import {Request,Response,NextFunction} from "express";
 import { RouteNotFound } from "../Models/ClientsErrors";
 
 //middle ware function
-const ErrorHandler = (request:Request,response:Response,nextFunction:NextFunction) =>{
+const ErrorHandler = (error:Error,request:Request,response:Response,nextFunction:NextFunction) =>{
     const err = new RouteNotFound(request.originalUrl);
+    console.log(err)
     nextFunction(err);
 }
 

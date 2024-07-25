@@ -1,9 +1,10 @@
 import { Component } from '@angular/core';
+import { CenterDirective } from '../../center.directive';
 
 @Component({
   selector: 'app-main',
   standalone: true,
-  imports: [],
+  imports: [CenterDirective],
   templateUrl: './main.component.html',
   styleUrl: './main.component.css'
 })

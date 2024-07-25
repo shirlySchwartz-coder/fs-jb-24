@@ -1,0 +1,21 @@
+.blue{
+  color:black;
+  background-color: blue;
+}
+.pink{
+  color:black;
+  background-color: pink;
+}
+
+li{
+  list-style-type: none;
+}
+
+.boy{
+  color:black;
+  background-color: blue;
+}
+.girl{
+  color:black;
+  background-color: pink;
+}
