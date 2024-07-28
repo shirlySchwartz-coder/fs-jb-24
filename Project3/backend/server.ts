@@ -3,14 +3,10 @@ import cors from "cors";
 import express from "express";
 import fileUpload from "express-fileupload";
 import config from "./Utils/config"
-import carRouter from "./Routes/vehicles";
 import ErrorHandler from "./MiddleWare/routeNotFound";
+import vacationsRouter from "./Routes/vacations";
 import loginRouter from "./Routes/login";
-import customerRouter from "./Routes/customersRouter";
-
-import dal__mongodb from "./DAL/dal__mongodb";
-import { addCat } from "./logic/mongoDB_logic";
-import { CatModel } from "./Models/catMode_mongoDB";
+import adminRouter from "./Routes/admin";
 
 //import ErrorHandler
 //import router 
@@ -55,21 +51,12 @@ server.use(express.static("upload"));
 server.use(fileUpload({createParentPath: true}));
 
 //using routes = > http://localhost:8080/api/v1/transport
-//http://127.0.0.1:8123/api/v1/transport/cars/6225433
-server.use("/api/v1/transport", carRouter);
+server.use("/api/v1/vacations", vacationsRouter);
 server.use("/api/v1/login",loginRouter);
-server.use("/api/v1/customer",customerRouter)
+server.use("/api/v1/dashboard",adminRouter);
+
 //404 handler
 server.use("*",ErrorHandler);
-
-//make the connection to mongoDB
-dal__mongodb.connect();
-
-//add new Category
-addCat(new CatModel(
-    {name: "rock"}
-));
-
 
 //start the server
 server.listen(config.webPort, ()=>{
