@@ -7,17 +7,10 @@ export function Menu(): JSX.Element {
     <div className='Menu'>
       <MenuList>
         <MenuItem>
-          <NavLink to='/bookList'>Book list</NavLink>
+          <NavLink to='/vacationList'>Vacations list</NavLink>
         </MenuItem>
         <MenuItem>
-          <NavLink to='/addBook'>Add book</NavLink>
-        </MenuItem>
-        <Divider />
-        <MenuItem>
-          <NavLink to='/authorsList'>Authors list</NavLink>
-        </MenuItem>
-        <MenuItem>
-         
+          <NavLink to='/login'>Login</NavLink>
         </MenuItem>
       </MenuList>
       <hr />
