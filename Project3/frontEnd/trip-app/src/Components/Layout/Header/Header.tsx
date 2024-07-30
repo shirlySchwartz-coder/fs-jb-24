@@ -9,7 +9,7 @@ export function Header(): JSX.Element {
       </div>
 
       <div className='Titel'>
-        <p className='name'>Stematzky</p>
+        <p className='name'>Trip App Header</p>
       </div>
     </div>
   );

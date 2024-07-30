@@ -17,7 +17,7 @@ export function Menu(): JSX.Element {
           <NavLink to='/authorsList'>Authors list</NavLink>
         </MenuItem>
         <MenuItem>
-          <NavLink to='/addAuthor'>Add author</NavLink>
+         
         </MenuItem>
       </MenuList>
       <hr />
