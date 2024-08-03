@@ -1,24 +1,26 @@
 import { SubmitHandler, useForm } from 'react-hook-form';
-import './register.css';
+import './Register.css';
 import notify from '../../utils/Notify';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
 import { User } from '../../Models/User';
+import { UserReg } from '../../Models/UserReg';
 
-type userCred = {
-  userName: string;
+type userForm = {
+  firstName: string;
+  lastName: string;
+  userEmail: string;
   userPass: string;
   passCheck: string;
-  userRole: string;
-  userEmail: string;
+  userRole?: boolean;
 };
-function Register(): JSX.Element {
+export function Register(): JSX.Element {
   const navigate = useNavigate();
   const {
     register,
     handleSubmit,
     formState: { errors },
-  } = useForm<userCred>();
+  } = useForm<userForm>();
 
   const fieldNeed = {
     required: true,
@@ -30,18 +32,21 @@ function Register(): JSX.Element {
   const ErrorsNoticeMin = `This filed must contain more than ${fieldNeed.minLength}characters`;
   const ErrorsNoticeMax = `This filed cant contain more then ${fieldNeed.maxLength}characters`;
 
-  const sendRegister: SubmitHandler<userCred> = (data) => {
+  const sendRegister: SubmitHandler<userForm> = (data) => {
+    console.log(data)
     if (data.userPass !== data.passCheck) {
       notify.error('Password mismatch');
       return;
     }
 
-    let sendData = {
-      userName:data.userName,
-      userPass:data.userPass,
-      userRole:data.userRole,
-      userEmail:data.userEmail,
-  }
+    let sendData: UserReg = {
+      id: 0,
+      userFirstName: data.firstName,
+      userLastName: data.lastName,
+      userEmail: data.userEmail,
+      userPassword: data.userPass,
+      isAdmin: data.userRole,
+    };
     console.log(sendData);
     //go to axios and send the information....
     axios
@@ -64,27 +69,66 @@ function Register(): JSX.Element {
         <form onSubmit={handleSubmit(sendRegister)}>
           <input
             type='text'
-            placeholder='user name'
-            {...register('userName', fieldNeed)}
+            placeholder='First Name'
+            {...register('firstName', fieldNeed)}
           />
-          {errors.userName?.type === 'required' && (
+          {errors.firstName?.type === 'required' && (
             <>
               <br />
               <span style={{ color: 'red' }}>{ErrorsNoticeRequired}</span>
             </>
           )}
-          {errors.userName?.type === 'minLength' && (
+          {errors.firstName?.type === 'minLength' && (
             <>
               <br />
               <span style={{ color: 'red' }}>{ErrorsNoticeMin}</span>
             </>
           )}
-          {errors.userName?.type === 'maxLength' && (
+          {errors.firstName?.type === 'maxLength' && (
             <>
               <br />
               <span style={{ color: 'red' }}>{ErrorsNoticeMax}</span>
             </>
           )}
+          <br />
+          <br />
+          <input
+            type='text'
+            placeholder='Last Name'
+            {...register('lastName', fieldNeed)}
+          />
+          {errors.lastName?.type === 'required' && (
+            <>
+              <br />
+              <span style={{ color: 'red' }}>{ErrorsNoticeRequired}</span>
+            </>
+          )}
+          {errors.lastName?.type === 'minLength' && (
+            <>
+              <br />
+              <span style={{ color: 'red' }}>{ErrorsNoticeMin}</span>
+            </>
+          )}
+          {errors.lastName?.type === 'maxLength' && (
+            <>
+              <br />
+              <span style={{ color: 'red' }}>{ErrorsNoticeMax}</span>
+            </>
+          )}
+          <br />
+          <br />
+          <input
+            type='text'
+            placeholder='user email'
+            {...register('userEmail', { required: true })}
+          />
+          {errors.userEmail?.type === 'required' && (
+            <>
+              <br />
+              <span style={{ color: 'red' }}>{ErrorsNoticeRequired}</span>
+            </>
+          )}
+
           <br />
           <br />
           <input
@@ -114,7 +158,7 @@ function Register(): JSX.Element {
           <br />
           <input
             type='password'
-            placeholder='check password'
+            placeholder='Confirm password'
             {...register('passCheck', { required: true })}
           />
           {errors.passCheck?.type === 'required' && (
@@ -125,33 +169,20 @@ function Register(): JSX.Element {
           )}
           <br />
           <br />
-          <input
-            type='text'
-            placeholder='user email'
-            {...register('userEmail', { required: true })}
-          />
-          {errors.userEmail?.type === 'required' && (
-            <>
-              <br />
-              <span style={{ color: 'red' }}>{ErrorsNoticeRequired}</span>
-            </>
-          )}
-          <br />
+
           <br />
           <select
-            defaultValue={'user'}
+           
             {...register('userRole', { required: true })}
           >
-            <option value='user'>User</option>
-            <option value='Company'>Company</option>
-            <option value='Admin'>Admin</option>
+            <option value='1'>Admin</option>
+            <option value='0' selected>User</option>
+            
           </select>
           <hr />
-          <input type='submit' value='register' />
+          <input type='submit' value='Send' />
         </form>
       </div>
     </div>
   );
 }
-
-export default Register;

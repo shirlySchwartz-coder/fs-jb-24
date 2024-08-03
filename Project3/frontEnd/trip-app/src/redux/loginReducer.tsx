@@ -1,9 +1,10 @@
 
 export class AuthState {
+    id:number=0;
     email: string = "";
-    name: string = "guest";
+    name: string = "";
     token: string = "";
-    userType: string = "";
+    isAdmin: boolean = false;
     isLogged:boolean = false;
 }
 

@@ -12,6 +12,9 @@ export function Menu(): JSX.Element {
         <MenuItem>
           <NavLink to='/login'>Login</NavLink>
         </MenuItem>
+        <MenuItem>
+          <NavLink to='/register'>Register</NavLink>
+        </MenuItem>
       </MenuList>
       <hr />
     </div>

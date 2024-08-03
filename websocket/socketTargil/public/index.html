@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Class 48</title>
+    <style>
+      * {
+          text-align: center;
+      }
+
+      #messages {
+          list-style-type: none;
+          margin: 0;
+          padding: 0;
+      }
+
+      #messages li {
+          padding: 5px 10px;
+      }
+    </style>
+    <script src="/socket.io/socket.io.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+  </head>
+
+  <body>
+    <h1>Class 48 - web socket</h1>
+    <hr />
+    <ul id="data"></ul>
+    <div>
+        <form id="form" action="">
+            <button type="button" id="color1" value="Red"/><br />
+            <button type="button"id="color2" value="Green">Green To Red</button><br />
+            <input type="checkbox" id="remember" name="remember" value=false />
+            <label for="remember"> Remember me</label><br />
+            <input type="text" placeholder="Please enter your text..." id="userText" />
+            <button>Send</button>
+        </form>
+        
+      </div>
+    
+
+    <script>
+      var socket = io();
+
+      //send chat message
+      $('form').submit(function(){
+        let data = {color1:$("#color1").val(), color2:$("#color1"), remember:$("#remember"), userText:$("#userText").val()}
+        console.log("data:", data)
+          socket.emit('data',$("#input").val());
+          $("#input").val("");
+          console.log("sent message");
+          return false;
+      });
+
+      //receive and display message
+      socket.on("chat message",function(msg){
+          console.log("client:",msg)
+          $("#messages").append($("<li>").text(msg));
+      });
+    </script>
+  </body>
+  
+</html>

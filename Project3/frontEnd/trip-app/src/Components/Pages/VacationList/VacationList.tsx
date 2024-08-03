@@ -1,8 +1,8 @@
 import { useEffect, useState } from 'react';
 import './VacationList.css';
 import axios from 'axios';
-import { SingleVacation } from '../SingleVacation/SingleVacation';
 import { Vacation } from '../../Models/Vacation';
+import SingleVacation from '../SingleVacation/SingleVacation';
 
 export function VacationList(): JSX.Element {
   const [vacations, setVacations] = useState<Vacation[]>([]);
@@ -17,10 +17,10 @@ export function VacationList(): JSX.Element {
   }, []);
 
   return (
-  <div className='VacationList'>
-{vacations.map(
-    (item)=> <SingleVacation key={item.vacationId} vacation={item}/>
-    )}
-  </div>
+    <div className='VacationList'>
+      {vacations.map((item) => (
+        <SingleVacation key={item.vacationId} vacation={item} />
+      ))}
+    </div>
   );
 }

@@ -1,18 +1,24 @@
 export class User {
+  public userId:number;
   public userName: string;
-  public userPass?: string; //if forgat password
-  public userRole?: string;
   public userEmail?: string;
+  public userPass?: string; //if forgat password
+  public isAdmin?: boolean;
+  public jwt?: string;
 
   constructor(
+    userId:number,
     userName: string,
+    userEmail?: string,
     userPass?: string,
-    userRole?: string,
-    userEmail?: string
+    isAdmin?: boolean,
+    jwt?: string
   ) {
+    this.userId=userId;
     this.userName = userName;
-    this.userPass = userPass;
-    this.userRole = userRole;
     this.userEmail = userEmail;
+    this.userPass = userPass;
+    this.isAdmin = isAdmin;
+    this.jwt = jwt;
   }
 }

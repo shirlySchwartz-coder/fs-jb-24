@@ -3,59 +3,57 @@ import { SubmitHandler, useForm } from 'react-hook-form';
 import notify from '../../utils/Notify';
 
 import { useNavigate } from 'react-router-dom';
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import { store } from '../../../redux/store';
 import { AuthState, loginAction } from '../../../redux/loginReducer';
+import { User } from '../../Models/User';
 
-function Login(): JSX.Element {
+export function Login(): JSX.Element {
   const navigate = useNavigate();
+  const [rememberMe,setRememberMe]=useState(false)
+  
   //user name, user pass, remember me, user role:user,company,admin
-  type userCred = {
-    userName: string;
-    userPass: string;
-    userRole: string;
-    rememberMe: boolean;
-  };
+  
+
   useEffect(() => {
     //if we have a valid token , we can navigate to the main page :)
   }, []);
   //use form methods and data type
-  const {
-    register,
-    handleSubmit,
-    formState: { errors },
-  } = useForm<userCred>();
-  const makeLogin: SubmitHandler<userCred> = (data) => {
+  const {register,handleSubmit,formState: { errors },} = useForm<User>();
+
+  const makeLogin: SubmitHandler<User> = (data) => {
     //handle remember me...
+    console.log(data);
+    
     axios
       .post('http://localhost:8080/api/v1/login/loginUser', {
-        userName: data.userName,
+        userEmail: data.userEmail,
         userPass: data.userPass,
       })
       .then((res) => {
         console.log('my result:', res.data);
         //update the redux
-        store.dispatch(loginAction(res.data));
-        //const jwt = res.headers["Authorization"];
-        const jwt = res.data.jwt;
-        if (data.rememberMe) {
+        //store.dispatch(loginAction(res.data));
+        const jwt = res.headers["Authorization"];
+        //const jwt = res.data.jwt;
+        if (rememberMe) {
           localStorage.setItem('jwt', jwt);
         } else {
           localStorage.removeItem('jwt');
           sessionStorage.setItem('jwt', jwt);
         }
         notify.success('Welcome ${data.userName}');
-        navigate('/main');
+        navigate('/vacationList');
       })
       .catch((err) => {
-        notify.error('Somthing went wrong');
+        notify.error('Something went wrong');
       });
   };
 
   const fieldNeed = {
     required: true,
     minLength: 4,
-    maxLength: 15,
+    maxLength: 35,
   };
 
   return (
@@ -65,16 +63,16 @@ function Login(): JSX.Element {
       <form onSubmit={handleSubmit(makeLogin)}>
         <input
           type='text'
-          placeholder='user name'
-          {...register('userName', fieldNeed)}
+          placeholder='user email'
+          {...register('userEmail', fieldNeed)}
         />
-        {errors.userName?.type === 'required' && (
+        {errors.userEmail?.type === 'required' && (
           <>
-            <br />
-            <span style={{ color: 'red' }}>you must write user name</span>
+            <br /> 
+            <span style={{ color: 'red' }}>you must write email</span>
           </>
         )}
-        {errors.userName?.type === 'minLength' && (
+        {errors.userEmail?.type === 'minLength' && (
           <>
             <br />
             <span style={{ color: 'red' }}>
@@ -82,7 +80,7 @@ function Login(): JSX.Element {
             </span>
           </>
         )}
-        {errors.userName?.type === 'maxLength' && (
+        {errors.userEmail?.type === 'maxLength' && (
           <>
             <br />
             <span style={{ color: 'red' }}>
@@ -109,7 +107,9 @@ function Login(): JSX.Element {
         )}
         <br />
         <br />
-        <input type='checkbox' {...register('rememberMe')} />
+       
+        
+        <input type='checkbox' onChange={(e)=>setRememberMe(e.target.checked)} />
         Remember me
         <hr />
         <input type='submit' value='login' />
@@ -117,4 +117,4 @@ function Login(): JSX.Element {
     </div>
   );
 }
-export default Login;
+

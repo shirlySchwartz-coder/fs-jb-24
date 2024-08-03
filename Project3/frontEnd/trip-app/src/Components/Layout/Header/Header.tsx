@@ -1,15 +1,69 @@
 import './Header.css';
 import logo from '../../Uploads/logo.png';
+import { useEffect, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
+import {store} from '../../../redux/store'
+import { logoutAction, loginAction } from '../../../redux/loginReducer';
 
 export function Header(): JSX.Element {
+  const [isLogged, setLogged]= useState(false)
+  const navigate = useNavigate();
+
+  store.subscribe(()=>{
+    setLogged(store.getState().login.token.length>10)
+  })
+
+  useEffect(() => {
+  const myJWT = localStorage.getItem('jwt')  || ''
+  setLogged(myJWT?.length>10)
+  }, []);
+  const logoutButton = () => {
+    return (
+      <>
+        <input
+          type='button'
+          value='logout'
+          onClick={() => {
+            store.dispatch(logoutAction());
+            //notify.success('You are logged out.');
+            localStorage.removeItem('jwt');
+            sessionStorage.removeItem('jwt');
+            navigate('/');
+          }}
+        />
+      </>
+    );
+  };
+
+  const loginButton = () => {
+    return (
+      <>
+        <input
+          type='button'
+          value='login'
+          onClick={() => {
+            navigate('/login');
+          }}
+        />
+        <input
+          type='button'
+          value='register'
+          onClick={() => navigate('/register')}
+        />
+      </>
+    );
+  };
+  
   return (
     <div className='Header'>
       <div >
         <img src={logo} width='100' height='50' alt='logo' className='img-logo-center' />
       </div>
 
-      <div className='Titel'>
+      <div className='Title'>
         <h2 className='name'>Trip App</h2>
+        <div>Hello {store.getState().login.name}</div>
+        <div>{isLogged? logoutButton() : loginButton()}</div>
       </div>
     </div>
   );

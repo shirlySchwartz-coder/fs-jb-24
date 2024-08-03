@@ -1,15 +1,24 @@
-export class UserCred{
-    public id:number;
-    public userName:string;
-    public userPass?:string; //will not pass in the jwt token
-    public userRole:string;
-    public userEmail:string;
+export class UserCred {
+    public userId:number;
+  public userName: string;
+  public userEmail?: string;
+  public userPass?: string; //if forgat password
+  public isAdmin?: boolean;
+  public jwt?: string;
 
-    constructor(id:number,userName:string,userRole:string,userEmail:string,userPass?:string){
-        this.id=id;
-        this.userName=userName;
-        this.userPass=userPass;
-        this.userRole=userRole;
-        this.userEmail=userEmail;
-    }
+  constructor(
+    userId:number,
+    userName: string,
+    userEmail?: string,
+    userPass?: string,
+    isAdmin?: boolean,
+    jwt?: string
+  ) {
+    this.userId=userId;
+    this.userName = userName;
+    this.userEmail = userEmail;
+    this.userPass = userPass;
+    this.isAdmin = isAdmin;
+    this.jwt = jwt;
+  }
 }
