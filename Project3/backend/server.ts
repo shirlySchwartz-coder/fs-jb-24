@@ -14,7 +14,7 @@ import adminRouter from "./Routes/admin";
 
 //create server
 const server = express();
-const isAdmin = false;
+//const isAdmin = false;
 
 //configure cors
 //origin => מאיפה מגיעה הבקשה
@@ -31,15 +31,9 @@ const corsOptions = {
     exposedHeaders: ["Authorization"] //which headers i will expose
 }
 
-const serverCors = {
-    origin: "192.168.60.53",
-    methods: ["POST"],
-    allowedHeaders: ["Content-Type","Authorization"],
-    exposedHeaders: ["Authorization"]
-}
 
 //cors = cross origin research sharing...
-server.use(cors(isAdmin?serverCors:corsOptions));
+server.use(cors(corsOptions));
 
 //how we send the data back (JSON,XML,RAW,String)
 server.use(express.json());

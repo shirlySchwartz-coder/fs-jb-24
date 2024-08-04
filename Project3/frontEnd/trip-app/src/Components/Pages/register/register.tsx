@@ -33,7 +33,7 @@ export function Register(): JSX.Element {
   const ErrorsNoticeMax = `This filed cant contain more then ${fieldNeed.maxLength}characters`;
 
   const sendRegister: SubmitHandler<userForm> = (data) => {
-    console.log(data)
+    console.log(data);
     if (data.userPass !== data.passCheck) {
       notify.error('Password mismatch');
       return;
@@ -171,13 +171,12 @@ export function Register(): JSX.Element {
           <br />
 
           <br />
-          <select
-           
-            {...register('userRole', { required: true })}
-          >
+          <select {...register('userRole', { required: true })}>
+            <option value='0' selected>
+              User
+            </option>
+
             <option value='1'>Admin</option>
-            <option value='0' selected>User</option>
-            
           </select>
           <hr />
           <input type='submit' value='Send' />

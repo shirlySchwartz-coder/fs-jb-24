@@ -1,6 +1,7 @@
 import axios from 'axios';
 import { SubmitHandler, useForm } from 'react-hook-form';
-import notify from '../../utils/Notify';
+import Notify from 'simple-notify';
+import 'simple-notify/dist/simple-notify.css';
 
 import { useNavigate } from 'react-router-dom';
 import { useEffect, useState } from 'react';
@@ -10,43 +11,85 @@ import { User } from '../../Models/User';
 
 export function Login(): JSX.Element {
   const navigate = useNavigate();
-  const [rememberMe,setRememberMe]=useState(false)
-  
+  const [rememberMe, setRememberMe] = useState(false);
+
   //user name, user pass, remember me, user role:user,company,admin
-  
 
   useEffect(() => {
     //if we have a valid token , we can navigate to the main page :)
   }, []);
   //use form methods and data type
-  const {register,handleSubmit,formState: { errors },} = useForm<User>();
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+  } = useForm<User>();
 
-  const makeLogin: SubmitHandler<User> = (data) => {
+  const makeLogin: SubmitHandler<User> = async(data) => {
     //handle remember me...
     console.log(data);
-    
-    axios
+
+    await axios
       .post('http://localhost:8080/api/v1/login/loginUser', {
         userEmail: data.userEmail,
         userPass: data.userPass,
       })
       .then((res) => {
-        console.log('my result:', res.data);
-        //update the redux
-        //store.dispatch(loginAction(res.data));
-        const jwt = res.headers["Authorization"];
-        //const jwt = res.data.jwt;
-        if (rememberMe) {
-          localStorage.setItem('jwt', jwt);
+        const jwt = res.headers["authorization"];
+        console.log('my jwt: ', jwt);
+        if (jwt.length>10) {
+          //store.dispatch(loginAction(jwt));
+          //const jwt = res.headers['Authorization'];
+          if (rememberMe) {
+            localStorage.setItem('jwt', jwt);
+          } else {
+            localStorage.removeItem('jwt');
+            sessionStorage.setItem('jwt', jwt);
+          }
+          //notify.success(`Welcome ${data.userName}`);
+          new Notify({
+            status: 'success',
+            title: 'Login ',
+            text: 'Login was successful',
+            effect: 'fade',
+            speed: 300,
+            customClass: '',
+            customIcon: '',
+            showIcon: false,
+            showCloseButton: true,
+            autoclose: true,
+            autotimeout: 3000,
+            notificationsGap: 0,
+            notificationsPadding: NaN,
+            type: 'outline',
+            position: 'center',
+            customWrapper: '',
+          });
+
+          navigate('/vacationList');
         } else {
-          localStorage.removeItem('jwt');
-          sessionStorage.setItem('jwt', jwt);
+          new Notify({
+            status: 'error',
+            title: 'Login ',
+            text: 'Login failed',
+            effect: 'fade',
+            speed: 300,
+            customClass: '',
+            customIcon: '',
+            showIcon: false,
+            showCloseButton: true,
+            autoclose: true,
+            autotimeout: 3000,
+            notificationsGap: 0,
+            notificationsPadding: NaN,
+            type: 'outline',
+            position: 'center',
+            customWrapper: '',
+          });
         }
-        notify.success('Welcome ${data.userName}');
-        navigate('/vacationList');
-      })
-      .catch((err) => {
-        notify.error('Something went wrong');
+      }).catch((err) => {
+        //notify.error("Why who are you?");
+        console.log(err);
       });
   };
 
@@ -55,6 +98,9 @@ export function Login(): JSX.Element {
     minLength: 4,
     maxLength: 35,
   };
+  const ErrorsNoticeRequired = 'This filed is required';
+  const ErrorsNoticeMin = `This filed must contain more than ${fieldNeed.minLength}`;
+  const ErrorsNoticeMax = `This filed can't contain more then ${fieldNeed.maxLength}`;
 
   return (
     <div className='login Box'>
@@ -68,24 +114,20 @@ export function Login(): JSX.Element {
         />
         {errors.userEmail?.type === 'required' && (
           <>
-            <br /> 
-            <span style={{ color: 'red' }}>you must write email</span>
+            <br />
+            <span style={{ color: 'red' }}>{ErrorsNoticeRequired}</span>
           </>
         )}
         {errors.userEmail?.type === 'minLength' && (
           <>
             <br />
-            <span style={{ color: 'red' }}>
-              user name must be 5 char minimum
-            </span>
+            <span style={{ color: 'red' }}>{ErrorsNoticeMin}</span>
           </>
         )}
         {errors.userEmail?.type === 'maxLength' && (
           <>
             <br />
-            <span style={{ color: 'red' }}>
-              user name must be 15 char maximum
-            </span>
+            <span style={{ color: 'red' }}>{ErrorsNoticeMax}</span>
           </>
         )}
         <br />
@@ -93,23 +135,32 @@ export function Login(): JSX.Element {
         <input
           type='password'
           placeholder='user password'
-          {...register('userPass', {
-            required: true,
-            minLength: 5,
-            maxLength: 10,
-          })}
+          {...register('userPass', fieldNeed)}
         />
-        {errors.userPass && (
+        {errors.userPass?.type === 'required' && (
           <>
             <br />
-            <span style={{ color: 'red' }}>WTF?</span>
+            <span style={{ color: 'red' }}>{ErrorsNoticeRequired}</span>
+          </>
+        )}
+        {errors.userPass?.type === 'minLength' && (
+          <>
+            <br />
+            <span style={{ color: 'red' }}>{ErrorsNoticeMin}</span>
+          </>
+        )}
+        {errors.userPass?.type === 'maxLength' && (
+          <>
+            <br />
+            <span style={{ color: 'red' }}>{ErrorsNoticeMax}</span>
           </>
         )}
         <br />
         <br />
-       
-        
-        <input type='checkbox' onChange={(e)=>setRememberMe(e.target.checked)} />
+        <input
+          type='checkbox'
+          onChange={(e) => setRememberMe(e.target.checked)}
+        />
         Remember me
         <hr />
         <input type='submit' value='login' />
@@ -117,4 +168,3 @@ export function Login(): JSX.Element {
     </div>
   );
 }
-

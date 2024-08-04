@@ -33,9 +33,9 @@ const loginUser = async (user: UserCred) => {
     FROM tagging_vacation.users
     WHERE userEmail='${user.userEmail}' and userPassword=${user.userPass};
     `;
-    console.log(sql)
+    //console.log(sql)
     const [result] = await dal_mysql.execute(sql);
-    console.log('result in logic:', result);
+    //console.log('result in logic:', result);
     
     if (result) {
       const userInfo={
