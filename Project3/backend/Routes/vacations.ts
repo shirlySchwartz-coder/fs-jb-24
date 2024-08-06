@@ -1,7 +1,7 @@
 //getting the methods we need
 import express , {NextFunction,Request,Response} from 'express';
 import { checkJWT } from '../Utils/jwt';
-import { followVacation, getAllVacations, getVacationById, unFollowVacation } from '../logic/vacationLogic';
+import { followVacation, getAllVacations, getFavoritesByUser, getVacationById, unFollowVacation } from '../logic/vacationLogic';
 
 const vacationsRouter = express.Router();
 
@@ -10,13 +10,18 @@ const vacationsRouter = express.Router();
 vacationsRouter.get(
     "/all",
     async (request:Request, response:Response, nextFunction:NextFunction)=>{        
-       
-        console.log("all vacations ");
+        const jwt = checkJWT(request.header("Authorization") || ""); 
+        console.log("all vacations-  jwt:",jwt);
+        if (jwt.length>10){
         response
         .status(200)
         .header('Access-Control-Expose-Headers', 'Authorization')
-        //.header("Authorization",jwt)
+        .header("Authorization",jwt)
         .json(await getAllVacations());
+        
+        }else{
+            response.status(401)
+        }
     }
 )
 
@@ -61,6 +66,21 @@ vacationsRouter.delete(
         .header('Access-Control-Expose-Headers', 'Authorization')
         //.header("Authorization",jwt)
         .json(await unFollowVacation(userId,vacationId));
+       
+    }
+)
+
+
+vacationsRouter.get(
+    "/favorites/:id",
+    async (request:Request, response:Response, nextFunction:NextFunction)=>{        
+        let userId = +request.params.id;
+        const jwt = checkJWT(request.header("Authorization") || ""); 
+        response
+        .status(201)
+        .header('Access-Control-Expose-Headers', 'Authorization')
+        .header("Authorization",jwt)
+        .json(await getFavoritesByUser(userId));
        
     }
 )

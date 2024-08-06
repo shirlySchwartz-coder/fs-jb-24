@@ -5,7 +5,7 @@ import { UserCred } from '../Models/UserCred';
 const getAllVacations = async () => {
   const sql = `
     SELECT vacationId ,destination, vacInfo , 
-DATE_FORMAT(startDate, "%d-%m-%Y") , DATE_FORMAT(endDate, "%d- %m- %Y") , price, pictureUrl 
+    DATE_FORMAT(startDate, "%d-%m-%Y") As startDate , DATE_FORMAT(endDate, "%d-%m-%Y") As endDate  , price, pictureUrl 
     FROM tagging_vacation.vacations
     `;
 
@@ -39,4 +39,15 @@ const unFollowVacation = async (userId: number, vacationId: number) => {
   return await dal_mysql.execute(sql);
 };
 
-export { getAllVacations, getVacationById, followVacation, unFollowVacation };
+const getFavoritesByUser = async (userId: number) => {
+  const sql = `
+  SELECT idVacation FROM tagging_vacation.followers where idFollower=${userId} 
+    `;
+
+  return await dal_mysql.execute(sql);
+};
+
+export { 
+  getAllVacations, getVacationById, followVacation, 
+  unFollowVacation, getFavoritesByUser
+ };

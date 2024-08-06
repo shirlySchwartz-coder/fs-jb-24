@@ -44,7 +44,6 @@ server.use(express.static("upload"));
 //enable file uploading, and create a path for the files if it no exists
 server.use(fileUpload({createParentPath: true}));
 
-//using routes = > http://localhost:8080/api/v1/transport
 server.use("/api/v1/vacations", vacationsRouter);
 server.use("/api/v1/login",loginRouter);
 server.use("/api/v1/dashboard",adminRouter);

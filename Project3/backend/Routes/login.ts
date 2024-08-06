@@ -6,25 +6,19 @@ import {
   deleteUser,
 } from '../logic/UserLogic';
 import { checkJWT, createJWT } from '../Utils/jwt';
+import { UserCred } from '../Models/UserCred';
 
 const loginRouter = express.Router();
 
-//login methods: loginUser, registerUser, forgotPassword
-/*
-export type userCred = {
-  name: string;
-  email: string;
-  role: string;
-  jwt: string;
-};
-*/
+
 //loginUser
 loginRouter.post(
   '/loginUser',
   async (request: Request, response: Response, nextFunction: NextFunction) => {
     let result: any = await loginUser(request.body);
-    console.log(result);
-    if (result.jwt != '') {
+    //console.log(result);
+    if (result.jwt !== undefined && result["jwt"].length>10) {
+     // console.log(result)
       response
         .status(200)
         .header('Access-Control-Expose-Headers', 'Authorization')

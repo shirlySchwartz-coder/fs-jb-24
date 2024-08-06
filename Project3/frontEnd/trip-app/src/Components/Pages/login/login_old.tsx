@@ -9,9 +9,89 @@ import { store } from '../../../redux/store';
 import { AuthState, loginAction } from '../../../redux/loginReducer';
 import { User } from '../../Models/User';
 
-export function Login(): JSX.Element {
+export function Login_old(): JSX.Element {
   const navigate = useNavigate();
   const [rememberMe, setRememberMe] = useState(false);
+
+  //user name, user pass, remember me, user role:user,company,admin
+
+  useEffect(() => {
+    //if we have a valid token , we can navigate to the main page :)
+  }, []);
+  //use form methods and data type
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+  } = useForm<User>();
+
+  const makeLogin: SubmitHandler<User> = async(data) => {
+    //handle remember me...
+    console.log(data);
+
+    await axios
+      .post('http://localhost:8080/api/v1/login/loginUser', {
+        userEmail: data.userEmail,
+        userPass: data.userPass,
+      })
+      .then((res) => {
+        const jwt = res.headers["authorization"];
+        console.log('my jwt: ', jwt);
+        if (jwt.length>10) {
+          //store.dispatch(loginAction(jwt));
+          //const jwt = res.headers['Authorization'];
+          if (rememberMe) {
+            localStorage.setItem('jwt', jwt);
+          } else {
+            localStorage.removeItem('jwt');
+            sessionStorage.setItem('jwt', jwt);
+          }
+          //notify.success(`Welcome ${data.userName}`);
+          new Notify({
+            status: 'success',
+            title: 'Login ',
+            text: 'Login was successful',
+            effect: 'fade',
+            speed: 300,
+            customClass: '',
+            customIcon: '',
+            showIcon: false,
+            showCloseButton: true,
+            autoclose: true,
+            autotimeout: 3000,
+            notificationsGap: 0,
+            notificationsPadding: NaN,
+            type: 'outline',
+            position: 'center',
+            customWrapper: '',
+          });
+
+          navigate('/vacationList');
+        } else {
+          new Notify({
+            status: 'error',
+            title: 'Login ',
+            text: 'Login failed',
+            effect: 'fade',
+            speed: 300,
+            customClass: '',
+            customIcon: '',
+            showIcon: false,
+            showCloseButton: true,
+            autoclose: true,
+            autotimeout: 3000,
+            notificationsGap: 0,
+            notificationsPadding: NaN,
+            type: 'outline',
+            position: 'center',
+            customWrapper: '',
+          });
+        }
+      }).catch((err) => {
+        //notify.error("Why who are you?");
+        console.log(err);
+      });
+  };
 
   const fieldNeed = {
     required: true,
@@ -21,68 +101,6 @@ export function Login(): JSX.Element {
   const ErrorsNoticeRequired = 'This filed is required';
   const ErrorsNoticeMin = `This filed must contain more than ${fieldNeed.minLength}`;
   const ErrorsNoticeMax = `This filed can't contain more then ${fieldNeed.maxLength}`;
-  const LOGIN_URL = 'http://localhost:8080/api/v1/login/loginUser';
-  //user name, user pass, remember me, user role:user,company,admin
-
-  useEffect(() => {
-    //if we have a valid token , we can navigate to the main page :)
-    const token =store.getState().login.jwt;
-    if (token.length>10){
-      console.log('token in login from store:',token)
-    }
-    
-  }, []);
-  //use form methods and data type
-  const {
-    register,
-    handleSubmit,
-    formState: { errors },
-  } = useForm<User>();
-
-  const makeLogin: SubmitHandler<User> = async (data) => {
-    let result: any = await axios
-      .post(LOGIN_URL, {
-        userEmail: data.userEmail,
-        userPass: data.userPass,
-      })
-      .then((res) => {
-        const jwt = res.headers['authorization'];
-        console.log('my jwt: ', jwt);
-
-        new Notify({
-          status: 'success',
-          title: 'Login ',
-          text: 'Login was successful',
-          effect: 'fade',
-          speed: 300,
-          customClass: '',
-          customIcon: '',
-          showIcon: true,
-          showCloseButton: true,
-          autoclose: true,
-          autotimeout: 3000,
-          notificationsGap: NaN,
-          notificationsPadding: NaN,
-          type: 'outline',
-          position: 'center',
-          customWrapper: '',
-        });
-        store.dispatch(loginAction(res.data));
-        console.log(res.data)
-        if (rememberMe) {
-          localStorage.setItem('jwt',jwt);
-        } else {
-          localStorage.removeItem('jwt');
-          sessionStorage.setItem('jwt', jwt);
-        }
-
-        navigate('/vacationList');
-      })
-      .catch((err) => {
-        console.log('err:', err);
-      });
-    //console.log('result:', result);
-  };
 
   return (
     <div className='login Box'>

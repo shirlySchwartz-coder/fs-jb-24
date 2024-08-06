@@ -6,16 +6,19 @@ import {store} from '../../../redux/store'
 import { logoutAction, loginAction } from '../../../redux/loginReducer';
 
 export function Header(): JSX.Element {
-  const [isLogged, setLogged]= useState(false)
+  const [isLogged, setLogged] = useState(false);
   const navigate = useNavigate();
-
-  store.subscribe(()=>{
-    setLogged(store.getState().login.token.length>10)
-  })
-
+  const [name,setName]=useState('')
+  
+  store.subscribe(() => {
+    setLogged(store.getState().login.jwt.length>10);
+    setName(store.getState().login.userName)
+    //checkJWT();
+  });
   useEffect(() => {
-  const myJWT = localStorage.getItem('jwt')  || ''
-  setLogged(myJWT?.length>10)
+    const myJWT = localStorage.getItem("jwt") || "";
+    setLogged(myJWT?.length > 10);
+    console.log('name:',name, 'isLogged:', isLogged)
   }, []);
   const logoutButton = () => {
     return (
@@ -53,7 +56,7 @@ export function Header(): JSX.Element {
       </>
     );
   };
-  
+ 
   return (
     <div className='Header'>
       <div >
@@ -62,7 +65,7 @@ export function Header(): JSX.Element {
 
       <div className='Title'>
         <h2 className='name'>Trip App</h2>
-        <div>Hello {store.getState().login.name}</div>
+        <div>Hello {name}</div>
         <div>{isLogged? logoutButton() : loginButton()}</div>
       </div>
     </div>

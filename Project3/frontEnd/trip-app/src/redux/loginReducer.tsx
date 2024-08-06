@@ -1,9 +1,9 @@
 
 export class AuthState {
-    id:number=0;
-    email: string = "";
-    name: string = "";
-    token: string = "";
+    userId:number=0;
+    userEmail: string = "";
+    userName: string = "";
+    jwt: string = "";
     isAdmin: boolean = false;
     isLogged:boolean = false;
 }
@@ -28,8 +28,8 @@ export function logoutAction(): AuthAction {
     return { type: AuthActionType.logout }
 }
 
-export function updateTokenAction(token: string): AuthAction {
-    return { type: AuthActionType.updateToken, payload: token }
+export function updateTokenAction(jwt: string): AuthAction {
+    return { type: AuthActionType.updateToken, payload: jwt }
 }
 
 export function AuthReducer(
@@ -44,7 +44,7 @@ export function AuthReducer(
             newState = new AuthState();
             break;
         case AuthActionType.updateToken:
-            newState.token = action.payload;
+            newState.jwt = action.payload;
             break;
     }
 
