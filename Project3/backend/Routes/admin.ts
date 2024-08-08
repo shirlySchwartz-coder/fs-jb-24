@@ -80,7 +80,7 @@ adminRouter.delete(
 );
 
 adminRouter.get(
-  '/reporets',
+  '/reports',
   async (request: Request, response: Response, nextFunction: NextFunction) => {
     await response.status(200).json(await getReports());
   }

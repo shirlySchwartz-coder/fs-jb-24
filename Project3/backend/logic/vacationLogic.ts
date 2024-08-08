@@ -43,8 +43,9 @@ const getFavoritesByUser = async (userId: number) => {
   const sql = `
   SELECT idVacation FROM tagging_vacation.followers where idFollower=${userId} 
     `;
-
-  return await dal_mysql.execute(sql);
+  const favorites = await dal_mysql.execute(sql)
+    console.log(favorites)
+  return favorites ;
 };
 
 export { 

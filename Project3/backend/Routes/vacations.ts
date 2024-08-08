@@ -2,6 +2,11 @@
 import express , {NextFunction,Request,Response} from 'express';
 import { checkJWT } from '../Utils/jwt';
 import { followVacation, getAllVacations, getFavoritesByUser, getVacationById, unFollowVacation } from '../logic/vacationLogic';
+const jwt = require('jsonwebtoken');
+
+//what is my secret key, i will not share it with any program
+const secretKey = 'the-secret-key-need-to-be-at-least-256-bytes';
+
 
 const vacationsRouter = express.Router();
 
@@ -13,11 +18,13 @@ vacationsRouter.get(
         const jwt = checkJWT(request.header("Authorization") || ""); 
         console.log("all vacations-  jwt:",jwt);
         if (jwt.length>10){
+         
         response
         .status(200)
         .header('Access-Control-Expose-Headers', 'Authorization')
         .header("Authorization",jwt)
         .json(await getAllVacations());
+
         
         }else{
             response.status(401)
@@ -32,7 +39,7 @@ vacationsRouter.get(
         response
         .status(201)
         .header('Access-Control-Expose-Headers', 'Authorization')
-        //.header("Authorization",jwt)
+        .header("Authorization",jwt)
         .json(await getVacationById(vacationId));
        
     }
@@ -76,12 +83,18 @@ vacationsRouter.get(
     async (request:Request, response:Response, nextFunction:NextFunction)=>{        
         let userId = +request.params.id;
         const jwt = checkJWT(request.header("Authorization") || ""); 
+        console.log(`all favorites by user ${userId}  jwt: ${jwt}`);
+        if (jwt.length>10){
+        
+        
         response
         .status(201)
         .header('Access-Control-Expose-Headers', 'Authorization')
         .header("Authorization",jwt)
         .json(await getFavoritesByUser(userId));
-       
+        }else{
+            response.status(401)
+        }
     }
 )
 
