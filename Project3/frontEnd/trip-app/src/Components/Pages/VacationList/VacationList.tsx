@@ -14,25 +14,33 @@ import {
   gelAllVacationsAction,
 } from '../../../redux/VacationReducer';
 import { getFavoritesAction } from '../../../redux/FavoriteReducer';
+import { Favorite } from '../../Models/Favorite';
 
 //import pathUrl from '../../utils/vars';
 
 export function VacationList(): JSX.Element {
   const [vacations, setVacations] = useState<Vacation[]>([]);
   const [token, setToken] = useState('');
-  const [favorites, setFavorites] = useState([]);
+  const [favorites, setFavorites] = useState<Favorite[]>([]);
   const [id, setId] = useState(store.getState().login.userId);
 
   // console.log(id);
   const getAllVacationsUrl = `http://localhost:8080/api/v1/vacations/all`;
-  //const getFavoritesUrl = `http://localhost:8080/api/v1/vacations/favorites/${id}`;
+  const FavoritesUrl = 'http://localhost:8080/api/v1/vacations/favorites/';
   //console.log(getFavoritesUrl)
   const navigate = useNavigate();
 
+  store.subscribe(() => {
+    setToken(store.getState().login.jwt);
+    setVacations(store.getState().trips.allVacations);
+    setFavorites(store.getState().favorites.userFavorites);
+  });
+
   const getFavorites = () => {
+    console.log(token);
     if (token.length > 10) {
       axios
-        .get(`http://localhost:8080/api/v1/vacations/favorites/1`, {
+        .get(FavoritesUrl + id, {
           headers: { 'Authorization': `${token}` },
         })
         .then((res) => res.data)
@@ -82,13 +90,12 @@ export function VacationList(): JSX.Element {
           store.dispatch(gelAllVacationsAction(vacsResult));
         }
       }
-      getFavorites()
-      if(favorites.length>0){
+      getFavorites();
+      if (favorites.length > 0) {
         //
-        setFavorites(favorites)
-        store.dispatch(getFavoritesAction(favorites))
+        setFavorites(favorites);
+        store.dispatch(getFavoritesAction(favorites));
       }
-      
     }
   }, []);
 

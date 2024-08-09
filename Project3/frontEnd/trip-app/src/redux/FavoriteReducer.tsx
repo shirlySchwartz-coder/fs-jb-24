@@ -1,18 +1,14 @@
-export class Favorite {
-  public idVacation: number;
-  constructor(idVacation: number) {
-    this.idVacation = idVacation;
-  }
-}
+import { Favorite } from "../Components/Models/Favorite";
+
 
 export class FavoriteState {
-  public favorites: Favorite[] = [];
+  public userFavorites: Favorite[] = [];
 }
 
 export enum FavoriteActionType {
   getUserFavorites = 'getUserFavorites',
-  addToFavorites = 'addToFavorites',
-  deleteFavorite = 'deleteFavorite',
+  //addToFavorites = 'addToFavorites',
+  //deleteFavorite = 'deleteFavorite',
 }
 
 export interface FavoriteAction {
@@ -32,7 +28,7 @@ export function FavoriteReducer(
 
   switch (action.type) {
     case FavoriteActionType.getUserFavorites:
-      newState.favorites = action.payload;
+      newState.userFavorites = action.payload;
       break;
   }
   return newState;
