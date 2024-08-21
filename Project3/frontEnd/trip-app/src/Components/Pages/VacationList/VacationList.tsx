@@ -12,6 +12,7 @@ import {
   VacationState,
   VacationAction,
   gelAllVacationsAction,
+  updateVacationFunction,
 } from '../../../redux/VacationReducer';
 import { getFavoritesAction } from '../../../redux/FavoriteReducer';
 import { Favorite } from '../../Models/Favorite';
@@ -36,17 +37,23 @@ export function VacationList(): JSX.Element {
     setFavorites(store.getState().favorites.userFavorites);
   });
 
-  const getFavorites = () => {
-    console.log(token);
-    if (token.length > 10) {
-      axios
+  const getFavorites = async () => {
+    let token = store.getState().login.jwt;
+    let id= store.getState().login.userId
+    console.log('token, id in get fav:', token, id);
+    if (token.length > 10 && id !== 0) {
+     await axios
         .get(FavoritesUrl + id, {
           headers: { 'Authorization': `${token}` },
         })
         .then((res) => res.data)
         .then((data) => {
-          //return data;
           setFavorites(data);
+          
+          store.dispatch(getFavoritesAction(data));
+          console.log("favorites:",favorites)
+          updateVacationsWithFavorites()
+
         })
         .catch((err) => {
           console.log(err);
@@ -56,52 +63,62 @@ export function VacationList(): JSX.Element {
       console.log('need new jwt');
     }
   };
+  /*const vacationsFavorites=()=>{
+    let favorites =store.getState().favorites.userFavorites
+    for(let i=0;i<favorites.length; i++){
+       let temp = (vacations.filter((vacation)=>vacation.vacationId===favorites[i].idVacation))
 
-  const getVacations = () => {
-    if (store.getState().trips.allVacations.length < 1) {
-      axios
-        .get(getAllVacationsUrl, { headers: { 'Authorization': `${token}` } })
-        .then((res) => res.data)
-        .then(async (data) => {
-          console.log('All vacations:', data);
-
-          if (data.length > 0) {
-            setVacations(data);
-          }
-        })
-        .catch((error) => {
-          console.log('error', error);
-          return error;
-        });
+       
     }
+    //console.log(fav)
+  }
+*/
+  const updateVacationsWithFavorites = () => {
+    setVacations(store.getState().trips.allVacations);
+    for(let i=0;i<favorites.length;i++){
+      for(let j=0; j<vacations.length; j++){
+        if(favorites[i].idVacation===vacations[j].vacationId){
+          vacations[j].isFavorite=true;
+          store.dispatch(updateVacationFunction(vacations[j]))
+        }
+      }
+      //store.dispatch(updateVacationFunction(vacations))
+    }
+    
   };
 
   useEffect(() => {
-    if (!CheckJWT()) {
-      navigate('/login');
-    } else {
-      setToken(store.getState().login.jwt);
-      setId(store.getState().login.userId);
-      console.log('token to send vacations:', token);
-      let vacsResult = store.getState().trips.allVacations;
-      if (vacsResult.length > 0) {
-        getVacations();
-        if (vacations.length > 0) {
-          store.dispatch(gelAllVacationsAction(vacsResult));
-        }
+    const checkAndFetchData = async () => {
+      if (!CheckJWT()) {
+        navigate('/login');
+      } else {
+        let token = store.getState().login.jwt;
+        await axios
+          .get(getAllVacationsUrl, { headers: { 'Authorization': `${token}` } })
+          .then((res) => res.data)
+          .then(async (data) => {
+            console.log('All vacations:', data);
+            setVacations(data);
+           store.dispatch(gelAllVacationsAction(data));
+          })
+          .catch((error) => {
+            console.error(401, error);
+          });
+          await getFavorites();
+          
+          // updateVacationFunction();
       }
-      getFavorites();
-      if (favorites.length > 0) {
-        //
-        setFavorites(favorites);
-        store.dispatch(getFavoritesAction(favorites));
-      }
-    }
+    };
+    //checkAndFetchData();
   }, []);
+
+  
 
   return (
     <Container maxWidth='sm' className='VacationList'>
-      {favorites ? '${favorites}' : 'none'}
+      {favorites.map((item) => (
+        <p>{item.idVacation}</p>
+      ))}
       {vacations.map((item) => (
         <SingleVacation key={item.vacationId} vacation={item} />
       ))}

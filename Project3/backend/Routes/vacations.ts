@@ -16,7 +16,7 @@ vacationsRouter.get(
     "/all",
     async (request:Request, response:Response, nextFunction:NextFunction)=>{        
         const jwt = checkJWT(request.header("Authorization") || ""); 
-        console.log("all vacations-  jwt:",jwt);
+        //console.log("all vacations-  jwt:",jwt);
         if (jwt.length>10){
          
         response

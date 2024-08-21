@@ -50,6 +50,7 @@ function SingleVacation(props: vacationProps): JSX.Element {
       <CardActions>
       <IconButton aria-label="add to favorites">
           <FavoriteIcon />
+          {`${props.vacation.isFavorite}`}
         </IconButton>
       </CardActions>
     </Card>

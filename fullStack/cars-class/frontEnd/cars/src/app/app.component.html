@@ -1,0 +1,15 @@
+<h1>{{ title }}</h1>
+<div>
+  <input type="text" [(ngModel)]="carNumber" />
+  <button class="btn btn-info" (click)="search()">Search</button>
+</div>
+<div>
+  <b><span>{{this.result["mispar_rechev"] }}</span></b>
+  <hr />
+  <div>
+    {{ this.result["baalut"] }}<br />
+    {{ this.result["tozeret_nm"] }}<br />
+    {{ this.result["kinuy_mishari"] }}<br />
+    {{ this.result["sug_delek_nm"] }}<br />
+  </div>
+</div>

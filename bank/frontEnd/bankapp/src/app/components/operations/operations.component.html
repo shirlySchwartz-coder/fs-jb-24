@@ -1,0 +1,15 @@
+<div>
+  <input [ngModel]="accountNumber" (ngModelChange)="accountNumber = $event" placeholder="מספר חשבון" />
+  <button (click)="getOperations()">הצג פעולות</button>
+</div>
+<div>
+  <select [ngModel]="type" (ngModelChange)="type = $event">
+    <option value="withdrawal">משיכה</option>
+    <option value="deposit">הפקדה</option>
+    <option value="loan">הלוואה</option>
+  </select>
+  <input [(ngModel)]="amount" placeholder="סכום" />
+  <input *ngIf="type === 'loan'" [(ngModel)]="interest" placeholder="ריבית" />
+  <input *ngIf="type === 'loan'" [(ngModel)]="numberOfPayments" placeholder="כמות תשלומים" />
+  <button (click)="addOperation()">שמור פעולה</button>
+</div>

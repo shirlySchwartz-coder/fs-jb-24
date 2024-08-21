@@ -18,7 +18,7 @@ loginRouter.post(
     let result: any = await loginUser(request.body);
     //console.log(result);
     if (result.jwt !== undefined && result["jwt"].length>10) {
-     // console.log(result)
+      console.log(result)
       response
         .status(200)
         .header('Access-Control-Expose-Headers', 'Authorization')

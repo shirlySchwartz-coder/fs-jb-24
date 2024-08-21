@@ -6,6 +6,7 @@ export class Vacation {
   public endDate: Date;
   public price: number;
   public pictureUrl: string;
+  public isFavorite?: boolean ;
 
   constructor(
     vacationId: number,
@@ -14,7 +15,8 @@ export class Vacation {
     startDate: Date,
     endDate: Date,
     price: number,
-    pictureUrl: string
+    pictureUrl: string,
+    isFavorite?: boolean
   ) {
     this.vacationId = vacationId;
     this.destination = destination;
@@ -23,5 +25,6 @@ export class Vacation {
     this.endDate = endDate;
     this.price = price;
     this.pictureUrl = pictureUrl;
+    this.isFavorite=isFavorite;
   }
 }
