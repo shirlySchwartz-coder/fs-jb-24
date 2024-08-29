@@ -1,10 +1,11 @@
 import { Component, OnInit } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
+import { FormsModule } from '@angular/forms';
 
 @Component({
   selector: 'app-operations',
   standalone: true,
-  imports: [],
+  imports: [FormsModule],
   templateUrl: './operations.component.html',
   styleUrl: './operations.component.css'
 })
@@ -15,13 +16,13 @@ export class OperationsComponent implements OnInit{
   interest: number;
   numberOfPayments: number;
 
-  constructor(private http: HttpClient) {}
+  constructor(private accountService:AccountService) {}
   ngOnInit(){
 
   }
 
   getOperations() {
-    this.http.get(`/api/accounts/${this.accountNumber}/operations`)
+   axios.get(`/api/accounts/${this.accountNumber}/operations`)
     .subscribe(data => {
       console.log(data);
     });
