@@ -87,6 +87,7 @@ export function Login(): JSX.Element {
               <span className='error-text'>Min length exceeded</span>
             )}
           </FormControl>
+          <br />
           <FormControl>
             <FormLabel htmlFor='password'>Password</FormLabel>
             <input
@@ -104,6 +105,7 @@ export function Login(): JSX.Element {
               <span className='error-text'>Min length exceeded</span>
             )}
           </FormControl>
+          <br />
           <div>
             <input
               type='checkbox'
@@ -111,6 +113,7 @@ export function Login(): JSX.Element {
             />
             Remember me
           </div>
+          <br />
           <input type='submit' value='Submit' className='submit-btn'/>
         </form>
         <Typography
