@@ -8,15 +8,13 @@ export function Page404(): JSX.Element {
           <div className='error__message message'>
             <h1 className='message__title'>Page Not Found</h1>
             <p className='message__text'>
-              We're sorry, the page you were looking for isn't found here. The
-              link you followed may either be broken or no longer exists. Please
-              try again, or take a look at our.
+              We're sorry, the page you were looking for isn't here. 
             </p>
           </div>
           <div className='error__nav e-nav'>
             <a
               href='http://localhost:3000'
-              target='_blank'
+              target='__blank'
               className='e-nav__link'
             ></a>
           </div>
