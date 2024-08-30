@@ -17,6 +17,12 @@ export function Menu(): JSX.Element {
         <MenuItem>
           <NavLink to='/register'>Register</NavLink>
         </MenuItem>
+        <MenuItem>
+          <NavLink to='/about'>About</NavLink>
+        </MenuItem>
+        <MenuItem>
+          <NavLink to='/contact'>Contact me</NavLink>
+        </MenuItem>
       </MenuList>
       <hr />
       Admin Menu

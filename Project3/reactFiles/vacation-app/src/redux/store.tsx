@@ -4,7 +4,7 @@ import { VacationReducer } from "./VacationReducer";
 
 const rootReducer = combineReducers({
     login: AuthReducer,
-    trips: VacationReducer  
+    vacations: VacationReducer  
   });
 
   export const store = configureStore({

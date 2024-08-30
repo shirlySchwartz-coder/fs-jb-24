@@ -26,12 +26,12 @@ const registerUser = async (user: UserReg) => {
 };
 
 //login from file
-const loginUser = async (user: UserCred) => {
+const loginUser = async (user:any) => {
   try {
     const sql = `
     SELECT  userId, CONCAT_WS(" ", userFirstName , userLastName) As userName, userEmail, isAdmin  
     FROM tagging_vacation.users
-    WHERE userEmail='${user.userEmail}' and userPassword=${user.userPass};
+    WHERE userEmail='${user.email}' and userPassword=${user.password};
     `;
     //console.log(sql)
     const [result] = await dal_mysql.execute(sql);

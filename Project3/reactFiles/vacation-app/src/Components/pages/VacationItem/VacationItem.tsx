@@ -20,7 +20,7 @@ type VacationItemProps = {
 export function VacationItem(props: VacationItemProps): JSX.Element {
     
   return (
-    <Card sx={{ maxWidth: 345 }}>
+    <Card  size="lg" variant="outlined" sx={{ maxWidth: 345 }}>
       <CardHeader
         action={
           <IconButton aria-label='settings'>

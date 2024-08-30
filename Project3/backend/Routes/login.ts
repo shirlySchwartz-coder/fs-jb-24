@@ -15,6 +15,7 @@ const loginRouter = express.Router();
 loginRouter.post(
   '/loginUser',
   async (request: Request, response: Response, nextFunction: NextFunction) => {
+    console.log(request.body);
     let result: any = await loginUser(request.body);
     //console.log(result);
     if (result.jwt !== undefined && result["jwt"].length>10) {

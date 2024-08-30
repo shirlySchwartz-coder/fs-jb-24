@@ -4,6 +4,7 @@
   "private": true,
   "dependencies": {
     "@mui/joy": "^5.0.0-beta.48",
+    "@mui/x-charts": "^7.15.0",
     "@reduxjs/toolkit": "^2.2.7",
     "@testing-library/jest-dom": "^5.17.0",
     "@testing-library/react": "^13.4.0",
