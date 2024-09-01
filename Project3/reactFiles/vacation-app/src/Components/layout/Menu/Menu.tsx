@@ -9,7 +9,7 @@ export function Menu(): JSX.Element {
       User Menu
       <MenuList>
         <MenuItem>
-          <NavLink to='/vacationList'>Vacations list</NavLink>
+          <NavLink to='/vacations'>Vacations list</NavLink>
         </MenuItem>
         <MenuItem>
           <NavLink to='/login'>Login</NavLink>

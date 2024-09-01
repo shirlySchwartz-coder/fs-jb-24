@@ -1,8 +1,10 @@
 import { Vacation } from '../Components/models/Vacation';
 
+import { Favorite } from '../Components/models/Favorite';
+
 export class VacationState {
   public allVacations: Vacation[] = [];
-  public userFavorites: number[] = [];
+  public userFavorites: Favorite[] = [];
 }
 
 export enum VacationActionType {

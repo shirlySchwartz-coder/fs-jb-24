@@ -56,7 +56,7 @@ vacationsRouter.post(
         response
         .status(201)
         .header('Access-Control-Expose-Headers', 'Authorization')
-        //.header("Authorization",jwt)
+        .header("Authorization",jwt)
         .json(await followVacation(userId,vacationId));
        
     }
