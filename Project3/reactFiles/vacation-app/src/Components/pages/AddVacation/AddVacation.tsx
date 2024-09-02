@@ -12,7 +12,7 @@ import FormLabel from '@mui/joy/FormLabel';
 import Box from '@mui/material/Box';
 import TextField from '@mui/material/TextField';
 import Sheet from '@mui/joy/Sheet';
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import { CheckJWT } from '../../utils/JWT';
 import { store } from '../../../redux/store';
 import { useNavigate } from 'react-router-dom';
@@ -21,16 +21,17 @@ export function AddVacation(): JSX.Element {
   let today = '2024-09-01';
   let oneYearMax = '2025-09-01';
   const navigate = useNavigate();
+  const [picture, setPicture] = useState();
 
   type VacationInput = {
-    vacationId:0;
+    vacationId: 0;
     destination: string;
     vacInfo: string;
     startDate: Date;
     endDate: Date;
     price: number;
+    picture: File;
     //pictureUrl: string;
-    picture: string;
   };
   const {
     register,
@@ -38,6 +39,36 @@ export function AddVacation(): JSX.Element {
     control,
     formState: { errors },
   } = useForm<VacationInput>();
+
+  async function handleUploadFile(picture:any){
+    if(!picture)return;
+    const token = store.getState().login.jwt;
+    //console.log('token:',token)
+    const formData = new FormData();
+    console.log(formData,picture)
+    formData.append('file',picture);
+    const res = await axios.post(
+      'http://localhost:8080/api/v1/dashBoard/uploadPicture',formData,{
+        headers: { 
+          'Authorization': `${token}`, 
+          'Content-Type':'multipart/form-data' 
+        } ,
+        onUploadProgress: (progressEvent) => {
+          console.log(
+            "Upload progress: " +
+              Math.round(
+                (progressEvent.loaded / (progressEvent.total ?? 1)) * 100
+              ) +
+              "%"
+          )}
+      }).then(res => {
+      console.log('Axios response: ', res);
+    })
+    .catch(err => {
+      console.error('Upload error: ', err);
+    });
+    console.log(res);
+  }
   const onSubmit: SubmitHandler<VacationInput> = async (
     data: VacationInput
   ) => {
@@ -49,9 +80,15 @@ export function AddVacation(): JSX.Element {
     let token = store.getState().login.jwt;
     //let id = store.getState().login.userId;
     
+   
     try {
-      const response = await axios.post('http://localhost:8080/api/v1/dashboard/addVacation', data,{
-        headers:{ 'Authorization': `${token}`}});
+      const response = await axios.post(
+        'http://localhost:8080/api/v1/dashBoard/addVacation',
+        data,
+        {
+          headers: { 'Authorization': `${token}` },
+        }
+      );
       console.log('Vacation added successfully:', response.data);
       return response.data;
     } catch (error) {
@@ -64,7 +101,6 @@ export function AddVacation(): JSX.Element {
       navigate('/login');
       return;
     }
-   
   }, []);
 
   return (
@@ -92,7 +128,7 @@ export function AddVacation(): JSX.Element {
               <p></p>
             </Typography>
           </div>
-          <form onSubmit={handleSubmit(onSubmit)}>
+          <form onSubmit={handleSubmit(onSubmit)} encType="multipart/form-data">
             <FormControl>
               <FormLabel htmlFor='destination'>Destination</FormLabel>
               <input
@@ -174,21 +210,21 @@ export function AddVacation(): JSX.Element {
               )}
             </FormControl>
             <FormControl>
-              <FormLabel htmlFor='pictureUrl'>Picture to upload</FormLabel>
-              
+              <FormLabel htmlFor='picture'>Picture to upload</FormLabel>
+
               <input
                 id='picture'
                 type='file'
-                {...register('picture', {
-                  required: true,
-                 
-                })}
+                {...register('picture', { required: true })}
+                onChange={(e) =>
+                  handleUploadFile((e.target ).files?.[0])
+                }
               />
-              
-             {/* 
-              {errors.pictureUrl?.type === 'required' && (
+  {/*
+              {errors.picture?.type === 'required' && (
                 <span className='error-text'>This is required</span>
               )}
+            
               {errors.pictureUrl?.type === 'maxLength' && (
                 <span className='error-text'>Max length exceeded</span>
               )}

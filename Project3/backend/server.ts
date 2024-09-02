@@ -7,6 +7,7 @@ import ErrorHandler from "./MiddleWare/routeNotFound";
 import vacationsRouter from "./Routes/vacations";
 import loginRouter from "./Routes/login";
 import adminRouter from "./Routes/admin";
+const multer  = require('multer')
 
 //import ErrorHandler
 //import router 
@@ -14,6 +15,7 @@ import adminRouter from "./Routes/admin";
 
 //create server
 const server = express();
+
 //const isAdmin = false;
 
 //configure cors
@@ -26,10 +28,11 @@ const server = express();
 //use Cors Option
 const corsOptions = {
     origin: "*", //allow any origin
-    methods: ["GET","POST"], //which methods i will allow
-    allowedHeaders: ["Content-Type","Authorization"], //which headers i will get
-    exposedHeaders: ["Authorization"] //which headers i will expose
+    methods: ['GET','POST','PUT'], //which methods i will allow
+    allowedHeaders: ['Content-Type',"Authorization"], //which headers i will get
+    exposedHeaders: ["Authorization",'Content-Type'] //which headers i will expose
 }
+
 
 
 //cors = cross origin research sharing...
@@ -46,7 +49,7 @@ server.use(fileUpload({createParentPath: true}));
 
 server.use("/api/v1/vacations", vacationsRouter);
 server.use("/api/v1/login",loginRouter);
-server.use("/api/v1/dashboard",adminRouter);
+server.use("/api/v1/dashBoard",adminRouter);
 
 //404 handler
 server.use("*",ErrorHandler);

@@ -1,6 +1,8 @@
 import { ResultSetHeader } from 'mysql2';
 //adminRouter
 import express, { NextFunction, Request, Response, request } from 'express';
+import multer  from 'multer';
+
 import { Vacation } from '../Models/Vacation';
 import {
   addNewVacation,
@@ -9,8 +11,11 @@ import {
   updateVacation,
 } from '../logic/adminLogic';
 import { getAllVacations } from '../logic/vacationLogic';
+import { checkJWT } from '../Utils/jwt';
 
 const adminRouter = express.Router();
+const upload = multer({ dest: "tmp/uploads/" });
+
 
 adminRouter.get(
   '/all',
@@ -25,12 +30,12 @@ adminRouter.get(
 );
 
 adminRouter.post(
-  '/addVacation',
+  '/addVacation', 
   async (request: Request, response: Response, nextFunction: NextFunction) => {
     console.log('addVacation', request.body);
 
     // Ensure request.body is properly structured
-    if (!request.body || !request.body.destination) {
+    if (!request.body || !request.body.destination  ) {
       return response.status(400).json({ msg: 'Invalid request data' });
     }
 
@@ -42,6 +47,28 @@ adminRouter.post(
     }
   }
 );
+
+adminRouter.post(
+  '/uploadPicture',upload.single("file"),
+  async (request: Request, response: Response) => {
+    console.log('hay');
+    const jwt = checkJWT(request.header("Authorization") || ""); 
+    console.log('jwt',jwt);
+    if (jwt.length>10){
+      console.log('uploadPicture start')
+    console.log(request.file);
+
+    response.status(200)
+    .header('Access-Control-Expose-Headers', 'Authorization')
+    .header("Authorization",jwt)
+    .json({ myResponse: "File uploaded successfully" })
+    }
+    else{
+      response.status(401).json({msg: })
+    }
+    
+  }
+)
 
 adminRouter.put(
   '/updateVacation/:id',
@@ -85,4 +112,11 @@ adminRouter.get(
     await response.status(200).json(await getReports());
   }
 );
+
+adminRouter.get(
+  '/test',
+  async (request: Request, response: Response, nextFunction: NextFunction) => {
+    await response.status(200).json({tex:'this is working'});
+  }
+)
 export default adminRouter;

@@ -20,6 +20,10 @@ adminRouter:
 /api/v1/dashboard
     get -  '/all'
     post - '/addVacation'
+    post - '/uploadFile'
     put -  '/updateVacation/:id'
     delete - '/deleteVacation/:id'
     get - '/reports'
+
+
+/api/v1/dashBoard/uploadPicture

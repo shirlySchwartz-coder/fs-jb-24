@@ -5,11 +5,11 @@ import { getAllVacations } from './vacationLogic';
 const addNewVacation = async (newVacation: Vacation) => {
   console.log('in AddVacation');
   //let start = newVacation.startDate.toDateString
-  console.log(newVacation.startDate);
+  console.log(newVacation);
   const sql = `
-    INSERT INTO tagging_vacation.vacations (vacationId,destination, vacInfo, startDate, endDate, price, pictureUrl)
+    INSERT INTO tagging_vacation.vacations (vacationId,destination, vacInfo, startDate, endDate, price)
     VALUES (${newVacation.vacationId}, '${newVacation.destination}','${newVacation.vacInfo}',
-        ${newVacation.startDate}, ${newVacation.endDate},${newVacation.price},'${newVacation.pictureUrl}'
+        ${newVacation.startDate}, ${newVacation.endDate},${newVacation.price}
      );
     `;
 
