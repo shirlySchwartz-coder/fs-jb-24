@@ -22,6 +22,7 @@ export function AddVacation(): JSX.Element {
   let oneYearMax = '2025-09-01';
   const navigate = useNavigate();
   const [picture, setPicture] = useState();
+  const Add_Vac_URL = `http://localhost:8080/api/v1/dashBoard/addVacation`
 
   type VacationInput = {
     vacationId: 0;
@@ -31,7 +32,7 @@ export function AddVacation(): JSX.Element {
     endDate: Date;
     price: number;
     picture: File;
-    //pictureUrl: string;
+    pictureUrl: string;
   };
   const {
     register,
@@ -40,35 +41,12 @@ export function AddVacation(): JSX.Element {
     formState: { errors },
   } = useForm<VacationInput>();
 
-  async function handleUploadFile(picture:any){
-    if(!picture)return;
-    const token = store.getState().login.jwt;
-    //console.log('token:',token)
-    const formData = new FormData();
-    console.log(formData,picture)
-    formData.append('file',picture);
-    const res = await axios.post(
-      'http://localhost:8080/api/v1/dashBoard/uploadPicture',formData,{
-        headers: { 
-          'Authorization': `${token}`, 
-          'Content-Type':'multipart/form-data' 
-        } ,
-        onUploadProgress: (progressEvent) => {
-          console.log(
-            "Upload progress: " +
-              Math.round(
-                (progressEvent.loaded / (progressEvent.total ?? 1)) * 100
-              ) +
-              "%"
-          )}
-      }).then(res => {
-      console.log('Axios response: ', res);
-    })
-    .catch(err => {
-      console.error('Upload error: ', err);
-    });
-    console.log(res);
+  const handleUploadFile=(file:any)=>{
+    console.log('55555',file.name)
+    
   }
+
+  
   const onSubmit: SubmitHandler<VacationInput> = async (
     data: VacationInput
   ) => {
@@ -78,13 +56,30 @@ export function AddVacation(): JSX.Element {
       return;
     }
     let token = store.getState().login.jwt;
-    //let id = store.getState().login.userId;
-    
+    let isAdmin = store.getState().login.isAdmin;
+    const formData = new FormData();
+    formData.append('files', data.picture)
+    const fileName = data.picture.name;
+    console.log(fileName)
+
+
+    let inputVac  = {
+      vacationId: 0,
+      destination: data.destination,
+    vacInfo: data.vacInfo,
+    startDate: data.startDate,
+    endDate: data.endDate,
+    price: +data.price,
+    picture: data.picture,
+    pictureUrl:fileName,
+
+    }
+    console.log(inputVac)
    
     try {
       const response = await axios.post(
-        'http://localhost:8080/api/v1/dashBoard/addVacation',
-        data,
+        Add_Vac_URL,
+        inputVac,
         {
           headers: { 'Authorization': `${token}` },
         }

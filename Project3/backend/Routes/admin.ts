@@ -38,7 +38,9 @@ adminRouter.post(
     if (!request.body || !request.body.destination  ) {
       return response.status(400).json({ msg: 'Invalid request data' });
     }
-
+    
+    console.log(request.files)
+    
     let result = await addNewVacation(request.body);
     if (!result.errno) {
       response.status(201).json({ msg: 'created' });
@@ -64,7 +66,7 @@ adminRouter.post(
     .json({ myResponse: "File uploaded successfully" })
     }
     else{
-      response.status(401).json({msg: })
+      response.status(401).json({msg: 'upload filed'})
     }
     
   }
