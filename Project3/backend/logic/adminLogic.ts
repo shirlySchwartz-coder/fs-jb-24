@@ -29,7 +29,7 @@ const updateVacation = async (vacationId: number, updateVac: Vacation) => {
   return await dal_mysql.execute(sql);
 };
 
-const deleteVacation = async (id: number ) => {
+const deleteVacation = async (id: number) => {
   const sql = `
     DELETE FROM tagging_vacation.vacations
     WHERE vacationId = ${id};
@@ -38,7 +38,17 @@ const deleteVacation = async (id: number ) => {
   return await dal_mysql.execute(sql);
 };
 const getReports = async () => {
-  console.log('getReports')
+  console.log('getReports');
 };
 
-export { addNewVacation, updateVacation, deleteVacation, getReports };
+const uploadPicture = async (file: File) => {
+  console.log('file to save is:', File);
+};
+
+export {
+  addNewVacation,
+  updateVacation,
+  deleteVacation,
+  getReports,
+  uploadPicture,
+};

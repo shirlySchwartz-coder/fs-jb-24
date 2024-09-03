@@ -1,9 +1,10 @@
 import { ResultSetHeader } from 'mysql2';
 //adminRouter
-import express, { NextFunction, Request, Response } from 'express';
+import express, { NextFunction, request, Request, Response } from 'express';
 import multer from 'multer';
 import fileUpload from 'express-fileupload';
 import fs from 'fs';
+
 
 import { Vacation } from '../Models/Vacation';
 import {
@@ -62,7 +63,7 @@ adminRouter.post(
     }
   }
 );
-
+/*
 adminRouter.post(
   '/uploadPicture',
   upload.single('vacPicFile'),
@@ -75,29 +76,32 @@ adminRouter.post(
 
     console.log('uploadPicture start:', request.file);
     const vacPicFile = request.file;
-    const uploadPath = __dirname + '/../temp/uploads/' + vacPicFile?.originalname; // Corrected path
+    if (!vacPicFile) {
+      return response.status(400).send('No file was uploaded.');
+    }
+    const uploadPath = __dirname + '/../temp/uploads/' + vacPicFile.originalname; // Corrected path
     console.log('vacPicFile:', vacPicFile, 'uploadPath:', uploadPath);
 
     // Save the file to the specified path
-    if (vacPicFile) {
-      fs.rename(vacPicFile.path, uploadPath, (err) => {
-        if (err) {
-          console.error('File upload failed:', err); // Log the error
-          return response.status(500).send('File upload failed.');
-        }
+    fs.rename(vacPicFile.path, uploadPath, (err) => {
+      if (err) {
+        console.error('File upload failed:', err); // Log the error
+        return response.status(500).send('File upload failed.');
+      }
 
-        response
-          .status(201)
-          .header('Access-Control-Expose-Headers', 'Authorization')
-          .header('Authorization', jwt)
-          .json({ myResponse: 'File uploaded successfully' });
-      });
-    } else {
-      response.status(400).send('No file was uploaded.');
-    }
+      response
+        .status(201)
+        .header('Access-Control-Expose-Headers', 'Authorization')
+        .header('Authorization', jwt)
+        .json({ myResponse: 'File uploaded successfully' });
+    });
   }
 );
-
+*/
+adminRouter.post('/uploadPicture', 
+  async(request: Request, response: Response, nextFunction: NextFunction)=>{
+    console.log('hay', request.files);
+})
 adminRouter.put(
   '/updateVacation/:id',
   async (request: Request, response: Response, nextFunction: NextFunction) => {

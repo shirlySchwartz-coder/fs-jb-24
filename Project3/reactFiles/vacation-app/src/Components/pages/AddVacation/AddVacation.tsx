@@ -15,7 +15,7 @@ import { useEffect, useState } from 'react';
 import { CheckJWT } from '../../utils/JWT';
 import { store } from '../../../redux/store';
 import { useNavigate } from 'react-router-dom';
-import { UploadPic } from '../UploadPic/UploadPic';
+import { LoadPic } from '../LoadPic/LoadPic';
 
 export function AddVacation(): JSX.Element {
   let today = Date.now();
@@ -196,7 +196,7 @@ export function AddVacation(): JSX.Element {
           <DevTool control={control} />
         </Sheet>
         <hr />
-        <UploadPic/>
+        <LoadPic/>
       </main>
     </div>
   );
