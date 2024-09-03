@@ -9,19 +9,18 @@ import CssBaseline from '@mui/joy/CssBaseline';
 import Typography from '@mui/joy/Typography';
 import FormControl from '@mui/joy/FormControl';
 import FormLabel from '@mui/joy/FormLabel';
-import Box from '@mui/material/Box';
 import TextField from '@mui/material/TextField';
 import Sheet from '@mui/joy/Sheet';
 import { useEffect, useState } from 'react';
 import { CheckJWT } from '../../utils/JWT';
 import { store } from '../../../redux/store';
 import { useNavigate } from 'react-router-dom';
+import { UploadPic } from '../UploadPic/UploadPic';
 
 export function AddVacation(): JSX.Element {
-  let today = '2024-09-01';
+  let today = Date.now();
   let oneYearMax = '2025-09-01';
   const navigate = useNavigate();
-  const [picture, setPicture] = useState();
   const Add_Vac_URL = `http://localhost:8080/api/v1/dashBoard/addVacation`;
 
   type VacationInput = {
@@ -41,38 +40,7 @@ export function AddVacation(): JSX.Element {
     formState: { errors },
   } = useForm<VacationInput>();
 
-  const handleUploadFile = async (file: any) => {
-    console.log('55555', file.name);
-    if (!picture) return;
-    const token = store.getState().login.jwt;
-    //console.log('token:',token)
-    const formData = new FormData();
-    console.log(formData, picture);
-    formData.append('file', picture);
-    const res = await axios
-      .post('http://localhost:8080/api/v1/dashBoard/uploadPicture', formData, {
-        headers: {
-          'Authorization': `${token}`,
-          'Content-Type': 'multipart/form-data',
-        },
-        onUploadProgress: (progressEvent) => {
-          console.log(
-            'Upload progress: ' +
-              Math.round(
-                (progressEvent.loaded / (progressEvent.total ?? 1)) * 100
-              ) +
-              '%'
-          );
-        },
-      })
-      .then((res) => {
-        console.log('Axios response: ', res);
-      })
-      .catch((err) => {
-        console.error('Upload error: ', err);
-      });
-    console.log(res);
-  };
+ 
 
   const onSubmit: SubmitHandler<VacationInput> = async (
     data: VacationInput
@@ -83,25 +51,15 @@ export function AddVacation(): JSX.Element {
       return;
     }
     let token = store.getState().login.jwt;
-    let isAdmin = store.getState().login.isAdmin;
-    //const formData = new FormData();
-    //formData.append('files', data.picture)
-    //const fileName = data.picture.[0].name;
-    //console.log(fileName)
-
-    //console.log(formData.values);
+    //let isAdmin = store.getState().login.isAdmin;
     const newVac = {
       vacationId: 0,
       destination: data.destination,
       vacInfo: data.vacInfo,
-      startDate: data.startDate,
-      endDate: data.endDate,
+      startDate: new Date(data.startDate).toISOString().split('T')[0],
+      endDate: new Date(data.endDate).toISOString().split('T')[0],
       price: +data.price,
     };
-
-    // }
-    //console.log(inputVac)
-
     try {
       const response = await axios.post(Add_Vac_URL, newVac, {
         headers: { 'Authorization': `${token}` },
@@ -118,6 +76,11 @@ export function AddVacation(): JSX.Element {
       navigate('/login');
       return;
     }
+    if (!store.getState().login.isAdmin) {
+      console.log('You are not allowed to be here!');
+
+      return;
+    }
   }, []);
 
   return (
@@ -126,16 +89,18 @@ export function AddVacation(): JSX.Element {
         <CssBaseline />
         <Sheet
           sx={{
-            width: 600,
-            mx: 'auto', // margin left & right
-            my: 4, // margin top & bottom
-            py: 3, // padding top & bottom
-            px: 2, // padding left & right
+            width: 500,
+            mx: 'auto',
+            my: 4,
+            py: 3,
+            px: 2,
             display: 'flex',
             flexDirection: 'column',
             gap: 2,
             borderRadius: 'sm',
             boxShadow: 'md',
+            //
+            alignItems: 'center',
           }}
           variant='outlined'
         >
@@ -226,34 +191,13 @@ export function AddVacation(): JSX.Element {
                 <span className='error-text'>This is required</span>
               )}
             </FormControl>
-            <FormControl>
-              <FormLabel htmlFor='picture'>Picture to upload</FormLabel>
-
-              <input
-                id='picture'
-                type='file'
-                {...register('picture', { required: true })}
-                onChange={(e) =>
-                  handleUploadFile((e.target ).files?.[0])
-                }
-              />
-              {/*
-              {errors.picture?.type === 'required' && (
-                <span className='error-text'>This is required</span>
-              )}
-            
-              {errors.pictureUrl?.type === 'maxLength' && (
-                <span className='error-text'>Max length exceeded</span>
-              )}
-              {errors.pictureUrl?.type === 'minLength' && (
-                <span className='error-text'>Min length exceeded</span>
-              )} */}
-            </FormControl>
 
             <br />
             <input type='submit' value='Submit' className='submit-btn' />
           </form>
-
+          <hr />
+         
+              <UploadPic/>
           <DevTool control={control} />
         </Sheet>
       </main>

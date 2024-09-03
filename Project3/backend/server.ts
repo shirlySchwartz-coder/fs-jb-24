@@ -43,7 +43,7 @@ server.use(express.json());
 server.use(express.urlencoded({ extended: true }));
 
 //where i will save my files from upload
-server.use(express.static("upload"));
+//server.use(express.static("upload"));
 
 //enable file uploading, and create a path for the files if it no exists
 server.use(fileUpload({createParentPath: true}));

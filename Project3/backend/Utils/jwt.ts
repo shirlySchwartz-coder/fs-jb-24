@@ -18,7 +18,7 @@ const createJWT = (user: UserCred) => {
   };
 
   //for how long the token will be alive
-  const options = { expiresIn: '15m' };
+  const options = { expiresIn: '30m' };
 
   const myJWT = jwt.sign(payload, secretKey, options);
   console.log('createJWT -jwt data:', payload);

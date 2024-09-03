@@ -5,24 +5,15 @@ import { getAllVacations } from './vacationLogic';
 const addNewVacation = async (newVacation: Vacation) => {
   console.log('in AddVacation');
   console.log(newVacation);
-  const start = (newVacation.startDate).toDateString()
-  const end = (newVacation.endDate).toDateString()
-  const picUrl = `eeee${Date.now()}`
-  console.log('start, end:', start,end);
+  const start = new Date(newVacation.startDate).toISOString().slice(0, 10);
+  const end = new Date(newVacation.endDate).toISOString().slice(0, 10);
+  //console.log('start, end:', start,end);
   const sql = `
-    INSERT INTO tagging_vacation.vacations (vacationId,destination, vacInfo, startDate, endDate, price, pictureUrl)
-    VALUES (${newVacation.vacationId}, '${newVacation.destination}','${newVacation.vacInfo}',
-        ${start}, ${end},${newVacation.price}, '${picUrl}'
+    INSERT INTO tagging_vacation.vacations (vacationId, destination, vacInfo, startDate, endDate, price)
+    VALUES (${newVacation.vacationId}, '${newVacation.destination}', '${newVacation.vacInfo}',
+      STR_TO_DATE('${start}', "%Y-%m-%d"), STR_TO_DATE('${end}', "%Y-%m-%d"), ${newVacation.price}
      );
     `;
-  
-  /* const sql = `
-    INSERT INTO tagging_vacation.vacations (vacationId,destination, vacInfo, startDate, endDate, price, pictureUrl)
-    VALUES (${newVacation.vacationId}, '${newVacation.destination}','${newVacation.vacInfo}',
-        ${newVacation.startDate}, ${newVacation.endDate},${newVacation.price}, '${newVacation.pictureUrl}'
-     );
-    `; */
-
   return await dal_mysql.execute(sql);
 };
 

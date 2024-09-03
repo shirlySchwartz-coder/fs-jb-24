@@ -68,7 +68,7 @@ adminRouter.post(
       console.log(request.file);
 
       response
-        .status(200)
+        .status(201)
         .header('Access-Control-Expose-Headers', 'Authorization')
         .header('Authorization', jwt)
         .json({ myResponse: 'File uploaded successfully' });
