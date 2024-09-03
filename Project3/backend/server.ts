@@ -40,6 +40,7 @@ server.use(cors(corsOptions));
 
 //how we send the data back (JSON,XML,RAW,String)
 server.use(express.json());
+server.use(express.urlencoded({ extended: true }));
 
 //where i will save my files from upload
 server.use(express.static("upload"));

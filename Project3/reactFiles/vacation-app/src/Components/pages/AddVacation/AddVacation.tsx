@@ -22,7 +22,7 @@ export function AddVacation(): JSX.Element {
   let oneYearMax = '2025-09-01';
   const navigate = useNavigate();
   const [picture, setPicture] = useState();
-  const Add_Vac_URL = `http://localhost:8080/api/v1/dashBoard/addVacation`
+  const Add_Vac_URL = `http://localhost:8080/api/v1/dashBoard/addVacation`;
 
   type VacationInput = {
     vacationId: 0;
@@ -41,12 +41,39 @@ export function AddVacation(): JSX.Element {
     formState: { errors },
   } = useForm<VacationInput>();
 
-  const handleUploadFile=(file:any)=>{
-    console.log('55555',file.name)
-    
-  }
+  const handleUploadFile = async (file: any) => {
+    console.log('55555', file.name);
+    if (!picture) return;
+    const token = store.getState().login.jwt;
+    //console.log('token:',token)
+    const formData = new FormData();
+    console.log(formData, picture);
+    formData.append('file', picture);
+    const res = await axios
+      .post('http://localhost:8080/api/v1/dashBoard/uploadPicture', formData, {
+        headers: {
+          'Authorization': `${token}`,
+          'Content-Type': 'multipart/form-data',
+        },
+        onUploadProgress: (progressEvent) => {
+          console.log(
+            'Upload progress: ' +
+              Math.round(
+                (progressEvent.loaded / (progressEvent.total ?? 1)) * 100
+              ) +
+              '%'
+          );
+        },
+      })
+      .then((res) => {
+        console.log('Axios response: ', res);
+      })
+      .catch((err) => {
+        console.error('Upload error: ', err);
+      });
+    console.log(res);
+  };
 
-  
   const onSubmit: SubmitHandler<VacationInput> = async (
     data: VacationInput
   ) => {
@@ -57,33 +84,28 @@ export function AddVacation(): JSX.Element {
     }
     let token = store.getState().login.jwt;
     let isAdmin = store.getState().login.isAdmin;
-    const formData = new FormData();
-    formData.append('files', data.picture)
-    const fileName = data.picture.name;
-    console.log(fileName)
+    //const formData = new FormData();
+    //formData.append('files', data.picture)
+    //const fileName = data.picture.[0].name;
+    //console.log(fileName)
 
-
-    let inputVac  = {
+    //console.log(formData.values);
+    const newVac = {
       vacationId: 0,
       destination: data.destination,
-    vacInfo: data.vacInfo,
-    startDate: data.startDate,
-    endDate: data.endDate,
-    price: +data.price,
-    picture: data.picture,
-    pictureUrl:fileName,
+      vacInfo: data.vacInfo,
+      startDate: data.startDate,
+      endDate: data.endDate,
+      price: +data.price,
+    };
 
-    }
-    console.log(inputVac)
-   
+    // }
+    //console.log(inputVac)
+
     try {
-      const response = await axios.post(
-        Add_Vac_URL,
-        inputVac,
-        {
-          headers: { 'Authorization': `${token}` },
-        }
-      );
+      const response = await axios.post(Add_Vac_URL, newVac, {
+        headers: { 'Authorization': `${token}` },
+      });
       console.log('Vacation added successfully:', response.data);
       return response.data;
     } catch (error) {
@@ -123,7 +145,7 @@ export function AddVacation(): JSX.Element {
               <p></p>
             </Typography>
           </div>
-          <form onSubmit={handleSubmit(onSubmit)} encType="multipart/form-data">
+          <form onSubmit={handleSubmit(onSubmit)} encType='multipart/form-data'>
             <FormControl>
               <FormLabel htmlFor='destination'>Destination</FormLabel>
               <input
@@ -215,7 +237,7 @@ export function AddVacation(): JSX.Element {
                   handleUploadFile((e.target ).files?.[0])
                 }
               />
-  {/*
+              {/*
               {errors.picture?.type === 'required' && (
                 <span className='error-text'>This is required</span>
               )}
