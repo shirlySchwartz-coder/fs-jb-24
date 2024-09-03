@@ -16,7 +16,7 @@ const registerUser = async (user: UserReg) => {
          '${user.isAdmin}')
     `;
     const result: ResultSetHeader = await dal_mysql.execute(sql);
-    console.log(`Created user with id:${result.insertId}`);
+    //console.log(`Created user with id:${result.insertId}`);
     user.id = +result.insertId;
   } catch (err) {
     return err;

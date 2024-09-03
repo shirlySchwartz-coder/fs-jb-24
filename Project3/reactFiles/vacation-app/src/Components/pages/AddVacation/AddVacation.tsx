@@ -21,7 +21,7 @@ export function AddVacation(): JSX.Element {
   let today = Date.now();
   let oneYearMax = '2025-09-01';
   const navigate = useNavigate();
-  const Add_Vac_URL = `http://localhost:8080/api/v1/dashBoard/addVacation`;
+  //const Add_Vac_URL = `http://localhost:8080/api/v1/dashBoard/addVacation`;
 
   type VacationInput = {
     vacationId: 0;
@@ -30,8 +30,6 @@ export function AddVacation(): JSX.Element {
     startDate: Date;
     endDate: Date;
     price: number;
-    picture: File;
-    pictureUrl: string;
   };
   const {
     register,
@@ -61,7 +59,7 @@ export function AddVacation(): JSX.Element {
       price: +data.price,
     };
     try {
-      const response = await axios.post(Add_Vac_URL, newVac, {
+      const response = await axios.post(vars.ADD_VAC_URL, newVac, {
         headers: { 'Authorization': `${token}` },
       });
       console.log('Vacation added successfully:', response.data);
@@ -91,7 +89,7 @@ export function AddVacation(): JSX.Element {
           sx={{
             width: 500,
             mx: 'auto',
-            my: 4,
+            my: 2,
             py: 3,
             px: 2,
             display: 'flex',
@@ -99,7 +97,6 @@ export function AddVacation(): JSX.Element {
             gap: 2,
             borderRadius: 'sm',
             boxShadow: 'md',
-            //
             alignItems: 'center',
           }}
           variant='outlined'
@@ -110,7 +107,7 @@ export function AddVacation(): JSX.Element {
               <p></p>
             </Typography>
           </div>
-          <form onSubmit={handleSubmit(onSubmit)} encType='multipart/form-data'>
+          <form onSubmit={handleSubmit(onSubmit)} >
             <FormControl>
               <FormLabel htmlFor='destination'>Destination</FormLabel>
               <input
@@ -194,12 +191,12 @@ export function AddVacation(): JSX.Element {
 
             <br />
             <input type='submit' value='Submit' className='submit-btn' />
-          </form>
-          <hr />
-         
-              <UploadPic/>
+          </form>        
+             
           <DevTool control={control} />
         </Sheet>
+        <hr />
+        <UploadPic/>
       </main>
     </div>
   );

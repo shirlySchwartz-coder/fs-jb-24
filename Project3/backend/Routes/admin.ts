@@ -1,7 +1,9 @@
 import { ResultSetHeader } from 'mysql2';
 //adminRouter
-import express, { NextFunction, Request, Response, request } from 'express';
+import express, { NextFunction, Request, Response } from 'express';
 import multer from 'multer';
+import fileUpload from 'express-fileupload';
+import fs from 'fs';
 
 import { Vacation } from '../Models/Vacation';
 import {
@@ -20,11 +22,17 @@ adminRouter.get(
   '/all',
   async (request: Request, response: Response, nextFunction: NextFunction) => {
     console.log('Admin get all vacations ');
-    response
-      .status(200)
-      .header('Access-Control-Expose-Headers', 'Authorization')
-      //.header("Authorization",jwt)
-      .json(await getAllVacations());
+    const jwt = checkJWT(request.header('Authorization') || '');
+    //console.log("all vacations-  jwt:",jwt);
+    if (jwt.length > 10) {
+      response
+        .status(200)
+        .header('Access-Control-Expose-Headers', 'Authorization')
+        .header('Authorization', jwt)
+        .json(await getAllVacations());
+    } else {
+      response.status(401);
+    }
   }
 );
 
@@ -33,13 +41,12 @@ adminRouter.post(
   async (request: Request, response: Response, nextFunction: NextFunction) => {
     console.log('addVacation', request.body);
     const jwt = checkJWT(request.header('Authorization') || '');
-    //console.log("all vacations-  jwt:",jwt);
     if (jwt.length > 10) {
       // Ensure request.body is properly structured
       if (!request.body || !request.body.destination) {
         return response.status(400).json({ msg: 'Invalid request data' });
       }
-      console.log('admin request fileUpload: ', request.files);
+
       let result = await addNewVacation(request.body);
       if (!result.errno) {
         response
@@ -58,22 +65,35 @@ adminRouter.post(
 
 adminRouter.post(
   '/uploadPicture',
-  upload.single('file'),
-  async (request: Request, response: Response) => {
-    console.log('hay');
+  upload.single('vacPicFile'),
+  async (request: Request, response: Response, nextFunction: NextFunction) => {
     const jwt = checkJWT(request.header('Authorization') || '');
-    console.log('jwt', jwt);
-    if (jwt.length > 10) {
-      console.log('uploadPicture start');
-      console.log(request.file);
+    console.log('hay', request.files);
+    if (jwt.length < 10) {
+      return response.status(400).send('You need to log in.');
+    }
 
-      response
-        .status(201)
-        .header('Access-Control-Expose-Headers', 'Authorization')
-        .header('Authorization', jwt)
-        .json({ myResponse: 'File uploaded successfully' });
+    console.log('uploadPicture start:', request.file);
+    const vacPicFile = request.file;
+    const uploadPath = __dirname + '/../temp/uploads/' + vacPicFile?.originalname; // Corrected path
+    console.log('vacPicFile:', vacPicFile, 'uploadPath:', uploadPath);
+
+    // Save the file to the specified path
+    if (vacPicFile) {
+      fs.rename(vacPicFile.path, uploadPath, (err) => {
+        if (err) {
+          console.error('File upload failed:', err); // Log the error
+          return response.status(500).send('File upload failed.');
+        }
+
+        response
+          .status(201)
+          .header('Access-Control-Expose-Headers', 'Authorization')
+          .header('Authorization', jwt)
+          .json({ myResponse: 'File uploaded successfully' });
+      });
     } else {
-      response.status(401).json({ msg: 'upload filed' });
+      response.status(400).send('No file was uploaded.');
     }
   }
 );

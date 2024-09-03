@@ -48,7 +48,7 @@ export function VacationList(): JSX.Element {
     let token = store.getState().login.jwt;
     let id = store.getState().login.userId;
     try {
-      const favoritesRes = await axios.get(`${vars.FavoritesUrl}${id}`, {
+      const favoritesRes = await axios.get(`${vars.FAVORITES_URL}${id}`, {
         headers: { 'Authorization': `${token}` },
       });
 
@@ -71,7 +71,7 @@ export function VacationList(): JSX.Element {
       } else {
         let token = store.getState().login.jwt;
         try {
-          const response = await axios.get(vars.VacationsUrl, {
+          const response = await axios.get(vars.VACATIONS_URL, {
             headers: { 'Authorization': `${token}` },
           });
           console.log('All vacations:', response.data);
