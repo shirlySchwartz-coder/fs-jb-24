@@ -1,6 +1,10 @@
 import { Vacation } from './../Models/Vacation';
 import dal_mysql from '../DAL/dal_mysql';
 import { getAllVacations } from './vacationLogic';
+import fs from 'fs';
+import multer from 'multer';
+   
+
 
 const addNewVacation = async (newVacation: Vacation) => {
   console.log('in AddVacation');
@@ -41,8 +45,25 @@ const getReports = async () => {
   console.log('getReports');
 };
 
-const uploadPicture = async (file: File) => {
-  console.log('file to save is:', File);
+const uploadPicture = async (file: any) => {
+  console.log('file to save is:', file);
+  console.log('uploadPicture start:', file);
+   
+ 
+
+    const uploadPath =  '/../temp/uploads/' + file.originalname; // Corrected path
+    console.log('vacPicFile:', file, 'uploadPath:', uploadPath);
+
+    return new Promise((resolve, reject) => {
+      fs.rename(file.path, uploadPath, (err) => {
+        if (err) {
+          console.error('File upload failed:', err); // Log the error
+          reject({ error: 'File upload failed.' });
+        } else {
+          resolve({ message: 'File uploaded successfully', fileName: file.originalname, filePath: uploadPath });
+        }
+      });
+    });
 };
 
 export {

@@ -40,14 +40,14 @@ server.use(cors(corsOptions));
 
 //how we send the data back (JSON,XML,RAW,String)
 server.use(express.json());
-server.use(express.urlencoded({ extended: true }));
+//server.use(express.urlencoded({ extended: true }));
 
 //where i will save my files from upload
-server.use(express.static("upload"));
+server.use(express.static("/uploads"));
 
 //enable file uploading, and create a path for the files if it no exists
 //server.use(fileUpload({createParentPath: true}));
-server.use(fileUpload());
+server.use(fileUpload({createParentPath: true}));
 
 server.use("/api/v1/vacations", vacationsRouter);
 server.use("/api/v1/login",loginRouter);

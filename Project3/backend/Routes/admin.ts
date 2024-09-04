@@ -12,6 +12,7 @@ import {
   deleteVacation,
   getReports,
   updateVacation,
+  uploadPicture,
 } from '../logic/adminLogic';
 import { getAllVacations } from '../logic/vacationLogic';
 import { checkJWT } from '../Utils/jwt';
@@ -98,9 +99,31 @@ adminRouter.post(
   }
 );
 */
-adminRouter.post('/uploadPicture', 
+adminRouter.post('/uploadPicture', upload.single('sampleFile'),
   async(request: Request, response: Response, nextFunction: NextFunction)=>{
-    console.log('hay', request.files);
+    console.log('hay',  request.file);
+    const jwt = checkJWT(request.header('Authorization') || '');
+    
+    if (jwt.length < 10) {
+      return response.status(400).send('You need to log in.');
+    }
+
+    const vacPicFile = request.file;
+    if (!vacPicFile) {
+      return response.status(400).send('No file was uploaded.');
+    }
+
+    try {
+      const result = await uploadPicture(vacPicFile);
+      response
+        .status(201)
+        .header('Access-Control-Expose-Headers', 'Authorization')
+        .header('Authorization', jwt)
+        .json(result);
+    } catch (error) {
+      response.status(500).send(error);
+    }
+
 })
 adminRouter.put(
   '/updateVacation/:id',
