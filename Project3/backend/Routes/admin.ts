@@ -64,41 +64,7 @@ adminRouter.post(
     }
   }
 );
-/*
-adminRouter.post(
-  '/uploadPicture',
-  upload.single('vacPicFile'),
-  async (request: Request, response: Response, nextFunction: NextFunction) => {
-    const jwt = checkJWT(request.header('Authorization') || '');
-    console.log('hay', request.files);
-    if (jwt.length < 10) {
-      return response.status(400).send('You need to log in.');
-    }
 
-    console.log('uploadPicture start:', request.file);
-    const vacPicFile = request.file;
-    if (!vacPicFile) {
-      return response.status(400).send('No file was uploaded.');
-    }
-    const uploadPath = __dirname + '/../temp/uploads/' + vacPicFile.originalname; // Corrected path
-    console.log('vacPicFile:', vacPicFile, 'uploadPath:', uploadPath);
-
-    // Save the file to the specified path
-    fs.rename(vacPicFile.path, uploadPath, (err) => {
-      if (err) {
-        console.error('File upload failed:', err); // Log the error
-        return response.status(500).send('File upload failed.');
-      }
-
-      response
-        .status(201)
-        .header('Access-Control-Expose-Headers', 'Authorization')
-        .header('Authorization', jwt)
-        .json({ myResponse: 'File uploaded successfully' });
-    });
-  }
-);
-*/
 adminRouter.post('/uploadPicture', upload.single('sampleFile'),
   async(request: Request, response: Response, nextFunction: NextFunction)=>{
     console.log('hay',  request.file);

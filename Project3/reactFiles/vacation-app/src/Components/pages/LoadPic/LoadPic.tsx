@@ -1,67 +1,44 @@
 import { useForm } from 'react-hook-form';
 import { store } from '../../../redux/store';
-import vars from '../../utils/Variants';
 import './LoadPic.css';
 import axios from 'axios';
 import { useState } from 'react';
 
 export function LoadPic(): JSX.Element {
-  const [fileToUpload, setFileToUpload] = useState<any>()
+  const [file, setFile] = useState<File | null>(null);
   const token = store.getState().login.jwt;
-  const {
-    register,
-    handleSubmit,
-    formState: { errors },
-  } = useForm();
+ 
+  const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    if (e.target.files && e.target.files[0]) {
+      setFile(e.target.files[0]);
+    }
+  };
 
-  async function handleUploadFile (file:any)  {
-    console.log(file);
+  const handleUpload = async () => {
     if (!file) return;
-    const token = store.getState().login.jwt;
-    //console.log('token:',token)
+
     const formData = new FormData();
-    console.log(formData, file);
-    formData.append('file', file);
-    const res = await axios
-      .post('http://localhost:8080/api/v1/dashBoard/uploadPicture', formData, {
+    formData.append('sampleFile', file); // Ensure the name matches the backend
+
+    try {
+      const response = await axios.post('/api/v1/dashBoard/uploadPicture', formData, {
         headers: {
-          'Authorization': `${token}`
+          'Content-Type': 'multipart/form-data',
+          'Authorization': `${token}`, // Adjust the token as needed
         },
-        onUploadProgress: (progressEvent) => {
-          console.log(
-            'Upload progress: ' +
-              Math.round(
-                (progressEvent.loaded / (progressEvent.total ?? 1)) * 100
-              ) +
-              '%'
-          );
-        },
-      })
-      .then((res) => {
-        console.log('Axios response: ', res);
-      })
-      .catch((err) => {
-        console.error('Upload error: ', err);
       });
-    console.log(res);
+      console.log('Upload success:', response.data);
+    } catch (error) {
+      console.error('Upload error:', error);
+    }
   };
 
   return (
     <div className='LoadPic'>
       <h2>Load Pic</h2>
       <div className='LoadPic'>
-        <form
-          id='uploadForm'
-          onSubmit={(e) =>
-            handleUploadFile(fileToUpload)
-          }
-          encType='multipart/form-data'
-        >
-          <input type='file' name='sampleFile' accept='image/*' onChange={(e) =>
-            setFileToUpload((e.target ).files?.[0])
-          } />
-          <input type='submit' value='Upload!' />
-        </form>
+        <input type='file' onChange={handleFileChange} />
+        <button onClick={handleUpload}>Upload</button>
       </div>
     </div>
   );

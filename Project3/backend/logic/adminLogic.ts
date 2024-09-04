@@ -49,21 +49,25 @@ const uploadPicture = async (file: any) => {
   console.log('file to save is:', file);
   console.log('uploadPicture start:', file);
    
- 
+  if (!file) {
+    console.error('No file was uploaded.');
+    return { error: 'No file was uploaded.' };
+  }
 
-    const uploadPath =  '/../temp/uploads/' + file.originalname; // Corrected path
-    console.log('vacPicFile:', file, 'uploadPath:', uploadPath);
+  const uploadPath = __dirname + '/../temp/uploads/' + file.originalname; // Corrected path
+  console.log('vacPicFile:', file, 'uploadPath:', uploadPath);
 
-    return new Promise((resolve, reject) => {
-      fs.rename(file.path, uploadPath, (err) => {
-        if (err) {
-          console.error('File upload failed:', err); // Log the error
-          reject({ error: 'File upload failed.' });
-        } else {
-          resolve({ message: 'File uploaded successfully', fileName: file.originalname, filePath: uploadPath });
-        }
-      });
+  // Save the file to the specified path
+  return new Promise((resolve, reject) => {
+    fs.rename(file.path, uploadPath, (err) => {
+      if (err) {
+        console.error('File upload failed:', err); // Log the error
+        reject({ error: 'File upload failed.' });
+      } else {
+        resolve({ message: 'File uploaded successfully', fileName: file.originalname, filePath: uploadPath });
+      }
     });
+  });
 };
 
 export {
