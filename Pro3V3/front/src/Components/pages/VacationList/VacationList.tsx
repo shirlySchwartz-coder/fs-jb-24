@@ -58,6 +58,9 @@ export function VacationList(): JSX.Element {
       const userVacations = fixUserFav(resultVacation, resultFavorites);
       setVacations(userVacations);
     }
+    else{
+      console.log("No Favorites")
+    }
   };
 
   const getVacations = async () => {
@@ -90,7 +93,7 @@ export function VacationList(): JSX.Element {
         console.log('Error', error.message);
       });
     console.log(resFav);
-    //store.dispatch(saveFavorites(resFav))
+    store.dispatch(saveFavorites(resFav))
     return resFav;
   };
   const fixUserFav = (vacations: Vacation[], favorites: Favorite[]) => {
@@ -108,16 +111,45 @@ export function VacationList(): JSX.Element {
   //
   const handleLike = async (vacationId: number) => {
     let token = store.getState().login.jwt;
-    let id = +store.getState().login.userId;
-    // שליחת בקשה לשרת כדי לעדכן את הלייק
-    await axios.post(
-      `${vars.FAVORITES_URL}${id}`,
-      { idVacation: vacationId },
-      {
-        headers: { 'Authorization': `${token}` },
-      }
+    let userId = +store.getState().login.userId;
+    //let vacId = vacationId;
+    //let isFav = store.getState().vacations[];
+    //
+    const vacationItem = vacations.find(
+      (vacation) => vacation.vacationId === vacationId
     );
+    let isFav = vacationItem ? vacationItem.isFavorite : false; // קבלת הערך של isFavorite
+    //
+    switch (isFav) {
+      case true:
+        console.log('UnFollow Req');
+        const resUnfollow = await axios.delete(`${vars.UNFOLLOW_URL}${vacationId}`, {
+          headers: { 'Authorization': `${token}` },
+          data: { userId: +userId },
+        });
 
+        if (resUnfollow.status === 204) {
+          console.log('unfollow successful!');
+          localStorage.setItem('userFavChange', 'vacationId');
+        } else {
+          throw new Error('unfollow fail!');
+        }
+        break;
+      case false:
+        console.log('Follow Req');
+        const res = await axios.post(
+          `${vars.FOLLOW_URL}${vacationId}`,
+          { userId: +userId },
+          { headers: { 'Authorization': `${token}` } }
+        );
+        if (res.status === 201) {
+          console.log('fullow successful!');
+          localStorage.setItem('userFavChange', 'vacationId');
+        } else {
+          throw new Error('not working');
+        }
+        break;
+    }
     // קבלת רשימת המועדפים המעודכנת
     const updatedFavorites = await getFavorites();
 
