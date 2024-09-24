@@ -15,20 +15,16 @@ export function Menu(): JSX.Element {
     setIsLogged(store.getState().login.isLogged);
   });
 
-  
-
-  
   const adminDbMenu = () => {
     return (
       <>
-        Admin Menu
+        <h3>Admin Menu</h3>
+        <br />
         <MenuList>
           <MenuItem>
             <NavLink to='/addVacation'>Add Vacation</NavLink>
           </MenuItem>
-          <MenuItem>
-            <NavLink to='/updateVacation'>Update Vacation</NavLink>
-          </MenuItem>
+         
           <MenuItem>
             <NavLink to='/reports'>Reports</NavLink>
           </MenuItem>
@@ -64,7 +60,7 @@ export function Menu(): JSX.Element {
   };
 
   return (
-    <div className='Menu'>      
+    <div className='Menu'>
       <div>{isAdmin ? adminDbMenu() : userMenu()}</div>
     </div>
   );

@@ -20,6 +20,8 @@ import Select from '@mui/joy/Select';
 import Option from '@mui/joy/Option';
 import vars from '../../utils/Variants';
 import { ToastContainer, Zoom, toast } from 'react-toastify';
+import { useEffect } from 'react';
+import { store } from '../../../redux/store';
 
 export function Register(): JSX.Element {
   const navigate = useNavigate();
@@ -57,10 +59,18 @@ export function Register(): JSX.Element {
     formState: { errors },
   } = useForm<userInput>();
   //
+
+  useEffect(() => {
+    store.dispatch(logoutAction());
+    toast.success('You are logged out.');
+    localStorage.removeItem('jwt');
+    sessionStorage.removeItem('jwt');
+    navigate('/');
+  }, [])
   const onSubmit: SubmitHandler<userInput> = async (data: userInput) => {
     console.log(data);
     if (data.password !== data.passCheck) {
-      //toast.error('Password mismatch', notifSetting);
+      toast.error('Password mismatch');
       //notyf.error('Password mismatch');
       return;
     }
@@ -75,12 +85,12 @@ export function Register(): JSX.Element {
     await axios
       .post('http://localhost:8080/api/v1/login/registerUser', sendData)
       .then((res) => {
-        //toast.success('User was registered successfully', notifSetting);
+        toast.success('User was registered successfully');
         //notyf.success('User was registered successfully');
         navigate('/');
       })
       .catch((err) => {
-        //toast.error('Error accord while registering the user', notifSetting);
+        toast.error('Error accord while registering the user');
         //notyf.error('Error accord while registering the user');
         console.log(err);
       });
@@ -94,10 +104,10 @@ export function Register(): JSX.Element {
         <Sheet
           sx={{
             width: 300,
-            mx: 'auto', // margin left & right
-            my: 4, // margin top & bottom
-            py: 3, // padding top & bottom
-            px: 2, // padding left & right
+            mx: 'auto', 
+            my: 4, 
+            py: 3, 
+            px: 2, 
             display: 'flex',
             flexDirection: 'column',
             gap: 2,
@@ -208,3 +218,7 @@ export function Register(): JSX.Element {
     </div>
   );
 }
+function logoutAction(): any {
+  throw new Error('Function not implemented.');
+}
+

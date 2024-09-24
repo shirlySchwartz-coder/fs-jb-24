@@ -42,9 +42,7 @@ export function VacationList(): JSX.Element {
       if (!CheckJWT()) {
         navigate('/login');
       } else {
-        //let id = +store.getState().login.userId;
-        //let token = store.getState().login.jwt;
-        //console.log('start', id, token);
+        
         await getAllData();
       }
     };
