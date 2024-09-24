@@ -18,7 +18,7 @@ import { Favorite } from '../../models/Favorite';
 export function VacationList(): JSX.Element {
   const [vacations, setVacations] = useState<Vacation[]>([]);
   const [favorites, setFavorites] = useState<Favorite[]>([]);
-  const [id, setId] = useState<number>();
+  //const [id, setId] = useState<number>();
   const [isAdmin, setIsAdmin] = useState(false);
   //const [isLogged, setLogged] = useState(false);
   //const [token, setToken] = useState<string>();
@@ -42,8 +42,8 @@ export function VacationList(): JSX.Element {
       if (!CheckJWT()) {
         navigate('/login');
       } else {
-        let id = +store.getState().login.userId;
-        let token = store.getState().login.jwt;
+        //let id = +store.getState().login.userId;
+        //let token = store.getState().login.jwt;
         //console.log('start', id, token);
         await getAllData();
       }
@@ -57,9 +57,8 @@ export function VacationList(): JSX.Element {
     if (resultVacation.length > 0 && resultFavorites.length > 0) {
       const userVacations = fixUserFav(resultVacation, resultFavorites);
       setVacations(userVacations);
-    }
-    else{
-      console.log("No Favorites")
+    } else {
+      console.log('No Favorites');
     }
   };
 
@@ -93,16 +92,18 @@ export function VacationList(): JSX.Element {
         console.log('Error', error.message);
       });
     console.log(resFav);
-    store.dispatch(saveFavorites(resFav))
+    store.dispatch(saveFavorites(resFav));
     return resFav;
   };
   const fixUserFav = (vacations: Vacation[], favorites: Favorite[]) => {
     console.log('call fixUserFav:', vacations, favorites);
-    const tempVacArray = vacations;
+    const tempVacArray = vacations.map((vacation) => ({ ...vacation }));
+
     for (let i = 0; i < favorites.length; i++) {
       tempVacArray.forEach((item) => {
-        if (item.vacationId !== favorites[i].idVacation) return;
-        else item.isFavorite = true;
+        if (item.vacationId === favorites[i].idVacation) {
+          item.isFavorite = true;
+        }
       });
     }
     console.log('Yes You got it :', tempVacArray, vacations);
@@ -118,23 +119,28 @@ export function VacationList(): JSX.Element {
     const vacationItem = vacations.find(
       (vacation) => vacation.vacationId === vacationId
     );
-    let isFav = vacationItem ? vacationItem.isFavorite : false; // קבלת הערך של isFavorite
+    let isFav = vacationItem?.isFavorite ? vacationItem.isFavorite :false;
     //
     switch (isFav) {
       case true:
         console.log('UnFollow Req');
-        const resUnfollow = await axios.delete(`${vars.UNFOLLOW_URL}${vacationId}`, {
-          headers: { 'Authorization': `${token}` },
-          data: { userId: +userId },
-        });
+        const resUnfollow = await axios.delete(
+          `${vars.UNFOLLOW_URL}${vacationId}`,
+          {
+            headers: { 'Authorization': `${token}` },
+            data: { userId: +userId },
+          }
+        );
 
         if (resUnfollow.status === 204) {
           console.log('unfollow successful!');
-          localStorage.setItem('userFavChange', 'vacationId');
+         
+          //localStorage.setItem('userFavChange', 'vacationId');
         } else {
           throw new Error('unfollow fail!');
         }
         break;
+
       case false:
         console.log('Follow Req');
         const res = await axios.post(
@@ -143,17 +149,14 @@ export function VacationList(): JSX.Element {
           { headers: { 'Authorization': `${token}` } }
         );
         if (res.status === 201) {
-          console.log('fullow successful!');
-          localStorage.setItem('userFavChange', 'vacationId');
+          console.log('follow successful!');
+          //localStorage.setItem('userFavChange', 'vacationId');
         } else {
           throw new Error('not working');
         }
         break;
     }
-    // קבלת רשימת המועדפים המעודכנת
     const updatedFavorites = await getFavorites();
-
-    // עדכון רשימת החופשות
     const updatedVacations = fixUserFav(vacations, updatedFavorites);
     setVacations(updatedVacations);
   };

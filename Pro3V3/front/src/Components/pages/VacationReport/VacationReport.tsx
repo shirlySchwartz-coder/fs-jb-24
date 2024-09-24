@@ -1,25 +1,37 @@
-import { useState } from 'react';
 import './VacationReport.css';
+import React, { useEffect, useState } from 'react';
+import axios from 'axios';
 import { BarChart } from '@mui/x-charts/BarChart';
 import { axisClasses } from '@mui/x-charts/ChartsAxis';
-import Box from '@mui/joy/Box';
-import Container from '@mui/joy/Container';
+import { Line } from 'react-chartjs-2';
+import { Box, Container, CssBaseline } from '@mui/material';
 
-const xLabels = [
-  'Vacation 1',
-  'Vacation 2',
-  'Vacation 3',
-  'Vacation 4',
-  'Vacation 5',
-  'Vacation 6',
-  'Vacation 7',
-  'Vacation 8',
-  'Vacation 9',
-  'Vacation 10',
-];
-const fData = [2, 5, 0, 0, 1, 3, 2, 0, 0, 0];
+//import Box from '@mui/joy/Box';
+//import Container from '@mui/joy/Container';
+//import CssBaseline from '@mui/joy/CssBaseline';
+import Sheet from '@mui/joy/Sheet';
+const SheetValues = {
+  sx: {
+    width: 1000,
+    height: 550,
+    mx: 'auto',
+    my: 2,
+    py: 3,
+    px: 2,
+    display: 'flex',
+    flexDirection: 'column',
+    gap: 2,
+    borderRadius: 'sm',
+    boxShadow: 'md',
+    alignItems: 'center',
+  },
+};
+
 export function VacationReport(): JSX.Element {
-  const [dataset, setDataSet] = useState([]);
+  const [data, setData] = useState<any[]>([]);
+  const [fData, setFData] = useState<number[]>([]);
+  const [datasets, setDatasets] = useState<string[]>([]);
+
   const chartSetting = {
     yAxis: [
       {
@@ -35,24 +47,68 @@ export function VacationReport(): JSX.Element {
       },
     },
   };
+  //('http://localhost:8080/api/v1/dashboard/reports')
+  const fetchData = async () => {
+    try {
+      const response = await axios.get(
+        'http://localhost:8080/api/v1/dashboard/reports'
+      );
+      if (response.data) {
+        console.log(response.data);
+        let labels = response.data.map((item: any) => item.place);
+       
+        let numbers = response.data.map((item: any) => item.followers);
+        console.log('labels', labels,numbers);
+        setData(response.data);
+        setFData(numbers); 
+        setDatasets(labels); 
+      }
+    } catch (error) {
+      console.error('Error fetching data:', error);
+    }
+  };
+
+  useEffect(() => {
+    fetchData();
+  }, []);
+
+  const chartData = {
+    labels: datasets, // השתמש ב-datasets לתוויות
+    datasets: [
+      {
+        label: 'Data Report',
+        data: fData, // השתמש ב-fData לערכים
+        borderColor: 'rgba(75,192,192,1)',
+        backgroundColor: 'rgba(75,192,192,0.2)',
+        fill: true,
+      },
+    ],
+  };
 
   return (
     <div className='VacationReport'>
-      <h2>Vacation Report</h2>
-      <div>
-      <Container maxWidth="sm">
-         <Box component='section' sx={{ p: 5, border: '1px solid grey' }}>
-          <BarChart
-            dataset={dataset}
-            xAxis={[{data: ['Vac1','Vac2','Vac3','Vac4','Vac5',
-                  'Vac6','Vac7','Vac8','Vac9', 'Vac10',],scaleType: 'band',},]}
-            series={[{ data: fData, label: 'followers', type: 'bar' }]}
-            {...chartSetting}
-          />
-        </Box>
-      </Container>
-       
-      </div>
+      <CssBaseline />
+      <Sheet variant='outlined' sx={SheetValues.sx}>
+        <h2>Vacation Report</h2>
+        <div>
+          <Container maxWidth='sm'>
+            <Box component='section' sx={{ p: 5, border: '1px solid grey' }}>
+              {data.length > 0 ? (
+                <>
+                 
+                  <BarChart
+                    xAxis={[{ scaleType: 'band', data: datasets,},]}
+                    series={[{ data: fData, label: 'followers', type: 'bar' }]}
+                    {...chartSetting}
+                  />
+                </>
+              ) : (
+                <p>Loading...</p>
+              )}
+            </Box>
+          </Container>
+        </div>
+      </Sheet>
     </div>
   );
 }

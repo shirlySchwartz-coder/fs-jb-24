@@ -4,13 +4,13 @@ import { getAllVacations } from './vacationLogic';
 import fs from 'fs';
 import multer from 'multer';
 
-const uploadPicture = async (file: any, id:number) => {
+const uploadPicture = async (file: any, id: number) => {
   console.log('file to save is:', file);
   //console.log('uploadPicture start:', file);
 
   let url = `http://localhost:8080/${file.filename}`;
   let vacId = +id;
-  console.log('url', url, 'vacId',vacId);
+  console.log('url', url, 'vacId', vacId);
   const sql = `
   UPDATE tagging_vacation.vacations
    SET pictureUrl = '${url}' WHERE (vacationId = ${vacId});
@@ -35,10 +35,10 @@ const addNewVacation = async (newVacation: Vacation) => {
   return result[0].id;
 };
 
-const getVacationById = async(vacationId:number)=>{
-  const sql = `SELECT * FROM tagging_vacation.vacations where vacationId=1`
+const getVacationById = async (vacationId: number) => {
+  const sql = `SELECT * FROM tagging_vacation.vacations where vacationId=1`;
   return await dal_mysql.execute(sql);
-}
+};
 
 const updateVacation = async (vacationId: number, updateVac: Vacation) => {
   const sql = `
@@ -62,6 +62,16 @@ const deleteVacation = async (id: number) => {
 };
 const getReports = async () => {
   console.log('getReports');
+  const sql = `
+    SELECT idVacation as vacId ,destination as place , count(idVacation) as followers
+    FROM tagging_vacation.followers
+    left join  vacations on vacationId=idVacation
+    group by  idVacation
+    order by followers desc 
+    limit 10 ;;
+  `;
+
+  return await dal_mysql.execute(sql);
 };
 
 export {
@@ -70,5 +80,5 @@ export {
   deleteVacation,
   getReports,
   uploadPicture,
-  getVacationById
+  getVacationById,
 };

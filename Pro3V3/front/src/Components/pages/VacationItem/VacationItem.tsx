@@ -24,7 +24,7 @@ type VacationItemProps = {
 
 export function VacationItem(props: VacationItemProps): JSX.Element {
   const [isAdmin, setIsAdmin] = useState<boolean>();
-  const [isFavChanged, setIsFavChanged] = useState(false);
+  //const [isFavChanged, setIsFavChanged] = useState(false);
   const [isLogged, setIsLogged] = useState(false);
   
   const navigate = useNavigate();
