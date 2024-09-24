@@ -3,25 +3,21 @@ import './Menu.css';
 import MenuList from '@mui/joy/MenuList';
 import MenuItem from '@mui/joy/MenuItem';
 import { store } from '../../../redux/store';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 
 export function Menu(): JSX.Element {
   const [isAdmin, setIsAdmin] = useState(false);
   const [isLogged, setIsLogged] = useState(false);
+  const [initial, setInitial] = useState(true);
   const navigate = useNavigate();
   store.subscribe(() => {
     setIsAdmin(store.getState().login.isAdmin);
     setIsLogged(store.getState().login.isLogged);
   });
 
-  const noMenu = () => {
-    return (
-      <>
-        <h3>Hello Login First</h3>
-      </>
-    );
-  };
+  
 
+  
   const adminDbMenu = () => {
     return (
       <>
@@ -68,9 +64,8 @@ export function Menu(): JSX.Element {
   };
 
   return (
-    <div className='Menu'>
-      
-      {isAdmin ? adminDbMenu() : userMenu()}
+    <div className='Menu'>      
+      <div>{isAdmin ? adminDbMenu() : userMenu()}</div>
     </div>
   );
 }
