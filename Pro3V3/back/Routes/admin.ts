@@ -91,27 +91,38 @@ adminRouter.get(
     const id = +request.params.id;
     const jwt = checkJWT(request.header('Authorization') || '');
     console.log('id in edit:', id);
-    
-    response
-      .status(200)
-      .header('Access-Control-Expose-Headers', 'Authorization')
-      .header('Authorization', jwt)
-      .json(await getVacationById(id));
+
+    //console.log("all vacations-  jwt:",jwt);
+    if (jwt.length > 10) {
+      response
+        .status(200)
+        .header('Access-Control-Expose-Headers', 'Authorization')
+        .header('Authorization', jwt)
+        .json(await getVacationById(id));
+    } else {
+      response.status(401);
+    }
   }
 );
 adminRouter.put(
   '/updateVacation/:id',
   async (request: Request, response: Response, nextFunction: NextFunction) => {
-    console.log('updateVacation ', request.params.id, request.body);
+    console.log(
+      'updateVacation ',
+      request.params.id,
+      request.body,
+      request.file
+    );
     let toUpdateVac = new Vacation(
-      request.body.vacationId,
+      +request.body.vacationId,
       request.body.destination,
       request.body.vacInfo,
       new Date(request.body.startDate),
       new Date(request.body.endDate),
-      request.body.price,
-      request.body.pictureUrl
+      +request.body.price,
+      (request.file as Express.Multer.File)?.filename
     );
+    console.log('toUpdateVac', toUpdateVac);
     let updatedVac = await updateVacation(+request.params.id, toUpdateVac);
     if (!updatedVac.errno) {
       response.status(201).json({ msg: 'created' });

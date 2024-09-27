@@ -53,25 +53,29 @@ export function UpdateVacation(): JSX.Element {
     register,
     handleSubmit,
     control,
-    formState: { errors },
+    formState: { errors, isDirty, isValid, isSubmitting, touchedFields, submitCount },
     setValue,
     watch,
     getValues,
   } = useForm<VacationInput>({
-    defaultValues: async () => {
-      const response = await fetch(
+    reValidateMode: 'onChange',
+    defaultValues: 
+    async () => {
+      const response = await axios.get(
         `http://localhost:8080/api/v1/dashBoard/edit/` + id,
         {
           headers: { 'Authorization': `${token}` },
         }
       );
-      const dataToUpdate = await response.json();
+      const dataToUpdate = await response.data;
       console.log(dataToUpdate);
       return {
-        vacationId: dataToUpdate[0].vacationId, // This should be fetched or passed to the component
+        vacationId: dataToUpdate[0].vacationId,
         destination: dataToUpdate[0].destination,
         vacInfo: dataToUpdate[0].vacInfo,
-        startDate: new Date(dataToUpdate[0].startDate).toISOString().split('T')[0],
+        startDate: new Date(dataToUpdate[0].startDate)
+          .toISOString()
+          .split('T')[0],
         endDate: new Date(dataToUpdate[0].endDate).toISOString().split('T')[0],
         price: dataToUpdate[0].price,
         image: null,
@@ -79,17 +83,21 @@ export function UpdateVacation(): JSX.Element {
       };
     },
   });
-  //const imageFile = watch('image'); // Watch to get the current value of the image file input
-  //const watchAllFields = watch();
+  console.log(isDirty)
+  console.log(errors)
   const fileInputValue = watch('oldImage');
-  /*const handleInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    const { name, value } = event.target;
-    setValue(name as keyof VacationInput, value);
-  };*/
+  //const imageFile = watch('image'); // Watch to get the current value of the image file input
   
+
   const onSubmit: SubmitHandler<VacationInput> = async (data) => {
     console.log(data);
-    const formData = new FormData();
+    console.log('isValid',isValid)
+    console.log('isSubmitting',isSubmitting)
+    if (!CheckJWT()) {
+      navigate('/login');
+      return;
+    }
+    let formData = new FormData();
     formData.append('vacationId', String(data.vacationId));
     formData.append('destination', data.destination);
     formData.append('vacInfo', data.vacInfo);
@@ -101,23 +109,27 @@ export function UpdateVacation(): JSX.Element {
     }
     console.log('Form Data:', formData);
     // API call to update vacation
-    if (!CheckJWT()) {
-      navigate('/login');
-      return;
-    }
-    let token = store.getState().login.jwt;
+   
+    //let token = store.getState().login.jwt;
     try {
-      const response = await axios.put(vars.UPDATE_VAC_URL, formData, {
-        headers: { 'Authorization': `${token}` },
+      const response = await axios.put(vars.UPDATE_VAC_URL + id, formData, {
+        headers: { 'Authorization': `${token}` ,'Content-Type': 'multipart/form-data',},
       });
-    } catch (error) {}
+      console.log(response);
+    } catch (error) {
+      throw new Error('Update did not succeed');
+    }
+  };
+  const handleInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const { name, value } = event.target;
+    setValue(name as keyof VacationInput, value);
   };
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     if (e.target.files && e.target.files[0]) {
-      setValue('image' ,e.target.files[0]);
+      setValue('image', e.target.files[0]);
     }
   };
- 
+
   return (
     <div className='UpdateVacation'>
       <h2>Update Vacation</h2>
@@ -129,6 +141,7 @@ export function UpdateVacation(): JSX.Element {
             <input
               {...register('destination', { required: true })}
               placeholder='Destination'
+              onBlur={handleInputChange}
             />
             {errors.destination && <span>This field is required</span>}
             <FormLabel htmlFor='vacInfo'>Vacation Info</FormLabel>
@@ -136,38 +149,29 @@ export function UpdateVacation(): JSX.Element {
               multiline
               rows={6}
               {...register('vacInfo')}
-                        placeholder='Vacation Info'
               
             />
             <FormLabel htmlFor='startDate'>Start Date</FormLabel>
-            <input
-              type='date'
-              {...register('startDate', { required: true })}
-             
-            />
+            <input type='date' {...register('startDate', { required: true })}  onBlur={handleInputChange}/>
             {errors.startDate && <span>This field is required</span>}
             <FormLabel htmlFor='endDate'>End Date</FormLabel>
 
-            <input
-              type='date'
-              {...register('endDate', { required: true })}
-             
-            />
+            <input type='date' {...register('endDate', { required: true })}  onBlur={handleInputChange}/>
             {errors.endDate && <span>This field is required</span>}
             <FormLabel htmlFor='price'>Price</FormLabel>
 
-            <input
-              type='number'
-              {...register('price', { required: true })}
-             
-            />
+            <input type='number' {...register('price', { required: true })}  onBlur={handleInputChange} />
             {errors.price && <span>This field is required</span>}
             <br />
 
-            <input type='file'  {...register('image',{required: true})}/>
+            <input
+              type='file'
+              {...register('image', { required: true })}
+              onChange={handleFileChange}
+            />
             {errors && <span>This field is required</span>}
 
-             {fileInputValue && (
+            {fileInputValue && (
               <div>
                 <h4>Image in the database</h4>
                 <img
@@ -179,7 +183,9 @@ export function UpdateVacation(): JSX.Element {
             )}
 
             <br />
+            <button disabled={!isDirty || !isValid} /> 
             <button type='submit'>Update Vacation</button>
+            
           </FormControl>
         </form>
         <DevTool control={control} />

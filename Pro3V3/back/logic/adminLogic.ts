@@ -48,6 +48,13 @@ const updateVacation = async (vacationId: number, updateVac: Vacation) => {
     price = ${updateVac.price}, pictureUrl = '${updateVac.pictureUrl}' 
     WHERE (vacationId = ${vacationId})
     `;
+   /*  const sql = `
+    UPDATE tagging_vacation.vacations
+    SET destination ='${updateVac.destination}', vacInfo='${updateVac.vacInfo}',
+    startDate = '${updateVac.startDate}', endDate = '${updateVac.endDate}', 
+    price = ${updateVac.price}, pictureUrl = '${updateVac.pictureUrl}' 
+    WHERE (vacationId = ${vacationId})
+    `; */
 
   return await dal_mysql.execute(sql);
 };

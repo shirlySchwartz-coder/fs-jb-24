@@ -14,7 +14,7 @@ root.render(
   <BrowserRouter>
     <MainLayout />
     <ToastContainer
-      position='top-right'
+      position="top-right"
       autoClose={2500}
       limit={1}
       hideProgressBar={false}
@@ -24,7 +24,7 @@ root.render(
       pauseOnFocusLoss
       draggable
       pauseOnHover
-      theme='colored'
+      theme="colored"
     />
   </BrowserRouter>
 );

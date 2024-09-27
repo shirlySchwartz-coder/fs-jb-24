@@ -22,6 +22,8 @@ import vars from '../../utils/Variants';
 import { ToastContainer, Zoom, toast } from 'react-toastify';
 import { useEffect } from 'react';
 import { store } from '../../../redux/store';
+import { logoutAction } from '../../../redux/loginReducer';
+
 
 export function Register(): JSX.Element {
   const navigate = useNavigate();
@@ -65,7 +67,7 @@ export function Register(): JSX.Element {
     toast.success('You are logged out.');
     localStorage.removeItem('jwt');
     sessionStorage.removeItem('jwt');
-    navigate('/');
+   
   }, [])
   const onSubmit: SubmitHandler<userInput> = async (data: userInput) => {
     console.log(data);
@@ -218,7 +220,5 @@ export function Register(): JSX.Element {
     </div>
   );
 }
-function logoutAction(): any {
-  throw new Error('Function not implemented.');
-}
+
 

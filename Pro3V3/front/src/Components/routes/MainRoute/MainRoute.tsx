@@ -22,12 +22,11 @@ export function MainRoute(): JSX.Element {
         <Route path='/about' element={<About />} />
         <Route path='/contact' element={<Contact />} />
         <Route path='/vacations' element={<VacationList />} />
-
-        <Route path='/vacations' element={<VacationList />} />
         <Route path='/addVacation' element={<AddVacation />} />
         <Route path='/loadPicture' element={<LoadPic />} />
         <Route path='/updateVacation/:id' element={<UpdateVacation />} />
         <Route path='/reports' element={<VacationReport />} />
+        <Route path='/*' element={<Page404 />} />
       </Routes>
     </div>
   );
