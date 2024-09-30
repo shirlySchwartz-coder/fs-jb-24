@@ -86,7 +86,7 @@ loginRouter.post(
 loginRouter.get(
   '/checkJWT/:token',
   async (request: Request, response: Response, nextFunction: NextFunction) => {
-    console.log('token: ', request.params.token);
+    //console.log('token: ', request.params.token);
     if (checkJWT(request.params.token)) {
       response.status(200).json({ msg: 'all ok' });
     } else {

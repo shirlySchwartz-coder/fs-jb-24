@@ -4,6 +4,7 @@ import './Header.css';
 import { useNavigate } from 'react-router-dom';
 import { store } from '../../../redux/store';
 import { logoutAction } from '../../../redux/loginReducer';
+import { toast } from 'react-toastify';
 
 export function Header(): JSX.Element {
   const [isLogged, setLogged] = useState(false);
@@ -16,9 +17,17 @@ export function Header(): JSX.Element {
     //checkJWT();
   });
   useEffect(() => {
-    const myJWT = localStorage.getItem('jwt') || '';
-    setLogged(myJWT?.length > 10);
-    console.log('name:', name, 'isLogged:', isLogged);
+   
+    const myJWT = localStorage.getItem('jwt') || sessionStorage.getItem('jwt') || '';
+    //const myJWT = store.getState().login.jwt;
+    if(myJWT.length>10){
+      setLogged(myJWT?.length > 10);
+      console.log('name:', name, 'isLogged:', isLogged);
+    }else{
+      store.dispatch(logoutAction())
+      navigate('/login')
+    }
+    
   }, []);
 
   const logoutButton = () => {
@@ -29,7 +38,7 @@ export function Header(): JSX.Element {
           value='logout'
           onClick={() => {
             store.dispatch(logoutAction());
-            //notify.success('You are logged out.');
+            toast.success('You are logged out.');
             localStorage.removeItem('jwt');
             sessionStorage.removeItem('jwt');
             navigate('/');

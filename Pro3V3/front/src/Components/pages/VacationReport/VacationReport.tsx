@@ -10,22 +10,8 @@ import { Box, Container, CssBaseline } from '@mui/material';
 //import Container from '@mui/joy/Container';
 //import CssBaseline from '@mui/joy/CssBaseline';
 import Sheet from '@mui/joy/Sheet';
-const SheetValues = {
-  sx: {
-    width: 1000,
-    height: 550,
-    mx: 'auto',
-    my: 2,
-    py: 3,
-    px: 2,
-    display: 'flex',
-    flexDirection: 'column',
-    gap: 2,
-    borderRadius: 'sm',
-    boxShadow: 'md',
-    alignItems: 'center',
-  },
-};
+import setting from '../../utils/Setting';
+
 
 export function VacationReport(): JSX.Element {
   const [data, setData] = useState<any[]>([]);
@@ -73,11 +59,11 @@ export function VacationReport(): JSX.Element {
   }, []);
 
   const chartData = {
-    labels: datasets, // השתמש ב-datasets לתוויות
+    labels: datasets, 
     datasets: [
       {
         label: 'Data Report',
-        data: fData, // השתמש ב-fData לערכים
+        data: fData, 
         borderColor: 'rgba(75,192,192,1)',
         backgroundColor: 'rgba(75,192,192,0.2)',
         fill: true,
@@ -88,7 +74,7 @@ export function VacationReport(): JSX.Element {
   return (
     <div className='VacationReport'>
       <CssBaseline />
-      <Sheet variant='outlined' sx={SheetValues.sx}>
+      <Sheet variant='outlined' sx={setting.SheetChartValues.sx}>
         <h2>Vacation Report</h2>
         <div>
           <Container maxWidth='sm'>

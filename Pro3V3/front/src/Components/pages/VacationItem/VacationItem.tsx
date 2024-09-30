@@ -26,8 +26,8 @@ type VacationItemProps = {
 
 export function VacationItem(props: VacationItemProps): JSX.Element {
   const [isAdmin, setIsAdmin] = useState<boolean>();
-  //const [isFavChanged, setIsFavChanged] = useState(false);
   const [isLogged, setIsLogged] = useState(false);
+  let token = store.getState().login.jwt;
 
   const navigate = useNavigate();
 
@@ -38,15 +38,15 @@ export function VacationItem(props: VacationItemProps): JSX.Element {
 
   const goToEdit = () => {
     console.log('Clicked Edit', props.vacation.vacationId);
-    navigate(`/updateVacation/${props.vacation.vacationId}`);
+    navigate(`/edit/${props.vacation.vacationId}`);
   };
   const goToDelete = () => {
     console.log('Clicked Delete', props.vacation.vacationId);
-    toast.warn('You want to Delete?')
+    toast.warn('You want to Delete?');
   };
   const AdminOptions = () => {
     return (
-      <CardActions >
+      <CardActions>
         <Button variant='contained' onClick={(e) => goToEdit()}>
           Edit
         </Button>
@@ -59,17 +59,15 @@ export function VacationItem(props: VacationItemProps): JSX.Element {
 
   const UserOptions = () => {
     return (
-      <>
-        <CardActions disableSpacing>
-          <IconButton
-            aria-label='add to favorites'
-            color={props.vacation.isFavorite ? 'primary' : 'default'}
-            onClick={() => props.onLike(props.vacation.vacationId)}
-          >
-            <FavoriteIcon />
-          </IconButton>
-        </CardActions>
-      </>
+      <CardActions disableSpacing>
+        <IconButton
+          aria-label='add to favorites'
+          color={props.vacation.isFavorite ? 'primary' : 'default'}
+          onClick={() => props.onLike(props.vacation.vacationId)}
+        >
+          <FavoriteIcon />
+        </IconButton>
+      </CardActions>
     );
   };
   useEffect(() => {
@@ -77,26 +75,29 @@ export function VacationItem(props: VacationItemProps): JSX.Element {
   }, []);
 
   return (
-    <Card size='lg' variant='outlined' sx={{ maxWidth: 345 }}>
-      <CardHeader
-        action={<IconButton aria-label='settings'></IconButton>}
-        title={`${props.vacation.vacationId}.${props.vacation.destination}`}
-      />
-      <h4>
-        {`${props.vacation.startDate}`} Until {`${props.vacation.endDate}`}
-      </h4>
-      <CardMedia
-        component='img'
-        height='194'
-        image={props.vacation.pictureUrl}
-        alt={props.vacation.destination}
-      />
-      <CardContent>
-        <Typography variant='body2' sx={{ color: 'text.secondary' }}>
-          {props.vacation.vacInfo}
-        </Typography>
-      </CardContent>
-      <div>{isAdmin ? AdminOptions() : UserOptions()}</div>
-    </Card>
+    <>
+      <Card size='lg' variant='outlined' sx={{ maxWidth: 345 }}>
+        <CardHeader
+          action={<IconButton aria-label='settings'></IconButton>}
+          title={`${props.vacation.vacationId}.${props.vacation.destination}`}
+        />
+        <CardContent>{props.vacation.price} </CardContent>
+        <CardContent>
+          {`${props.vacation.startDate}`} Until {`${props.vacation.endDate}`}
+        </CardContent>
+        <CardMedia
+          component='img'
+          height='194'
+          image={props.vacation.pictureUrl}
+          alt={props.vacation.destination}
+        />
+        <CardContent>
+          <Typography variant='body2' sx={{ color: 'text.secondary' }}>
+            {props.vacation.vacInfo}
+          </Typography>
+        </CardContent>
+        <div>{isAdmin ? AdminOptions() : UserOptions()}</div>
+      </Card>
+    </>
   );
 }

@@ -30,7 +30,7 @@ const checkJWT = (token: string) => {
   try {
     const checkToken = token.split(' ')[1];
     const decoded = jwt.verify(checkToken, secretKey);
-    console.log(decoded);
+    //console.log(decoded);
     return createJWT(new UserCred( 
       decoded.userId, decoded.userName,decoded.userEmail,decoded.isAdmin
      ));

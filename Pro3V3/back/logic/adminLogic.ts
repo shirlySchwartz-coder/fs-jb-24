@@ -8,7 +8,7 @@ const uploadPicture = async (file: any, id: number) => {
   console.log('file to save is:', file);
   //console.log('uploadPicture start:', file);
 
-  let url = `http://localhost:8080/${file.filename}`;
+  let url = `http://localhost:8080/${file.destination}/${file.filename}`;
   let vacId = +id;
   console.log('url', url, 'vacId', vacId);
   const sql = `
@@ -41,20 +41,17 @@ const getVacationById = async (vacationId: number) => {
 };
 
 const updateVacation = async (vacationId: number, updateVac: Vacation) => {
+  console.log(updateVac)
+
   const sql = `
     UPDATE tagging_vacation.vacations
     SET destination ='${updateVac.destination}', vacInfo='${updateVac.vacInfo}',
-    startDate = '${updateVac.startDate.toISOString()}', endDate = '${updateVac.endDate.toISOString()}', 
+    startDate = STR_TO_DATE('${updateVac.startDate}', "%Y-%m-%d"), 
+    endDate = STR_TO_DATE('${updateVac.endDate}', "%Y-%m-%d"), 
     price = ${updateVac.price}, pictureUrl = '${updateVac.pictureUrl}' 
     WHERE (vacationId = ${vacationId})
     `;
-   /*  const sql = `
-    UPDATE tagging_vacation.vacations
-    SET destination ='${updateVac.destination}', vacInfo='${updateVac.vacInfo}',
-    startDate = '${updateVac.startDate}', endDate = '${updateVac.endDate}', 
-    price = ${updateVac.price}, pictureUrl = '${updateVac.pictureUrl}' 
-    WHERE (vacationId = ${vacationId})
-    `; */
+  
 
   return await dal_mysql.execute(sql);
 };

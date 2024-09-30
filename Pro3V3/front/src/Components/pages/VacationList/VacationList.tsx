@@ -14,10 +14,12 @@ import { store } from '../../../redux/store';
 import { saveFavorites, saveVacations } from '../../../redux/VacationReducer';
 import vars from '../../utils/Variants';
 import { Favorite } from '../../models/Favorite';
+let renderCount = 0;
 
 export function VacationList(): JSX.Element {
   const [vacations, setVacations] = useState<Vacation[]>([]);
   const [favorites, setFavorites] = useState<Favorite[]>([]);
+
   //const [id, setId] = useState<number>();
   const [isAdmin, setIsAdmin] = useState(false);
   //const [isLogged, setLogged] = useState(false);
@@ -34,7 +36,7 @@ export function VacationList(): JSX.Element {
     setIsAdmin(store.getState().login.isAdmin);
     //setToken(store.getState().login.jwt);
     setVacations(store.getState().vacations.allVacations);
-    setFavorites(store.getState().vacations.userFavorites);
+    //setFavorites(store.getState().vacations.userFavorites);
   });
 
   useEffect(() => {
@@ -50,14 +52,19 @@ export function VacationList(): JSX.Element {
   }, []);
 
   const getAllData = async () => {
+    
     const resultVacation = await getVacations();
-    const resultFavorites = await getFavorites();
+    if (isAdmin) {setVacations(resultVacation)}
+    else{
+      const resultFavorites = await getFavorites();
     if (resultVacation.length > 0 && resultFavorites.length > 0) {
       const userVacations = fixUserFav(resultVacation, resultFavorites);
       setVacations(userVacations);
     } else {
       console.log('No Favorites');
     }
+    }
+    
   };
 
   const getVacations = async () => {
@@ -141,12 +148,12 @@ export function VacationList(): JSX.Element {
 
       case false:
         console.log('Follow Req');
-        const res = await axios.post(
+        const resFollow = await axios.post(
           `${vars.FOLLOW_URL}${vacationId}`,
           { userId: +userId },
           { headers: { 'Authorization': `${token}` } }
         );
-        if (res.status === 201) {
+        if (resFollow.status === 201) {
           console.log('follow successful!');
           //localStorage.setItem('userFavChange', 'vacationId');
         } else {

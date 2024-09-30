@@ -15,6 +15,7 @@ import { useNavigate, useParams } from 'react-router-dom';
 import { error } from 'console';
 import { store } from '../../../redux/store';
 import { CheckJWT } from '../../utils/JWT';
+import setting from '../../utils/Setting';
 
 const SheetValues = {
   sx: {
@@ -48,6 +49,8 @@ export function UpdateVacation(): JSX.Element {
   let token = store.getState().login.jwt;
   const navigate = useNavigate();
   //const [image, setImage]= useState<File | null>()
+  const [data, setData] = useState(null)
+
 
   const {
     register,
@@ -85,7 +88,7 @@ export function UpdateVacation(): JSX.Element {
   });
   console.log(isDirty)
   console.log(errors)
-  const fileInputValue = watch('oldImage');
+  //const fileInputValue = watch('oldImage');
   //const imageFile = watch('image'); // Watch to get the current value of the image file input
   
 
@@ -134,7 +137,7 @@ export function UpdateVacation(): JSX.Element {
     <div className='UpdateVacation'>
       <h2>Update Vacation</h2>
       <CssBaseline />
-      <Sheet variant='outlined' sx={SheetValues.sx}>
+      <Sheet variant='outlined' sx={setting.SheetValues.sx}>
         <form onSubmit={handleSubmit(onSubmit)}>
           <FormControl>
             <FormLabel htmlFor='destination'>Destination</FormLabel>
@@ -171,7 +174,7 @@ export function UpdateVacation(): JSX.Element {
             />
             {errors && <span>This field is required</span>}
 
-            {fileInputValue && (
+           {/*  {fileInputValue && (
               <div>
                 <h4>Image in the database</h4>
                 <img
@@ -180,7 +183,7 @@ export function UpdateVacation(): JSX.Element {
                   style={{ width: '100px', height: '100px' }}
                 />
               </div>
-            )}
+            )} */}
 
             <br />
             <button disabled={!isDirty || !isValid} /> 

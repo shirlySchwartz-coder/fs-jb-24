@@ -10,6 +10,7 @@ import { UpdateVacation } from '../../pages/UpdateVacation/UpdateVacation';
 import { About } from '../../pages/About/About';
 import { Contact } from '../../pages/Contact/Contact';
 import { LoadPic } from '../../pages/LoadPic/LoadPic';
+import { EditForm } from '../../pages/EditForm/EditForm';
 
 
 export function MainRoute(): JSX.Element {
@@ -24,7 +25,8 @@ export function MainRoute(): JSX.Element {
         <Route path='/vacations' element={<VacationList />} />
         <Route path='/addVacation' element={<AddVacation />} />
         <Route path='/loadPicture' element={<LoadPic />} />
-        <Route path='/updateVacation/:id' element={<UpdateVacation />} />
+       {/*  <Route path='/updateVacation/:id' element={<UpdateVacation />} /> */}
+        <Route path='/edit/:id' element={<EditForm />} />
         <Route path='/reports' element={<VacationReport />} />
         <Route path='/*' element={<Page404 />} />
       </Routes>

@@ -49,3 +49,9 @@ font-style: italic;
   letter-spacing: 2px;
   font-weight: bold;
 }
+
+.edit-error{
+  color :red;
+  font-size: 12px;
+  text-align: left;
+}

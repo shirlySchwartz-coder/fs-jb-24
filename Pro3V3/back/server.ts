@@ -23,10 +23,10 @@ const corsOptions = {
 };
 
 server.use(cors(corsOptions));
-
+server.use('/uploads', express.static('uploads'))
 server.use(express.json());
 //server.use(express.urlencoded({ extended: true }));
-server.use( express.static('uploads'))
+
 server.use('/api/v1/dashBoard', adminRouter);
 server.use('/api/v1/vacations', vacationsRouter);
 server.use('/api/v1/login', loginRouter);

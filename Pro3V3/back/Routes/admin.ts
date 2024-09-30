@@ -18,7 +18,7 @@ const upload = require('../Utils/upload.ts');
 adminRouter.post(
   '/uploadPicture/:id',
   upload.single('imageFile'),
-  async (request: Request, response: Response) => {
+  async (request: Request, response: Response, nextFunction: NextFunction) => {
     //console.log('hay', request.file);
     const jwt = checkJWT(request.header('Authorization') || '');
     const id = +request.params.id;
@@ -104,30 +104,47 @@ adminRouter.get(
     }
   }
 );
-adminRouter.put(
+adminRouter.post(
   '/updateVacation/:id',
+  upload.single('image'),
   async (request: Request, response: Response, nextFunction: NextFunction) => {
-    console.log(
-      'updateVacation ',
-      request.params.id,
-      request.body,
-      request.file
-    );
-    let toUpdateVac = new Vacation(
-      +request.body.vacationId,
-      request.body.destination,
-      request.body.vacInfo,
-      new Date(request.body.startDate),
-      new Date(request.body.endDate),
-      +request.body.price,
-      (request.file as Express.Multer.File)?.filename
-    );
-    console.log('toUpdateVac', toUpdateVac);
-    let updatedVac = await updateVacation(+request.params.id, toUpdateVac);
-    if (!updatedVac.errno) {
-      response.status(201).json({ msg: 'created' });
+    const jwt = checkJWT(request.header('Authorization') || '');
+    let url=''
+    if (jwt.length > 10) {
+      const { body, file } = request;
+      console.log({ body, file });
+
+      const vacationId = +request.body.vacationId;
+      const destination = request.body.destination;
+      const vacInfo = request.body.vacInfo;
+      const startDate = request.body.startDate;
+      const endDate = request.body.endDate;
+      const price = +request.body.price;
+      
+      if (!request.file?.path) {
+        throw new Error('file not saved');
+      } else {
+        url = `http://localhost:8080/${request.file?.destination}/${request.file.filename}`;
+      }
+
+      let toUpdateVac = new Vacation(
+        vacationId,
+        destination,
+        vacInfo,
+        startDate,
+        endDate,
+        price,
+        url
+      );
+      console.log('toUpdateVac', toUpdateVac);
+      let updatedVac = await updateVacation(vacationId, toUpdateVac);
+      if (!updatedVac.errno) {
+        response.status(201).json({ msg: 'created' });
+      } else {
+        response.status(400).json({ msg: updatedVac.sqlMessage });
+      }
     } else {
-      response.status(400).json({ msg: updatedVac.sqlMessage });
+      response.status(401).json({ msg: 'Unauthorized' });
     }
   }
 );
