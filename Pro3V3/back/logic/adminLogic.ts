@@ -41,17 +41,21 @@ const getVacationById = async (vacationId: number) => {
 };
 
 const updateVacation = async (vacationId: number, updateVac: Vacation) => {
-  console.log(updateVac)
+  console.log(updateVac);
+  const vacInfoReq = updateVac.vacInfo;
+  //const strInfo = replaceAccentsChars(vacInfoReq, ' ', 'ALL');
+  //const strInfo =vacInfoReq.replace(/[&\/\\#+()$~%'":*?<>{}]/g,'_');
+  const strInfo= vacInfoReq;
+  console.log(strInfo);
 
   const sql = `
     UPDATE tagging_vacation.vacations
-    SET destination ='${updateVac.destination}', vacInfo='${updateVac.vacInfo}',
+    SET destination ='${updateVac.destination}', vacInfo='${strInfo}',
     startDate = STR_TO_DATE('${updateVac.startDate}', "%Y-%m-%d"), 
     endDate = STR_TO_DATE('${updateVac.endDate}', "%Y-%m-%d"), 
     price = ${updateVac.price}, pictureUrl = '${updateVac.pictureUrl}' 
     WHERE (vacationId = ${vacationId})
     `;
-  
 
   return await dal_mysql.execute(sql);
 };
@@ -76,6 +80,26 @@ const getReports = async () => {
   `;
 
   return await dal_mysql.execute(sql);
+};
+
+const replaceAccentsChars = (
+  str: string,
+  charWith = '-',
+  regexType: 'ALL' | 'NO_SPECIAL' | 'SINGLE_FOR_MULTI' = 'NO_SPECIAL'
+) => {
+  if (!str) return;
+
+  const REGEX_TYPE = {
+    'ALL': / /g,
+    'NO_SPECIAL': /[^A-Z0-9]/gi,
+    'SINGLE_FOR_MULTI': /[^A-Z0-9]+/gi,
+  };
+  if (!REGEX_TYPE[regexType]) {
+    // תיקון: בדיקה אם regexType קיים
+    throw new Error(`Invalid regexType: ${regexType}`); // טיפול בשגיאה
+  }
+
+  return str.replace(REGEX_TYPE[regexType], charWith).toLowerCase();
 };
 
 export {

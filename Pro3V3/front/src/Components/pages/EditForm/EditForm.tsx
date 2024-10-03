@@ -11,6 +11,7 @@ import { SubmitHandler, useForm } from 'react-hook-form';
 import { CheckJWT } from '../../utils/JWT';
 import vars from '../../utils/Variants';
 import { toast } from 'react-toastify';
+import { getValue } from '@testing-library/user-event/dist/utils';
 let renderCount = 0;
 interface VacationUpdateInput {
   vacationId: number;
@@ -31,6 +32,7 @@ export function EditForm(): JSX.Element {
   const [apiValue, setApiValue] = useState<VacationUpdateInput>();
   const [progress, setProgress] = useState({ started: false, pc: 0 });
   const [msg, setMsg] = useState('');
+  
 
   const {
     register,
@@ -68,6 +70,7 @@ export function EditForm(): JSX.Element {
     const subscription = watch((value, { name, type }) =>
       console.log(value, name, type)
     );
+    //const fileInputValue = watch('oldImage')
     return () => subscription.unsubscribe();
   }, [watch]);
   //get default values
@@ -108,12 +111,16 @@ export function EditForm(): JSX.Element {
         },
       });
       let upDated = response.status;
-      console.log(upDated);
+      if(upDated===201){
+         console.log(upDated);
       toast.success('Vacation updated successfully!');
       navigate('/vacations');
+      }
+     
     } catch (error) {
-      throw new Error('Update did not succeed');
       toast.error('Update did not succeed!');
+      throw new Error('Update did not succeed');
+      
     }
   };
 
@@ -147,12 +154,18 @@ export function EditForm(): JSX.Element {
             <FormLabel htmlFor='vacInfo'>Vacation Info</FormLabel>
             <TextField
               multiline
+              maxRows={6}
               rows={6}
               {...register('vacInfo', {
                 required: {
                   value: true,
                   message: 'Vacation Info is required',
                 },
+                pattern:{
+                  value:/[^=]*/i ,
+                  message:'You cant enter special chares- please fix the text'
+                } 
+
               })}
             />
             {errors.vacInfo?.message && (
@@ -209,7 +222,12 @@ export function EditForm(): JSX.Element {
           <FormControl style={{ marginBottom: '20px' }}>
             <input
               type='file'
-              {...register('image')}
+              {...register('image',{
+                required: {
+                  value: true,
+                  message: 'Image File  is required',
+                },
+              })}
               accept='image/png, image/jpeg'
               onChange={(e) => {
                 if (e.target.files && e.target.files[0]) {
@@ -221,20 +239,22 @@ export function EditForm(): JSX.Element {
               <p className='edit-error'>This field is required</p>
             )}
           </FormControl>
-          {/* {fileInputValue && (
+           {/* (fileInputValue) && (
             <div>
-              <h4>Image in the database</h4>
+              <h4>תמונה במסד הנתונים</h4>
               <img
-                src={data?.oldImage}
-                alt='Preview'
+                src={getValue('oldImage') || ''}
+                alt='תצוגה מקדימה'
                 style={{ width: '100px', height: '100px' }}
               />
             </div>
-          )} */}
+          )*/}
+            
           <br />
           <button type='submit'>Update Vacation</button>
+          {progress.started && <progress max="100" value={progress.pc}></progress>}
         </form>
-        {progress.started && <progress max="100" value={progress.pc}></progress>}
+       
       
         <DevTool control={control} />
       </Sheet>

@@ -23,6 +23,8 @@ export function Header(): JSX.Element {
     if(myJWT.length>10){
       setLogged(myJWT?.length > 10);
       console.log('name:', name, 'isLogged:', isLogged);
+      sessionStorage.clear()
+      localStorage.clear()
     }else{
       store.dispatch(logoutAction())
       navigate('/login')

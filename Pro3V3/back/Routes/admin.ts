@@ -19,10 +19,8 @@ adminRouter.post(
   '/uploadPicture/:id',
   upload.single('imageFile'),
   async (request: Request, response: Response, nextFunction: NextFunction) => {
-    //console.log('hay', request.file);
-    const jwt = checkJWT(request.header('Authorization') || '');
     const id = +request.params.id;
-    //console.log('jwt', jwt);
+    const jwt = checkJWT(request.header('Authorization') || '');
     if (jwt.length > 10) {
       console.log('uploadPicture start');
 
@@ -34,8 +32,7 @@ adminRouter.post(
         .header('Access-Control-Expose-Headers', 'Authorization')
         .header('Authorization', jwt)
         .json({
-          myResponse: 'File uploaded successfully',
-          success: 1,
+          myResponse: 'File uploaded successfully',result,
           image_url: `http://localhost:8080/images/${request.file?.fieldname}`,
         });
     } else {
@@ -109,7 +106,7 @@ adminRouter.post(
   upload.single('image'),
   async (request: Request, response: Response, nextFunction: NextFunction) => {
     const jwt = checkJWT(request.header('Authorization') || '');
-    let url=''
+    let url = '';
     if (jwt.length > 10) {
       const { body, file } = request;
       console.log({ body, file });
@@ -120,7 +117,7 @@ adminRouter.post(
       const startDate = request.body.startDate;
       const endDate = request.body.endDate;
       const price = +request.body.price;
-      
+
       if (!request.file?.path) {
         throw new Error('file not saved');
       } else {
@@ -139,7 +136,11 @@ adminRouter.post(
       console.log('toUpdateVac', toUpdateVac);
       let updatedVac = await updateVacation(vacationId, toUpdateVac);
       if (!updatedVac.errno) {
-        response.status(201).json({ msg: 'created' });
+        response
+          .status(201)
+          .header('Access-Control-Expose-Headers', 'Authorization')
+          .header('Authorization', jwt)
+          .json({ msg: `created new vacation:${updatedVac}` });
       } else {
         response.status(400).json({ msg: updatedVac.sqlMessage });
       }
@@ -166,7 +167,16 @@ adminRouter.delete(
 adminRouter.get(
   '/reports',
   async (request: Request, response: Response, nextFunction: NextFunction) => {
-    await response.status(200).json(await getReports());
+    const jwt = checkJWT(request.header('Authorization') || '');
+    if (jwt.length > 10) {
+      await response
+        .status(200)
+        .header('Access-Control-Expose-Headers', 'Authorization')
+        .header('Authorization', jwt)
+        .json(await getReports());
+    } else {
+      response.status(401);
+    }
   }
 );
 

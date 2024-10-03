@@ -81,7 +81,7 @@ export function VacationItem(props: VacationItemProps): JSX.Element {
           action={<IconButton aria-label='settings'></IconButton>}
           title={`${props.vacation.vacationId}.${props.vacation.destination}`}
         />
-        <CardContent>{props.vacation.price} </CardContent>
+        <CardContent>{props.vacation.price}$ </CardContent>
         <CardContent>
           {`${props.vacation.startDate}`} Until {`${props.vacation.endDate}`}
         </CardContent>

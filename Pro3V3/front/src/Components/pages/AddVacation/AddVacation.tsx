@@ -16,6 +16,7 @@ import { CheckJWT } from '../../utils/JWT';
 import { store } from '../../../redux/store';
 import { useNavigate } from 'react-router-dom';
 import { LoadPic } from '../LoadPic/LoadPic';
+import { toast } from 'react-toastify';
 
 export function AddVacation(): JSX.Element {
   let today = Date.now();
@@ -63,6 +64,7 @@ export function AddVacation(): JSX.Element {
         headers: { 'Authorization': `${token}` },
       });
       console.log('Vacation added successfully:', response.data);
+      toast.success('Vacation added successfully')
       let id = response.data.result;
       //console.log('id',newVacId)
       if (id != 0) {

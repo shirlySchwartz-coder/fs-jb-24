@@ -14,16 +14,15 @@ import { store } from '../../../redux/store';
 import { saveFavorites, saveVacations } from '../../../redux/VacationReducer';
 import vars from '../../utils/Variants';
 import { Favorite } from '../../models/Favorite';
+import { toast } from 'react-toastify';
 let renderCount = 0;
 
 export function VacationList(): JSX.Element {
   const [vacations, setVacations] = useState<Vacation[]>([]);
   const [favorites, setFavorites] = useState<Favorite[]>([]);
-
-  //const [id, setId] = useState<number>();
-  const [isAdmin, setIsAdmin] = useState(false);
+  const [isAdmin, setIsAdmin] = useState<boolean>();
   //const [isLogged, setLogged] = useState(false);
-  //const [token, setToken] = useState<string>();
+  const [token, setToken] = useState<string>();
   const navigate = useNavigate();
   let sxSetting = {
     width: '100%',
@@ -34,7 +33,7 @@ export function VacationList(): JSX.Element {
 
   store.subscribe(() => {
     setIsAdmin(store.getState().login.isAdmin);
-    //setToken(store.getState().login.jwt);
+    setToken(store.getState().login.jwt);
     setVacations(store.getState().vacations.allVacations);
     //setFavorites(store.getState().vacations.userFavorites);
   });
@@ -42,6 +41,7 @@ export function VacationList(): JSX.Element {
   useEffect(() => {
     const fetchIntialData = async () => {
       if (!CheckJWT()) {
+        toast.error('You need to login')
         navigate('/login');
       } else {
         
@@ -118,9 +118,7 @@ export function VacationList(): JSX.Element {
   const handleLike = async (vacationId: number) => {
     let token = store.getState().login.jwt;
     let userId = +store.getState().login.userId;
-    //let vacId = vacationId;
-    //let isFav = store.getState().vacations[];
-    //
+ 
     const vacationItem = vacations.find(
       (vacation) => vacation.vacationId === vacationId
     );
@@ -149,8 +147,7 @@ export function VacationList(): JSX.Element {
       case false:
         console.log('Follow Req');
         const resFollow = await axios.post(
-          `${vars.FOLLOW_URL}${vacationId}`,
-          { userId: +userId },
+          `${vars.FAVORITES_URL}${userId}`,{ idVacation: +vacationId },
           { headers: { 'Authorization': `${token}` } }
         );
         if (resFollow.status === 201) {
@@ -174,7 +171,7 @@ export function VacationList(): JSX.Element {
           <VacationItem
             key={item.vacationId}
             vacation={item}
-            onLike={handleLike}
+            onLike={()=>handleLike(item.vacationId)}
           />
         ))}
       </>

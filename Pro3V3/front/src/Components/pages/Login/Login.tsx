@@ -76,6 +76,7 @@ export function Login(): JSX.Element {
         toast('The Fun Begin...!');
       })
       .catch((err) => {
+        if(err.status===400){ toast.error('Incorrect username or password')}
         console.log('error is:', err);
         if (err.message === 'Network Error') {
          toast.error('The Server is off...')
