@@ -15,16 +15,16 @@ const loginRouter = express.Router();
 loginRouter.post(
   '/loginUser',
   async (request: Request, response: Response, nextFunction: NextFunction) => {
-    //console.log(request.body);
+    
     let result: any = await loginUser(request.body);
-    //console.log(result);
+    
     if (result.jwt !== undefined && result["jwt"].length>10) {
-      //console.log(result)
+     
       response
         .status(200)
         .header('Access-Control-Expose-Headers', 'Authorization')
         .header('Authorization', result.jwt)
-        .json(result);
+        .json(await result);
     } else {
       response.status(400).json({ msg: 'user not found' });
     }
@@ -51,7 +51,7 @@ loginRouter.get(
   async (request: Request, response: Response, nextFunction: NextFunction) => {
     let userName = request.params.userName;
     let myJWT:any = forgotPassword(userName);
-    console.log(myJWT);
+   
 
     if (myJWT.length > 10) {
       response
@@ -86,7 +86,7 @@ loginRouter.post(
 loginRouter.get(
   '/checkJWT/:token',
   async (request: Request, response: Response, nextFunction: NextFunction) => {
-    //console.log('token: ', request.params.token);
+   
     if (checkJWT(request.params.token)) {
       response.status(200).json({ msg: 'all ok' });
     } else {

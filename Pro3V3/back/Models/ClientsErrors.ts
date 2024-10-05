@@ -21,8 +21,3 @@ export class UserNotLogged extends ClientError{
     }
 }
 
-export class videoNotFound extends ClientError{
-    constructor(){
-        super(404,"Video id was not found....");
-    }
-}

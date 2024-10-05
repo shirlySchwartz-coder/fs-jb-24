@@ -1,6 +1,5 @@
 import { ResultSetHeader } from 'mysql2';
 import express, { NextFunction, Request, Response, request } from 'express';
-//import multer from 'multer';
 import { Vacation } from '../Models/Vacation';
 import {
   addNewVacation,
@@ -24,15 +23,15 @@ adminRouter.post(
     if (jwt.length > 10) {
       console.log('uploadPicture start');
 
-      //console.log(request.file, request.params);
       const result = await uploadPicture(request.file, id);
-      //console.log(result);
+
       response
         .status(201)
         .header('Access-Control-Expose-Headers', 'Authorization')
         .header('Authorization', jwt)
         .json({
-          myResponse: 'File uploaded successfully',result,
+          myResponse: 'File uploaded successfully',
+          result,
           image_url: `http://localhost:8080/images/${request.file?.fieldname}`,
         });
     } else {
@@ -43,31 +42,31 @@ adminRouter.post(
 adminRouter.get(
   '/all',
   async (request: Request, response: Response, nextFunction: NextFunction) => {
-    console.log('Admin get all vacations ');
     const jwt = checkJWT(request.header('Authorization') || '');
-
-    response
-      .status(200)
-      .header('Access-Control-Expose-Headers', 'Authorization')
-      .header('Authorization', jwt)
-      .json(await getAllVacations());
+    if (jwt.length > 10) {
+      response
+        .status(200)
+        .header('Access-Control-Expose-Headers', 'Authorization')
+        .header('Authorization', jwt)
+        .json(await getAllVacations());
+    } else {
+      response.status(401);
+    }
   }
 );
 
 adminRouter.post(
   '/addVacation',
   async (request: Request, response: Response, nextFunction: NextFunction) => {
-    //console.log('addVacation', request.body);
     const jwt = checkJWT(request.header('Authorization') || '');
-    //console.log("all vacations-  jwt:",jwt);
+
     if (jwt.length > 10) {
-      // Ensure request.body is properly structured
       if (!request.body || !request.body.destination) {
         return response.status(400).json({ msg: 'Invalid request data' });
       }
-      console.log('admin request fileUpload: ', request.files);
+
       let result = await addNewVacation(request.body);
-      console.log(result);
+
       if (!result.errno) {
         response
           .status(201)
@@ -87,9 +86,7 @@ adminRouter.get(
   async (request: Request, response: Response, nextFunction: NextFunction) => {
     const id = +request.params.id;
     const jwt = checkJWT(request.header('Authorization') || '');
-    console.log('id in edit:', id);
 
-    //console.log("all vacations-  jwt:",jwt);
     if (jwt.length > 10) {
       response
         .status(200)
@@ -109,7 +106,7 @@ adminRouter.post(
     let url = '';
     if (jwt.length > 10) {
       const { body, file } = request;
-      console.log({ body, file });
+     
 
       const vacationId = +request.body.vacationId;
       const destination = request.body.destination;
@@ -133,7 +130,7 @@ adminRouter.post(
         price,
         url
       );
-      console.log('toUpdateVac', toUpdateVac);
+     
       let updatedVac = await updateVacation(vacationId, toUpdateVac);
       if (!updatedVac.errno) {
         response
@@ -169,7 +166,7 @@ adminRouter.get(
   async (request: Request, response: Response, nextFunction: NextFunction) => {
     const jwt = checkJWT(request.header('Authorization') || '');
     if (jwt.length > 10) {
-      await response
+       response
         .status(200)
         .header('Access-Control-Expose-Headers', 'Authorization')
         .header('Authorization', jwt)
