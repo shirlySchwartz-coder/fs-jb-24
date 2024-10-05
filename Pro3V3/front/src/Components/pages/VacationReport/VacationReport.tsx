@@ -11,6 +11,8 @@ import { Box, Container, CssBaseline } from '@mui/material';
 //import CssBaseline from '@mui/joy/CssBaseline';
 import Sheet from '@mui/joy/Sheet';
 import setting from '../../utils/Setting';
+import { store } from '../../../redux/store';
+import vars from '../../utils/Variants';
 
 
 export function VacationReport(): JSX.Element {
@@ -35,9 +37,12 @@ export function VacationReport(): JSX.Element {
   };
   //('http://localhost:8080/api/v1/dashboard/reports')
   const fetchData = async () => {
+    let token = store.getState().login.jwt;
+
     try {
       const response = await axios.get(
-        'http://localhost:8080/api/v1/dashboard/reports'
+        vars.REPORTS_URL,
+        {headers: { 'Authorization': `${token}` }}
       );
       if (response.data) {
         console.log(response.data);

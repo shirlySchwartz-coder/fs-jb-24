@@ -147,7 +147,7 @@ export function VacationList(): JSX.Element {
       case false:
         console.log('Follow Req');
         const resFollow = await axios.post(
-          `${vars.FAVORITES_URL}${userId}`,{ idVacation: +vacationId },
+          `${vars.FOLLOW_URL}${+vacationId}`,{ userId: +userId },
           { headers: { 'Authorization': `${token}` } }
         );
         if (resFollow.status === 201) {
