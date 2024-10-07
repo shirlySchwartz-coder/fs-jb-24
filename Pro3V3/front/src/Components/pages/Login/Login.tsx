@@ -161,7 +161,6 @@ export function Login(): JSX.Element {
           >
             Don&apos;t have an account?
           </Typography>
-          <DevTool control={control} />
         </Sheet>
       </main>
     </div>

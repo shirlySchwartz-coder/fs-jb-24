@@ -18,7 +18,7 @@
 
 .MainLayout,
 .MainLayout > * {
-  border: 1px solid rgb(229, 220, 220);
+ 
 }
 .gradient-background {
   background: linear-gradient(314deg, #a2d7eb, #6094f3, #d09af6);

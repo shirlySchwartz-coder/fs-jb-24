@@ -5,6 +5,9 @@ import { useNavigate } from 'react-router-dom';
 import { store } from '../../../redux/store';
 import { logoutAction } from '../../../redux/loginReducer';
 import { toast } from 'react-toastify';
+import Container from 'react-bootstrap/Container';
+import Row from 'react-bootstrap/Row';
+import Col from 'react-bootstrap/Col';
 
 export function Header(): JSX.Element {
   const [isLogged, setLogged] = useState(false);
@@ -17,19 +20,18 @@ export function Header(): JSX.Element {
     //checkJWT();
   });
   useEffect(() => {
-   
-    const myJWT = localStorage.getItem('jwt') || sessionStorage.getItem('jwt') || '';
+    const myJWT =
+      localStorage.getItem('jwt') || sessionStorage.getItem('jwt') || '';
     //const myJWT = store.getState().login.jwt;
-    if(myJWT.length>10){
+    if (myJWT.length > 10) {
       setLogged(myJWT?.length > 10);
       console.log('name:', name, 'isLogged:', isLogged);
-      sessionStorage.clear()
-      localStorage.clear()
-    }else{
-      store.dispatch(logoutAction())
-      navigate('/login')
+    } else {
+      store.dispatch(logoutAction());
+      sessionStorage.clear();
+      localStorage.clear();
+      navigate('/login');
     }
-    
   }, []);
 
   const logoutButton = () => {
@@ -70,16 +72,20 @@ export function Header(): JSX.Element {
   };
 
   return (
-    <div className='Header'>
-      <div className='logo-img'>
-        <img src={logo} alt='logo' className='img-logo-center' />
-      </div>
+    <Container >
+      <Row>
+        <Col className='logo-img'>
+          <img src={logo} alt='logo' className='img-logo-center' />
+        </Col>
 
-      <div className='Title'>
-        <h2 className='name'>Trip App</h2>
-        <div>Hello {name}</div>
-        <div>{isLogged ? logoutButton() : loginButton()}</div>
-      </div>
-    </div>
+        <Col className='Title'>
+          <h2 className='name'>Trip App</h2>
+        </Col>
+        <Col>
+          <div>Hello {name}</div>
+          <div>{isLogged ? logoutButton() : loginButton()}</div>
+        </Col>
+      </Row>
+    </Container>
   );
 }

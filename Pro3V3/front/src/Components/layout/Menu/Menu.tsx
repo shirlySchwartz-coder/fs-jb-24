@@ -8,8 +8,8 @@ import { useEffect, useState } from 'react';
 import SvgIcon, { SvgIconProps } from '@mui/material/SvgIcon';
 
 export function Menu(): JSX.Element {
-  const [isAdmin, setIsAdmin] = useState(false);
-  const [isLogged, setIsLogged] = useState(false);
+  const [isAdmin, setIsAdmin] = useState<boolean>();
+  const [isLogged, setIsLogged] = useState<boolean>();
   const [initial, setInitial] = useState(true);
 
   const navigate = useNavigate();
@@ -52,22 +52,23 @@ export function Menu(): JSX.Element {
   const userMenu = () => {
     return (
       <>
-        User Menu
+        <h3>Menu</h3>
+        <br />
         <MenuList>
           <MenuItem>
             <NavLink to='/vacations'>Vacations list</NavLink>
+          </MenuItem>        
+          <MenuItem>
+            <NavLink to='/about'>About</NavLink>
           </MenuItem>
+         {/*  <MenuItem>
+            <NavLink to='/contact'>Contact me</NavLink>
+          </MenuItem> */}
           <MenuItem>
             <NavLink to='/login'>Login</NavLink>
           </MenuItem>
           <MenuItem>
             <NavLink to='/register'>Register</NavLink>
-          </MenuItem>
-          <MenuItem>
-            <NavLink to='/about'>About</NavLink>
-          </MenuItem>
-          <MenuItem>
-            <NavLink to='/contact'>Contact me</NavLink>
           </MenuItem>
         </MenuList>
       </>

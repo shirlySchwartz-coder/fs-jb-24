@@ -214,7 +214,6 @@ export function Register(): JSX.Element {
             <input type='submit' value='Submit' className='submit-btn' />
           </form>
 
-          <DevTool control={control} />
         </Sheet>
       </main>
     </div>
