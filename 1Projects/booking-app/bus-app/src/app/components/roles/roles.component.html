@@ -1,55 +1,18 @@
-<p>roles works!</p>
-<!-- interpolation -->
 <div class="row">
-  <div class="col-3">
-    <p>{{ firstName }}</p>
-  </div>
-  <div class="col-3">
-    <p>{{ version }}</p>
-  </div>
-  <div class="col-3">
-    <p>{{ currentDate }}</p>
-  </div>
-  <div class="col-3">
-    <p>{{ state }}</p>
+  <div class="col-12">
+    <table class="table table-bordered">
+      <thead>
+        <tr>
+          <th>Role Id</th>
+          <th>Role Name</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let role of roleList ">
+          <td >{{role.roleId}}</td>
+          <td>{{role.role}}</td>
+        </tr>
+      </tbody>
+    </table>
   </div>
 </div>
-<!-- property binding -->
-<div class="row">
-  <div class="col-3">
-    <input type="text" [value]="firstName" class="form-control" />
-  </div>
-  <div class="col-3">
-    <input [type]="inputType" />
-  </div>
-
-  <div class="col-3">
-    <input type="text" [(ngModel)]="firstName" />
-  </div>
-  <div class="col-3">
-    <select [(ngModel)]="state">
-      <option value="Haifa">Haifa</option>
-      <option value="Tel-Aviv">Tel-Aviv</option>
-      <option value="Jerusalem">Jerusalem</option>
-    </select>
-  </div>
-</div>
-<div class="row">
-  <div class="col-3">
-    <button type="button" class="btn btn-primary" (click)="showWelcomeAlert()">Show Alert</button>
-  </div>
-  <div class="col-3">
-    <button class="btn btn-success" (click)="showMessage('Welcome to React')">Show React Msg</button>
-  </div>
-  <div class="col-3">
-    <button class="btn btn-danger" (click)="showMessage('Welcome JavaScript')">Show JavaScript Msg</button>
-  </div>
-</div>
-
-<!--Data Binding
-    interpolation {{}}
-    property binding []
-    two way data binding [(ngModel)]
-    event binding (click)
-
-    -->

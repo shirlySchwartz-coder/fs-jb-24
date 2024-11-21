@@ -1,28 +1,29 @@
-import { Component } from '@angular/core';
+import { HttpClient } from '@angular/common/http';
+import { Component, inject, OnInit } from '@angular/core';
 import { FormsModule } from '@angular/forms';
+import { APIResultModel, IRole } from '../../model/interface/role';
+import { CommonModule } from '@angular/common';
 
 @Component({
   selector: 'app-roles',
   standalone: true,
-  imports: [FormsModule],
+  imports: [FormsModule,CommonModule],
   templateUrl: './roles.component.html',
   styleUrl: './roles.component.css',
 })
-export class RolesComponent {
-  firstName: string = 'Angular Bus App';
-  angularVersion = 'Version 18.2';
-  version: number = 18;
-  currentDate: Date = new Date();
-  inputType: string = 'button';
-  state: string = '';
+export class RolesComponent implements OnInit {
+  http = inject(HttpClient);
+  roleList :IRole []=[]
 
-  // create functions
-  showWelcomeAlert(){
-    //normal function
-    alert('Welcome to Angular 18')
+  ngOnInit(): void {
+    this.getAllRoles();
   }
-showMessage(message:string){
-  alert(message)
-}
 
+  getAllRoles() {
+    this.http
+      .get<APIResultModel>('https://freeapi.miniprojectideas.com/api/ClientStrive/GetAllRoles')
+      .subscribe((res: APIResultModel) => {
+        this.roleList = res.data;
+      });
+  }
 }
