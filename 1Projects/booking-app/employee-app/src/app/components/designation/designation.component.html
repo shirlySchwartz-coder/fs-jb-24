@@ -1,0 +1,21 @@
+<div class="row p-2">
+  @if (isLoading == true) {
+  <div class="col-12">
+    <p>Loading</p>
+    <div class="spinner-border text-primary"></div>
+  </div>
+  } @else {
+    @for(item of designationList; track $index){
+  <div class="col-sm-4">
+    <div class="card" style="width: 18rem">
+      <div class="card-body">
+        <h5 class="card-title">{{ item.designation }}</h5>
+
+        <a href="#" class="card-link">Edit</a>
+        <a href="#" class="card-link">Delete</a>
+      </div>
+    </div>
+  </div>
+  }
+}
+</div>

@@ -1,0 +1,26 @@
+<div class="row">
+  @if (isLoading == true) {
+    <div class="col-12">
+      <p>Loading</p>
+      <div class="spinner-border text-primary"></div>
+    </div>
+    }@else{
+      <div class="col-12">
+    <table class="table table-bordered">
+      <thead>
+        <tr>
+          <th>Role Id</th>
+          <th>Role Name</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let role of roleList ">
+          <td >{{role.roleId}}</td>
+          <td>{{role.role}}</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+    }
+
+</div>
