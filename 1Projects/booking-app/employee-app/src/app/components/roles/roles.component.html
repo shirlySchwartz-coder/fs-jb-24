@@ -1,9 +1,6 @@
 <div class="row">
   @if (isLoading == true) {
-    <div class="col-12">
-      <p>Loading</p>
-      <div class="spinner-border text-primary"></div>
-    </div>
+    <app-loader></app-loader>
     }@else{
       <div class="col-12">
     <table class="table table-bordered">

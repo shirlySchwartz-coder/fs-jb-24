@@ -3,11 +3,12 @@ import { Component, inject, OnInit } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { APIResultModel, IRole } from '../../model/interface/role';
 import { CommonModule } from '@angular/common';
+import { LoaderComponent } from "../loader/loader.component";
 
 @Component({
   selector: 'app-roles',
   standalone: true,
-  imports: [FormsModule, CommonModule],
+  imports: [FormsModule, CommonModule, LoaderComponent],
   templateUrl: './roles.component.html',
   styleUrl: './roles.component.css',
 })

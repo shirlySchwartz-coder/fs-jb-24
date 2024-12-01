@@ -12,3 +12,12 @@ export interface APIResultModel {
   result: boolean;
   data: any;
 }
+
+export  interface Employee{
+  empName: string,
+  empId: string,
+  empCode: string,
+  empEmailId: string,
+  empDesignation: string,
+  role: string
+}

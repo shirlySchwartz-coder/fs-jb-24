@@ -19,12 +19,13 @@ export const routes: Routes = [
     path: 'employee',
     component: EmployeeComponent
   },
-  {
-    path: 'client',
-    component: ClientComponent
-  },
+
   {
     path: 'client-project',
     component: ClientProjectComponent
+  },
+  {
+    path: 'client',
+    component: ClientComponent
   },
 ];

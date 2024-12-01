@@ -1,10 +1,7 @@
 <div class="row">
   <div class="col-8">
     @if (isLoading == true) {
-      <div class="col-12">
-        <p>Loading</p>
-        <div class="spinner-border text-primary"></div>
-      </div>
+      <app-loader></app-loader>
       }@else{
         <div class="card">
       <div class="card-header bg-success">Client List</div>

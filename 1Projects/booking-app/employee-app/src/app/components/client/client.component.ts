@@ -5,11 +5,12 @@ import { ClientService } from '../../services/client.service';
 import { APIResultModel } from '../../model/interface/role';
 import { HttpClient } from '@angular/common/http';
 import { CommonModule } from '@angular/common';
+import { LoaderComponent } from "../loader/loader.component";
 
 @Component({
   selector: 'app-client',
   standalone: true,
-  imports: [FormsModule, CommonModule ],
+  imports: [FormsModule, CommonModule, LoaderComponent],
   templateUrl: './client.component.html',
   styleUrl: './client.component.css',
 })
