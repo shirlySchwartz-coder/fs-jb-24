@@ -4,13 +4,14 @@ import { FormsModule } from '@angular/forms';
 import { ClientService } from '../../services/client.service';
 import { APIResultModel } from '../../model/interface/role';
 import { HttpClient } from '@angular/common/http';
-import { CommonModule } from '@angular/common';
+import { AsyncPipe, CommonModule, DatePipe, JsonPipe, UpperCasePipe,  } from '@angular/common';
 import { LoaderComponent } from "../loader/loader.component";
+import { Observable } from 'rxjs';
 
 @Component({
   selector: 'app-client',
   standalone: true,
-  imports: [FormsModule, CommonModule, LoaderComponent],
+  imports: [FormsModule, CommonModule, LoaderComponent,UpperCasePipe ,DatePipe, JsonPipe, AsyncPipe],
   templateUrl: './client.component.html',
   styleUrl: './client.component.css',
 })
@@ -19,11 +20,15 @@ export class ClientComponent implements OnInit {
   clientObj: Client = new Client();
   clientList: Client[] = [];
   clientService = inject(ClientService);
+  today: Date =new Date();
+
+  userList$: Observable<any>= new Observable<any>
 
   constructor(private http: HttpClient) {}
   ngOnInit(): void {
     this.loadClient();
     this.isLoading=false;
+    this.userList$ = this.clientService.getAllUsers()
   }
 
   async loadClient() {
