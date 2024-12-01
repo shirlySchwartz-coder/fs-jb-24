@@ -1,5 +1,5 @@
-import { CommonModule } from '@angular/common';
-import { Component, inject, OnInit } from '@angular/core';
+import { CommonModule, DatePipe } from '@angular/common';
+import { Component, inject, OnInit, signal } from '@angular/core';
 import {
   FormControl,
   FormGroup,
@@ -9,13 +9,13 @@ import {
 } from '@angular/forms';
 import { LoaderComponent } from '../loader/loader.component';
 import { ClientService } from '../../services/client.service';
-import { APIResultModel, Employee } from '../../model/interface/role';
+import { APIResultModel, ClientProject, Employee } from '../../model/interface/role';
 import { Client } from '../../model/class/Client';
 
 @Component({
   selector: 'app-client-project',
   standalone: true,
-  imports: [ReactiveFormsModule, LoaderComponent],
+  imports: [ReactiveFormsModule, LoaderComponent, DatePipe],
   templateUrl: './client-project.component.html',
   styleUrl: './client-project.component.css',
 })
@@ -24,7 +24,10 @@ export class ClientProjectComponent implements OnInit {
 
   projectForm: FormGroup = new FormGroup({
     clientProjectId: new FormControl(0),
-    projectName: new FormControl('', [Validators.required,Validators.minLength(4)]),
+    projectName: new FormControl('', [
+      Validators.required,
+      Validators.minLength(4),
+    ]),
     startDate: new FormControl(''),
     expectedEndDate: new FormControl(''),
     leadByEmpId: new FormControl(''),
@@ -41,10 +44,15 @@ export class ClientProjectComponent implements OnInit {
   clientSrv = inject(ClientService);
   employeeList: Employee[] = [];
   clientList: Client[] = [];
+  cardTitle = signal('Angular 18');
+  projectList =signal<ClientProject[]>([])
+
 
   ngOnInit(): void {
     this.getAllClients();
     this.getAllEmployee();
+    this.getAllClientProjects();
+    this.isLoading=false;
   }
   getAllEmployee() {
     this.clientSrv.getAllEmployee().subscribe((res: APIResultModel) => {
@@ -54,6 +62,11 @@ export class ClientProjectComponent implements OnInit {
   getAllClients() {
     this.clientSrv.getAllClients().subscribe((res: APIResultModel) => {
       this.clientList = res.data;
+    });
+  }
+  getAllClientProjects() {
+    this.clientSrv.getAllProjects().subscribe((res: APIResultModel) => {
+      this.projectList.set(res.data) ;
     });
   }
 
@@ -71,5 +84,9 @@ export class ClientProjectComponent implements OnInit {
           alert(res.message);
         }
       });
+  }
+
+  changeTitle(){
+    this.cardTitle.set('React')
   }
 }

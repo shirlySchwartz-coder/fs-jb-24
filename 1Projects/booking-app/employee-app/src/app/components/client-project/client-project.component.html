@@ -2,7 +2,8 @@
   <div class="col-8">
     <div class="card">
       <div class="card-header bg-success">
-        Client List 
+        Client List -{{ cardTitle() }}
+        <div class="btn btn-danger" (click)="changeTitle()">Change Title</div>
       </div>
       <div class="card-body">
         <div class="row">
@@ -10,27 +11,27 @@
             <table class="table table-bordered text-center">
               <thead>
                 <tr>
-                  <th>Client No</th>
-                  <th>Company Name</th>
-                  <th>Person Name</th>
-                  <th>Contact No</th>
-                  <th>City</th>
-                  <th>Action</th>
+                  <th>Client Name</th>
+                  <th>Project Name</th>
+                  <th>Emp Name</th>
+                  <th>empEmail</th>
+                  <th>Start Date</th>
+                  <th>Edit</th>
                 </tr>
               </thead>
               @if (isLoading == true) {
               <app-loader></app-loader>
               }@else{
-              <!-- <tbody>
-                @for (item of clientList; track $index) {
+              <tbody>
+                @for (item of projectList(); track $index) {
                 <tr>
-                  <td>{{ item.clientId }}</td>
-                  <td>{{ item.companyName }}</td>
-                  <td>{{ item.contactPersonName }}</td>
-                  <td>{{ item.contactNo }}</td>
-                  <td>{{ item.city }}</td>
+                  <td>{{ item.clientName }}</td>
+                  <td>{{ item.projectName }}</td>
+                  <td>{{ item.empName }}</td>
+                  <td>{{ item.empEmailId }}</td>
+                  <td>{{ item.startDate | date : "dd-MMM-yy" }}</td>
                   <td>
-                    <button class="btn btn-primary" (click)="onEdit(item)">
+                    <!--  <button class="btn btn-primary" (click)="onEdit(item)">
                       Edit
                     </button>
                     <button
@@ -38,11 +39,11 @@
                       (click)="onDelete(item.clientId)"
                     >
                       Delete
-                    </button>
+                    </button> -->
                   </td>
                 </tr>
                 }
-              </tbody> -->
+              </tbody>
               }
             </table>
           </div>
@@ -66,12 +67,11 @@
               />
             </div>
             @if(projectForm.controls['projectName'].touched){
-              <div class="text-danger">
+            <div class="text-danger">
               @if(projectForm.controls['projectName'].errors?.['required']){
-                <span>This is Required</span>
-              }
-              @if(projectForm.controls['projectName'].errors?.['minLength']){
-                <span>Min 4 Chars</span>
+              <span>{{ "Constant.VALIDATION_MESSAGE.REQUIRED" }}</span>
+              } @if(projectForm.controls['projectName'].errors?.['minLength']){
+              <span>{{ "Constant.VALIDATION_MESSAGE.MIN_LENGTH" }}</span>
               }
             </div>
             }
@@ -184,7 +184,11 @@
             <button class="btn btn-secondary">Reset</button>
           </div>
           <div class="col-6">
-            <button class="btn btn-success" [disabled]="projectForm.invalid" (click)="onSaveProject()">
+            <button
+              class="btn btn-success"
+              [disabled]="projectForm.invalid"
+              (click)="onSaveProject()"
+            >
               Save Project
             </button>
           </div>

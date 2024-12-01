@@ -4,6 +4,7 @@ import { Observable } from 'rxjs';
 import { Client } from '../model/class/Client';
 import { environment } from '../../environments/environment.development';
 import { APIResultModel } from '../model/interface/role';
+import { Constant } from '../constant/constant';
 
 @Injectable({
   providedIn: 'root',
@@ -24,7 +25,10 @@ export class ClientService {
   }
 //Employee
   getAllEmployee(): Observable<APIResultModel>{
-    return this.http.get<APIResultModel>(environment.API_URL+'GetAllEmployee')
+    return this.http.get<APIResultModel>(environment.API_URL+ Constant.API_METHOD.GET_ALL_EMP)
+  }
+  getAllProjects(): Observable<APIResultModel>{
+    return this.http.get<APIResultModel>(environment.API_URL+ Constant.API_METHOD.GET_ALL_PROJECT)
   }
 
   AddUpdateClientProject(obj: Client): Observable<APIResultModel> {
@@ -32,6 +36,6 @@ export class ClientService {
   }
 
   getAllUsers (){
-    return this.http.get('https://jsonplaceholder.typicode.com/users')
+    return this.http.get(Constant.API_METHOD.GET_ALL_USER)
   }
 }
