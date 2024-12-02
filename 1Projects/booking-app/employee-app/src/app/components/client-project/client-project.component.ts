@@ -11,11 +11,12 @@ import { LoaderComponent } from '../loader/loader.component';
 import { ClientService } from '../../services/client.service';
 import { APIResultModel, ClientProject, Employee } from '../../model/interface/role';
 import { Client } from '../../model/class/Client';
+import { AlertComponent } from "../reusebale/alert/alert.component";
 
 @Component({
   selector: 'app-client-project',
   standalone: true,
-  imports: [ReactiveFormsModule, LoaderComponent, DatePipe],
+  imports: [ReactiveFormsModule, LoaderComponent, DatePipe, AlertComponent],
   templateUrl: './client-project.component.html',
   styleUrl: './client-project.component.css',
 })

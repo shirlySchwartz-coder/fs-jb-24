@@ -5,6 +5,7 @@
     <li>{{item.username}}</li>
   }
  </ul>
+ <app-alert [alertType]="'Danger'" [alertMassage]="'Not good'"></app-alert>
 </div>
 <div class="row">
 
@@ -180,13 +181,14 @@
             <button class="btn btn-secondary" (click)="onReset()">Reset</button>
           </div>
           <div class="col-6">
-            <button
+            <app-my-button (onBtnClicked)="onSaveClient()" [btnClass]="'btn btn-success'" [btnText]="clientObj.clientId != 0 ? 'Update Client' : 'Save Client'" ></app-my-button>
+            <!-- <button
               class="btn btn-success"
               [disabled]="!form.valid"
               (click)="onSaveClient()"
             >
               {{ clientObj.clientId != 0 ? "Update Client" : "Save Client" }}
-            </button>
+            </button> -->
           </div>
         </div>
       </div>

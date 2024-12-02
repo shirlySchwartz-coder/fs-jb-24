@@ -7,11 +7,13 @@ import { HttpClient } from '@angular/common/http';
 import { AsyncPipe, CommonModule, DatePipe, JsonPipe, UpperCasePipe,  } from '@angular/common';
 import { LoaderComponent } from "../loader/loader.component";
 import { Observable } from 'rxjs';
+import { AlertComponent } from "../reusebale/alert/alert.component";
+import { MyButtonComponent } from "../reusebale/my-button/my-button.component";
 
 @Component({
   selector: 'app-client',
   standalone: true,
-  imports: [FormsModule, CommonModule, LoaderComponent,UpperCasePipe ,DatePipe, JsonPipe, AsyncPipe],
+  imports: [FormsModule, CommonModule, LoaderComponent, UpperCasePipe, DatePipe, JsonPipe, AsyncPipe, AlertComponent, MyButtonComponent],
   templateUrl: './client.component.html',
   styleUrl: './client.component.css',
 })
