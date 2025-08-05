@@ -72,7 +72,7 @@ export function Header(): JSX.Element {
   };
 
   return (
-    <Container >
+    <header className='Header'>
       <Row>
         <Col className='logo-img'>
           <img src={logo} alt='logo' className='img-logo-center' />
@@ -83,9 +83,12 @@ export function Header(): JSX.Element {
         </Col>
         <Col>
           <div>Hello {name}</div>
-          <div>{isLogged ? logoutButton() : loginButton()}</div>
+          
         </Col>
+        <Col>
+          <div>{isLogged ? logoutButton() : loginButton()}</div>
+          </Col>
       </Row>
-    </Container>
+    </header>
   );
 }

@@ -79,7 +79,7 @@ export function VacationItem(props: VacationItemProps): JSX.Element {
       <Card size='lg' variant='outlined' sx={{ maxWidth: 345 }}>
         <CardHeader
           action={<IconButton aria-label='settings'></IconButton>}
-          title={`${props.vacation.vacationId}.${props.vacation.destination}`}
+          title={`${props.vacation.destination}`}
         />
         <CardContent>{props.vacation.price}$ </CardContent>
         <CardContent>
